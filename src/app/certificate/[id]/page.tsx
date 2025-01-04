@@ -30,15 +30,19 @@ const CertificateDetails = () => {
     const fetchCertificate = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3008/api/certificates/${id}`
+          `${process.env.NEXT_PUBLIC_API_URL}/certificates/${id}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch certificate details");
         }
         const data: Certificate = await response.json();
         setCertificate(data);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("An unknown error occurred");
+        }
       } finally {
         setLoading(false);
       }
@@ -51,7 +55,7 @@ const CertificateDetails = () => {
   if (error) return <Text type="danger">Error: {error}</Text>;
   if (!certificate) return <Text>No certificate found</Text>;
 
-  const currentUrl = `http://localhost:3000/certificate/${id}`;
+  const currentUrl = `${process.env.NEXT_PUBLIC_API_URL}/certificate/${id}`;
 
   return (
     <Space direction="vertical" size="large" style={{ padding: "20px" }}>

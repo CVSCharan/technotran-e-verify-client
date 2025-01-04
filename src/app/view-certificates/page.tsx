@@ -20,14 +20,20 @@ const CertificatesPage = () => {
   useEffect(() => {
     const fetchCertificates = async () => {
       try {
-        const response = await fetch("http://localhost:3008/api/certificates");
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/certificates`
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch certificates");
         }
         const data: Certificate[] = await response.json();
         setCertificates(data);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("An unknown error occurred");
+        }
       } finally {
         setLoading(false);
       }
