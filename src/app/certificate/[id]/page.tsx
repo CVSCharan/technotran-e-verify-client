@@ -55,7 +55,7 @@ const CertificateDetails = () => {
   if (error) return <Text type="danger">Error: {error}</Text>;
   if (!certificate) return <Text>No certificate found</Text>;
 
-  const currentUrl = `${process.env.NEXT_PUBLIC_API_URL}/certificate/${id}`;
+  const currentUrl = `https://vercel.com/cvs-charans-projects/certificate/${id}`;
 
   return (
     <Space direction="vertical" size="large" style={{ padding: "20px" }}>
