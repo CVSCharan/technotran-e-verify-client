@@ -1,11 +1,10 @@
-import styles from "./page.module.css";
 import Navbar from "@/sections/NavBar";
-import VerifyCertificateComp from "@/components/VerifyCertificateComp";
-import Footer from "@/sections/Footer";
+import React from "react";
+import styles from "./page.module.css";
 
-export default function Home() {
+const VendorPortalPage = () => {
   return (
-    <main>
+    <main id="E-Verify Vendor Portal">
       <Navbar />
       <section className={styles.mainBody}>
         <div className={styles.landingSection}>
@@ -19,13 +18,10 @@ export default function Home() {
               certificates issued by our organization.
             </p>
           </div>
-
-          <div className={styles.formContainer}>
-            <VerifyCertificateComp />
-          </div>
         </div>
       </section>
-      <Footer />
     </main>
   );
-}
+};
+
+export default VendorPortalPage;

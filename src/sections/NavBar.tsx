@@ -24,22 +24,37 @@ const Navbar = () => {
         </div>
         <ul className={`${styles.navLinks} ${isOpen ? styles.active : ""}`}>
           <li>
-            <Link href="/" onClick={() => setIsOpen(false)}>
+            <Link
+              href="https://technotran.in/"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setIsOpen(false)}
+            >
               Technotran.in
             </Link>
           </li>
           <li>
-            <Link href="/" onClick={() => setIsOpen(false)}>
+            <Link
+              href="https://technotran.in/contact-us/"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setIsOpen(false)}
+            >
               Contact Us
             </Link>
           </li>
           <li>
-            <Link href="/" onClick={() => setIsOpen(false)}>
+            <Link
+              href="https://technotran.in/about-us/"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setIsOpen(false)}
+            >
               About Us
             </Link>
           </li>
           <li>
-            <Link href="/" onClick={() => setIsOpen(false)}>
+            <Link href="/vendor-portal" onClick={() => setIsOpen(false)}>
               {`Vendor's Portal`}
             </Link>
           </li>
