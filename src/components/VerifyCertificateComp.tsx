@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import styles from "../styles/VerifyCertificateComp.module.css";
 import { useRouter } from "next/navigation";
@@ -71,6 +73,7 @@ const VerifyCertificateComp = () => {
 
       if (response.ok) {
         const data = await response.json();
+        console.log(data);
         setOtpSent(true);
         setShowOtpInput(true);
         console.log("OTP sent successfully:"); // For testing, remove in production
@@ -79,6 +82,7 @@ const VerifyCertificateComp = () => {
         setErrorMessage(errorData.message || "Failed to send OTP");
       }
     } catch (error) {
+      console.error(error);
       setErrorMessage("An error occurred while sending the OTP.");
     } finally {
       setLoading(false);

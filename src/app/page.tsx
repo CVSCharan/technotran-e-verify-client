@@ -1,6 +1,3 @@
-"use client";
-
-import { useState } from "react";
 import styles from "./page.module.css";
 import Navbar from "@/sections/NavBar";
 import VerifyCertificateComp from "@/components/VerifyCertificateComp";

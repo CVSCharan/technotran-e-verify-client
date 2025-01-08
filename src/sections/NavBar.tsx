@@ -40,7 +40,7 @@ const Navbar = () => {
           </li>
           <li>
             <Link href="/" onClick={() => setIsOpen(false)}>
-              Vendor's Portal
+              {`Vendor's Portal`}
             </Link>
           </li>
         </ul>
