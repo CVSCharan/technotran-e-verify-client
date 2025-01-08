@@ -1,14 +1,165 @@
+/* Main container to center content */
 .main {
+  height: 100vh;
+  width: 100vw;
   display: flex;
   flex-direction: column;
-  gap: 32px;
-  grid-row-start: 2;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: #fafafa; /* Soft background color */
 }
 
-.main code {
-  font-family: inherit;
-  background: var(--gray-alpha-100);
-  padding: 2px 4px;
-  border-radius: 4px;
+.mainBody {
+  margin-left: auto;
+  margin-right: auto;
+  overflow-x: hidden;
+  position: relative;
+  color: #333; /* Dark text for contrast */
+}
+
+/* Landing section with grid pattern */
+.landingSection {
+  height: 80vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem; /* Added padding for a spacious feel */
+  background-color: #f8fafc; /* Light background color */
+  background-image: radial-gradient(circle, #d1d5db 1px, transparent 1px),
+    radial-gradient(circle, #d1d5db 1px, transparent 1px); /* Grid pattern */
+  background-position: 0 0, 25px 25px; /* Offset the grid */
+  background-size: 50px 50px; /* Set the grid size */
+}
+
+/* Welcome Section */
+.welcomeSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 35vh;
+  max-width: 80rem;
+  width: 100%;
+  padding: 1rem;
+}
+
+.heading {
+  font-size: 2.2rem;
+  font-family: "Georgia", serif; /* Elegant serif font */
   font-weight: 600;
+  color: #2c3e50; /* Dark gray for a refined look */
+  margin-bottom: 0.5rem;
+}
+
+.subHeading {
+  font-size: 1.1rem;
+  font-weight: 500;
+  font-family: "Georgia", serif;
+  color: #34495e; /* Softer gray */
+  margin-bottom: 1rem;
+}
+
+.welcomeText {
+  font-size: 1.2rem;
+  font-family: "Georgia", serif;
+  color: #555;
+  max-width: 770px;
+  line-height: 1.6;
+}
+
+/* Form container styles */
+.formContainer {
+  margin-top: 1rem;
+  padding: 2rem;
+  background-color: #ffffff; /* White background */
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  max-width: 600px;
+  width: 100%;
+  height: 65%;
+  text-align: center;
+}
+
+/* Extra Small Mobile Devices (Portrait) */
+/* iPhone SE, older Android phones */
+@media only screen and (max-width: 320px) {
+  .landingSection {
+    padding: 1rem;
+  }
+
+  .heading {
+    font-size: 1rem;
+  }
+
+  .subHeading {
+    font-size: 0.8rem;
+  }
+
+  .welcomeText {
+    font-size: 1rem;
+  }
+}
+
+/* Small Mobile Devices (Portrait) */
+/* iPhone 6/7/8, Galaxy S8 */
+@media only screen and (min-width: 321px) and (max-width: 375px) {
+  .landingSection {
+    padding: 1rem;
+  }
+
+  .heading {
+    font-size: 1.2rem;
+  }
+
+  .subHeading {
+    font-size: 0.8rem;
+  }
+
+  .welcomeText {
+    font-size: 1rem;
+  }
+}
+
+/* Medium Mobile Devices (Portrait) */
+/* iPhone 11 Pro, Google Pixel 2 */
+@media only screen and (min-width: 376px) and (max-width: 425px) {
+  .landingSection {
+    padding: 1rem;
+  }
+
+  .heading {
+    font-size: 1.3rem;
+  }
+
+  .subHeading {
+    font-size: 0.9rem;
+  }
+
+  .welcomeText {
+    font-size: 1.05rem;
+  }
+}
+
+/* Tablets (portrait and landscape) */
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+  .landingSection {
+    padding: 2rem;
+  }
+
+  .heading {
+    font-size: 2.7rem;
+    margin-bottom: 1rem;
+  }
+
+  .subHeading {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .welcomeText {
+    font-size: 1.4rem;
+  }
 }

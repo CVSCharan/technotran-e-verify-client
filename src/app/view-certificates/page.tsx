@@ -76,7 +76,7 @@ const CertificatesPage = () => {
                 <td>{certificate.type}</td>
                 <td>{new Date(certificate.issueDate).toLocaleDateString()}</td>
                 <td>
-                  <Link href={`/certificate/${certificate._id}`}>Link</Link>
+                  <Link href={`/certificate/${certificate.certificateId}`}>Link</Link>
                 </td>
               </tr>
             ))}

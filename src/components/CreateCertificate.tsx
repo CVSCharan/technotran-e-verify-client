@@ -9,33 +9,87 @@ const CreateCertificate = () => {
   const [certificateId, setCertificateId] = useState("");
   const [rollNo, setRollNo] = useState("");
   const [message, setMessage] = useState("");
+  const [otp, setOtp] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpVerified, setOtpVerified] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    try {
-      const response = await fetch("http://localhost:3008/api/certificates", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name, type, issueDate, certificateId, rollNo }),
-      });
+    if (otpSent && !otpVerified) {
+      // Verify OTP
+      await verifyOtp();
+    } else {
+      // Send OTP and create certificate if OTP is not yet sent
+      await sendOtp();
+    }
+  };
 
-      const result = await response.json();
+  const sendOtp = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/send-otp`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email: "user@example.com" }), // Replace with dynamic email input if required
+        }
+      );
+
       if (response.ok) {
-        setMessage("Certificate created successfully!");
-        setName("");
-        setType("");
-        setIssueDate("");
-        setCertificateId("");
-        setRollNo("");
+        const data = await response.json();
+        setOtpSent(true);
+        setMessage("OTP sent successfully!");
       } else {
-        setMessage(result.error || "Something went wrong!");
+        const result = await response.json();
+        setMessage(result.error || "Failed to send OTP!");
       }
     } catch (error) {
-      console.error("Error creating certificate:", error);
-      setMessage("Failed to create certificate!");
+      console.error("Error sending OTP:", error);
+      setMessage("Error sending OTP!");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const verifyOtp = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/verify-otp`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ otp }),
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.valid) {
+          setOtpVerified(true);
+          setMessage(
+            "OTP verified successfully! Now you can create the certificate."
+          );
+        } else {
+          setOtpVerified(false);
+          setMessage("Invalid OTP. Please try again.");
+        }
+      } else {
+        const result = await response.json();
+        setMessage(result.error || "OTP verification failed!");
+      }
+    } catch (error) {
+      console.error("Error verifying OTP:", error);
+      setMessage("Error verifying OTP!");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -88,8 +142,31 @@ const CreateCertificate = () => {
             required
           />
         </div>
-        <button type="submit">Create</button>
+
+        {/* OTP logic */}
+        {otpSent && !otpVerified && (
+          <div>
+            <label>Enter OTP:</label>
+            <input
+              type="text"
+              value={otp}
+              onChange={(e) => setOtp(e.target.value)}
+              required
+            />
+            <button type="submit" disabled={loading}>
+              {loading ? "Verifying..." : "Verify OTP"}
+            </button>
+          </div>
+        )}
+
+        {/* Final submit */}
+        {otpVerified && (
+          <button type="submit" disabled={loading}>
+            {loading ? "Creating..." : "Create Certificate"}
+          </button>
+        )}
       </form>
+
       {message && <p>{message}</p>}
     </div>
   );

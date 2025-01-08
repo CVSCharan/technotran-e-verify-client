@@ -34,6 +34,31 @@ html {
   color: white;
 }
 
+.footer-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 7px;
+  background: linear-gradient(90deg, #4b0406, #6b0f12, #a82b30);
+  bottom: 0;
+  padding: 0.5rem 0;
+  position: fixed;
+}
+
+.footer-heading {
+  font-size: 1rem;
+  text-align: center;
+  margin-top: 10px;
+  color: white;
+}
+
+.footer-sub-heading {
+  font-size: 0.7rem;
+  text-align: center;
+  margin-top: 10px;
+  color: white;
+}
+
 /* width */
 ::-webkit-scrollbar {
   width: 11px;
