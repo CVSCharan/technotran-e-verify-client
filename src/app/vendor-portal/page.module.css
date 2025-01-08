@@ -12,7 +12,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   padding: 2rem; /* Added padding for a spacious feel */
   background-color: #f8fafc; /* Light background color */
@@ -29,7 +29,7 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  height: 35vh;
+  height: 30%;
   max-width: 80rem;
   width: 100%;
   padding: 1rem;
@@ -57,4 +57,159 @@
   color: #555;
   max-width: 770px;
   line-height: 1.6;
+}
+
+.selectContainer {
+  margin-top: 0.7rem;
+  padding: 1rem;
+  max-width: 80rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 20%;
+}
+
+.selectLabel {
+  display: block;
+  font-family: "Georgia", serif;
+  margin-bottom: 8px;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.selectDropdown {
+  width: 100%;
+  max-width: 500px;
+  padding: 10px;
+  font-size: 0.9rem;
+  border: 1px solid #ccc;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  border-radius: 4px;
+  outline: none; /* Disable default focus outline */
+}
+
+.selectDropdown:focus {
+  border-color: #4b0406; /* Custom color for focus state */
+  outline: none; /* Prevent default blue outline */
+  box-shadow: 0 0 5px #4b0406; /* Optional: Add a focus glow effect */
+}
+
+/* Form container styles */
+.formContainer {
+  margin-top: 1rem;
+  padding: 2rem;
+  background-color: #ffffff; /* White background */
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  max-width: 550px;
+  width: 100%;
+  height: 50%;
+  text-align: center;
+}
+
+/* Extra Small Mobile Devices (Portrait) */
+/* iPhone SE, older Android phones */
+@media only screen and (max-width: 320px) {
+  .landingSection {
+    padding: 1rem;
+  }
+
+  .heading {
+    font-size: 1rem;
+  }
+
+  .subHeading {
+    font-size: 0.8rem;
+  }
+
+  .selectLabel {
+    font-size: 1rem;
+  }
+
+  .welcomeText {
+    font-size: 1rem;
+  }
+
+  .selectDropdown {
+    font-size: 1rem;
+  }
+}
+
+/* Small Mobile Devices (Portrait) */
+/* iPhone 6/7/8, Galaxy S8 */
+@media only screen and (min-width: 321px) and (max-width: 375px) {
+  .landingSection {
+    padding: 1rem;
+  }
+
+  .heading {
+    font-size: 1.2rem;
+  }
+
+  .subHeading {
+    font-size: 0.8rem;
+  }
+
+  .selectLabel {
+    font-size: 1.2rem;
+  }
+
+  .welcomeText {
+    font-size: 1rem;
+  }
+
+  .selectDropdown {
+    font-size: 1rem;
+  }
+}
+
+/* Medium Mobile Devices (Portrait) */
+/* iPhone 11 Pro, Google Pixel 2 */
+@media only screen and (min-width: 376px) and (max-width: 425px) {
+  .landingSection {
+    padding: 1rem;
+  }
+
+  .heading {
+    font-size: 1.3rem;
+  }
+
+  .subHeading {
+    font-size: 0.9rem;
+  }
+
+  .selectLabel {
+    font-size: 1.3rem;
+  }
+
+  .welcomeText {
+    font-size: 1.05rem;
+  }
+
+  .selectDropdown {
+    font-size: 1.05rem;
+  }
+}
+
+/* Tablets (portrait and landscape) */
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+  .landingSection {
+    padding: 2rem;
+  }
+
+  .heading {
+    font-size: 2.7rem;
+    margin-bottom: 1rem;
+  }
+
+  .subHeading {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .welcomeText {
+    font-size: 1.4rem;
+  }
 }

@@ -145,7 +145,7 @@ const VerifyCertificateComp = () => {
 
   return (
     <form onSubmit={handleSubmit} className={styles.formContainer}>
-      <h1 className={styles.fromHeading}>Verify Your Certificate</h1>
+      <h1 className={styles.formHeading}>Verify Your Certificate</h1>
       <input
         type="text"
         name="certificateId"
@@ -184,7 +184,7 @@ const VerifyCertificateComp = () => {
         disabled={loading}
       >
         {loading
-          ? "Processing..."
+          ? "Verifying..."
           : otpVerified
           ? "Check Certificate"
           : otpSent
