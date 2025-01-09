@@ -2,19 +2,9 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useParams } from "next/navigation";
-import { Typography, Space, Button } from "antd";
-import QRCode from "antd/es/qrcode"; // Ant Design QR Code
-
-const { Title, Text } = Typography;
-
-type Certificate = {
-  _id: string;
-  name: string;
-  type: string;
-  issueDate: string;
-  certificateId: string;
-  rollNo: string;
-};
+import QRCode from "qrcode"; // Import the qrcode library
+import styles from "./page.module.css"; // Import CSS module
+import { Certificate } from "@/utils/types";
 
 const CertificateDetails = () => {
   const params = useParams();
@@ -24,10 +14,9 @@ const CertificateDetails = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Ref to the canvas element
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const qrCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  // Fetch certificate data
   useEffect(() => {
     if (!id) return;
 
@@ -42,11 +31,7 @@ const CertificateDetails = () => {
         const data: Certificate = await response.json();
         setCertificate(data);
       } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError("An unknown error occurred");
-        }
+        setError(err instanceof Error ? err.message : "Unknown error occurred");
       } finally {
         setLoading(false);
       }
@@ -55,49 +40,56 @@ const CertificateDetails = () => {
     fetchCertificate();
   }, [id]);
 
-  // Create the certificate image with text overlay after certificate is fetched
   useEffect(() => {
     if (certificate && canvasRef.current) {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext("2d");
+
       if (ctx) {
         const img = new Image();
-        img.src = "/Images/certificate-img.jpeg"; // Replace with your certificate image URL
+        img.src = "/Images/certificate-img.jpeg"; // Replace with your image path
 
-        // Debugging: Check if the image is loading
         img.onload = () => {
-          console.log("Image loaded successfully!");
-          // Draw the certificate image onto the canvas
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-          // Set font style and size for the name
-          ctx.font = "bold 30px 'Arial', 'Roboto', sans-serif"; // Larger font size for the name
+          // Add certificate details
+          ctx.font = "bold 30px Arial";
           ctx.fillStyle = "black";
-          ctx.textBaseline = "top";
+          ctx.fillText(certificate.name, 50, 320);
 
-          // Overlay the name on the image
-          ctx.fillText(`${certificate.name}`, 50, 320);
+          ctx.font = "bold 50px Arial";
+          ctx.fillText(certificate.type, 70, 150);
 
-          ctx.font = "bold 50px 'Arial', 'Roboto', sans-serif"; 
-          ctx.fillText(`${certificate.type}`, 70, 150);
+          ctx.font = "bold 18px Arial";
+          ctx.fillText(certificate.certificateId, 150, 510);
+          ctx.fillText(certificate.rollNo, 85, 535);
 
-          // Set font style and size for other details
-          ctx.font = "bold 18px 'Arial', 'Roboto', sans-serif"; // Smaller font size for other details
-
-          // Overlay other details on the image
-          ctx.fillText(`${certificate.certificateId}`, 150, 510);
-          ctx.fillText(`${certificate.rollNo}`, 85, 535);
-        };
-
-        img.onerror = (err) => {
-          console.error("Image loading error: ", err);
-          setError("Failed to load certificate image.");
+          // Generate QR code and draw on canvas
+          QRCode.toCanvas(
+            qrCanvasRef.current,
+            `https://technotran-e-verify-client.vercel.app/certificate/${id}`,
+            {
+              width: 100,
+              margin: 0,
+            },
+            (error) => {
+              if (!error && qrCanvasRef.current) {
+                const qrImg = qrCanvasRef.current;
+                ctx.drawImage(
+                  qrImg,
+                  canvas.width - 120,
+                  canvas.height - 120,
+                  100,
+                  100
+                ); // Adjust QR code position and size
+              }
+            }
+          );
         };
       }
     }
-  }, [certificate]);
+  }, [certificate, id]);
 
-  // Function to download the certificate image with text overlay
   const downloadImage = () => {
     if (canvasRef.current) {
       const link = document.createElement("a");
@@ -107,40 +99,31 @@ const CertificateDetails = () => {
     }
   };
 
-  if (loading) return <Text>Loading certificate details...</Text>;
-  if (error) return <Text type="danger">Error: {error}</Text>;
-  if (!certificate) return <Text>No certificate found</Text>;
-
-  const currentUrl = `https://technotran-e-verify-client.vercel.app/certificate/${id}`;
+  if (loading)
+    return <p className={styles.loading}>Loading certificate details...</p>;
+  if (error) return <p className={styles.error}>Error: {error}</p>;
+  if (!certificate)
+    return <p className={styles.noData}>No certificate found</p>;
 
   return (
-    <Space direction="vertical" size="large" style={{ padding: "20px" }}>
-      <Title level={3}>Certificate Details</Title>
-
-      {/* Certificate Image Canvas */}
+    <div className={styles.container}>
+      <h1 className={styles.title}>Certificate Details</h1>
       <canvas
         ref={canvasRef}
         width={800}
-        height={600} // Adjust the width and height as per your image dimensions
-        style={{
-          border: "1px solid #ddd",
-          marginBottom: "20px",
-          display: "block",
-        }}
+        height={600}
+        className={styles.certificateCanvas}
       ></canvas>
-
-      {/* Download Button */}
-      <Button type="primary" onClick={downloadImage}>
+      <canvas
+        ref={qrCanvasRef}
+        width={100}
+        height={100}
+        style={{ display: "none" }} // QR code canvas is hidden, only used for rendering
+      ></canvas>
+      <button className={styles.downloadButton} onClick={downloadImage}>
         Download Certificate with Details
-      </Button>
-
-      {/* QR Code Section */}
-      <Space direction="vertical" size="small" align="center">
-        <Title level={4}>Scan QR Code</Title>
-        <QRCode value={currentUrl} size={200} />
-        <Text>Scan this QR code to view this page on your device.</Text>
-      </Space>
-    </Space>
+      </button>
+    </div>
   );
 };
 

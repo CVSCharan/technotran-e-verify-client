@@ -8,11 +8,11 @@
 
 /* Landing section with grid pattern */
 .landingSection {
-  height: 80vh;
+  height: 85vh;
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   padding: 2rem; /* Added padding for a spacious feel */
   background-color: #f8fafc; /* Light background color */
@@ -20,4 +20,13 @@
     radial-gradient(circle, #d1d5db 1px, transparent 1px); /* Grid pattern */
   background-position: 0 0, 25px 25px; /* Offset the grid */
   background-size: 50px 50px; /* Set the grid size */
+}
+
+.landingHeading {
+  margin-bottom: 1rem;
+  font-family: "Georgia", serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.6;
 }

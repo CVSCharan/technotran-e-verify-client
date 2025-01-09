@@ -11,6 +11,8 @@ export interface Vendor {
 
 export interface VendorVerifyCompProps {
   org: string;
+  openModal: boolean; // Add the openModal property
+  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface AdminUser {
@@ -45,3 +47,12 @@ export interface VendorContextType {
   login: (user: VendorUser) => void;
   showModal: boolean;
 }
+
+export type Certificate = {
+  _id: string;
+  name: string;
+  type: string;
+  issueDate: string;
+  certificateId: string;
+  rollNo: string;
+};

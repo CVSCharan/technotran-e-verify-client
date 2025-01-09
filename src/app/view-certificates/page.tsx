@@ -2,15 +2,9 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-
-type Certificate = {
-  _id: string;
-  name: string;
-  type: string;
-  issueDate: string;
-  certificateId: string;
-  rollNo: string;
-};
+import styles from "./page.module.css"; // Import the CSS module
+import { Certificate } from "@/utils/types";
+import AdminNav from "@/sections/AdminNav";
 
 const CertificatesPage = () => {
   const [certificates, setCertificates] = useState<Certificate[]>([]);
@@ -43,47 +37,53 @@ const CertificatesPage = () => {
   }, []);
 
   if (loading) {
-    return <p>Loading certificates...</p>;
+    return <p className={styles.loading}>Loading certificates...</p>;
   }
 
   if (error) {
-    return <p>Error: {error}</p>;
+    return <p className={styles.error}>Error: {error}</p>;
   }
 
   return (
-    <div>
-      <h1>Certificates</h1>
-      {certificates.length === 0 ? (
-        <p>No certificates found.</p>
-      ) : (
-        <table
-          border={1}
-          cellPadding="8"
-          style={{ margin: "20px auto", width: "80%" }}
-        >
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Type</th>
-              <th>Issue Date</th>
-              <th>View</th>
-            </tr>
-          </thead>
-          <tbody>
-            {certificates.map((certificate) => (
-              <tr key={certificate._id}>
-                <td>{certificate.name}</td>
-                <td>{certificate.type}</td>
-                <td>{new Date(certificate.issueDate).toLocaleDateString()}</td>
-                <td>
-                  <Link href={`/certificate/${certificate.certificateId}`}>Link</Link>
-                </td>
+    <main>
+      <AdminNav />
+      <div className={styles.container}>
+        <h1 className={styles.heading}>Certificates</h1>
+        {certificates.length === 0 ? (
+          <p className={styles.noCertificates}>No certificates found.</p>
+        ) : (
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Issue Date</th>
+                <th>View</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-    </div>
+            </thead>
+            <tbody>
+              {certificates.map((certificate) => (
+                <tr key={certificate._id}>
+                  <td>{certificate.name}</td>
+                  <td>{certificate.type}</td>
+                  <td>
+                    {new Date(certificate.issueDate).toLocaleDateString()}
+                  </td>
+                  <td>
+                    <Link
+                      href={`/certificate/${certificate.certificateId}`}
+                      className={styles.link}
+                    >
+                      View
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+    </main>
   );
 };
 

@@ -1,18 +1,48 @@
-/* Form container styles */
-.formContainer {
-  height: 100%;
-  width: 100%;
+.modalMainContainer {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalContainer {
+  height: 70%;
+  width: 70%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 0.7rem;
+  gap: 0.5rem;
+  border-radius: 1rem;
+  padding: 1rem; /* Added padding for a spacious feel */
+  background-color: #f8fafc; /* Light background color */
+  background-image: radial-gradient(circle, #d1d5db 1px, transparent 1px),
+    radial-gradient(circle, #d1d5db 1px, transparent 1px); /* Grid pattern */
+  background-position: 0 0, 25px 25px; /* Offset the grid */
+  background-size: 50px 50px; /* Set the grid size */
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  width: 70%;
+}
+
+.formImg {
+  height: 120px;
+  width: 120px;
+  border-radius: 1rem;
+  margin-bottom: 0.7rem;
 }
 
 .formInput {
   width: 100%;
   padding: 1rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   border: 1px solid #ccc; /* Soft border */
   border-radius: 8px; /* Rounded corners */
   font-size: 1.1rem;
@@ -28,8 +58,9 @@
 .formHeading {
   margin-bottom: 1rem;
   font-family: "Georgia", serif;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: 600;
+  text-align: center;
   line-height: 1.6;
 }
 
@@ -49,14 +80,14 @@
   background: linear-gradient(90deg, #4b0406, #6b0f12, #a82b30);
 }
 
-.formImg {
-  height: 100px;
-  width: 100px;
-}
-
 /* Extra Small Mobile Devices (Portrait) */
 /* iPhone SE, older Android phones */
 @media only screen and (max-width: 320px) {
+  .modalContainer {
+    height: 60%;
+    width: 90%;
+  }
+
   .formButton {
     font-size: 0.9rem;
   }
@@ -74,6 +105,11 @@
 /* Small Mobile Devices (Portrait) */
 /* iPhone 6/7/8, Galaxy S8 */
 @media only screen and (min-width: 321px) and (max-width: 375px) {
+  .modalContainer {
+    height: 60%;
+    width: 90%;
+  }
+
   .formButton {
     font-size: 1rem;
   }
@@ -91,6 +127,11 @@
 /* Medium Mobile Devices (Portrait) */
 /* iPhone 11 Pro, Google Pixel 2 */
 @media only screen and (min-width: 376px) and (max-width: 425px) {
+  .modalContainer {
+    height: 60%;
+    width: 90%;
+  }
+
   .formButton {
     font-size: 1rem;
   }

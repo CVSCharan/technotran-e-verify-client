@@ -6,10 +6,12 @@ import { useRouter } from "next/navigation";
 import { vendorsData } from "@/utils/helper";
 import Image from "next/image";
 import { Vendor, VendorVerifyCompProps } from "@/utils/types";
+import VendorLoginModal from "./VendorLoginModal"; // Import the modal component
 
 const VendorVerifyComp: React.FC<VendorVerifyCompProps> = ({ org }) => {
   const router = useRouter();
   const [orgData, setOrgData] = useState<Vendor | null>(null); // Use Vendor type
+  const [openModal, setOpenModal] = useState(false); // State to control modal visibility
 
   // Debugging: Log the org prop and vendorsData
   useEffect(() => {
@@ -21,10 +23,7 @@ const VendorVerifyComp: React.FC<VendorVerifyCompProps> = ({ org }) => {
   }, [org]); // Re-run the effect whenever org changes
 
   const handleLoginClick = () => {
-    if (orgData) {
-      // Redirect to login page or whatever logic you want to handle on login button click
-      router.push(`/login/${orgData.name}`);
-    }
+    setOpenModal(true); // Open the modal when the login button is clicked
   };
 
   return (
@@ -45,6 +44,13 @@ const VendorVerifyComp: React.FC<VendorVerifyCompProps> = ({ org }) => {
           </button>
         </div>
       )}
+
+      {/* Pass orgData to the modal */}
+      <VendorLoginModal
+        open={openModal}
+        setOpen={setOpenModal}
+        orgData={orgData}
+      />
     </>
   );
 };

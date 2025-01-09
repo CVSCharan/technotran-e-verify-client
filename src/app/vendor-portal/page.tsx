@@ -8,6 +8,7 @@ import VendorVerifyComp from "@/components/VendorVerifyComp";
 
 const VendorPortalPage = () => {
   const [selectedOrganization, setSelectedOrganization] = useState("");
+  const [openModal, setOpenModal] = useState(false); // Add state for the modal
 
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedOrganization(event.target.value);
@@ -85,7 +86,12 @@ const VendorPortalPage = () => {
           </div>
           {selectedOrganization && (
             <div className={styles.formContainer}>
-              <VendorVerifyComp org={selectedOrganization} />
+              {/* Pass openModal and setOpenModal to VendorVerifyComp */}
+              <VendorVerifyComp
+                org={selectedOrganization}
+                openModal={openModal}
+                setOpenModal={setOpenModal}
+              />
             </div>
           )}
         </div>

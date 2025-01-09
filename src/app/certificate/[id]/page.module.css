@@ -1,0 +1,69 @@
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+  font-family: "Arial", sans-serif;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.loading,
+.error,
+.noData {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.error {
+  color: red;
+}
+
+.certificateCanvas {
+  border: 1px solid #ccc;
+  margin: 20px 0;
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+}
+
+.downloadButton {
+  background-color: #0070f3;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+  margin: 20px 0;
+}
+
+.downloadButton:hover {
+  background-color: #005bb5;
+}
+
+.qrCodeSection {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.qrTitle {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.qrText {
+  font-size: 1rem;
+  color: #555;
+  margin-top: 10px;
+}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import styles from "../styles/CreateCertificate.module.css";
 
 const CreateCertificate = () => {
   const [name, setName] = useState("");
@@ -50,54 +51,57 @@ const CreateCertificate = () => {
 
   return (
     <div style={{ maxWidth: "400px", margin: "auto", padding: "20px" }}>
-      <h2>Create Certificate</h2>
+      <h2 className={styles.formHeading}>Certificate's Form</h2>
+
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Name:</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Type:</label>
-          <input
-            type="text"
-            value={type}
-            onChange={(e) => setType(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Issue Date:</label>
-          <input
-            type="date"
-            value={issueDate}
-            onChange={(e) => setIssueDate(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Certificate ID:</label>
-          <input
-            type="text"
-            value={certificateId}
-            onChange={(e) => setCertificateId(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Roll No:</label>
-          <input
-            type="text"
-            value={rollNo}
-            onChange={(e) => setRollNo(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Create</button>
+        <input
+          placeholder="Username"
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+          className={styles.formInput}
+        />
+
+        <input
+          placeholder="Type"
+          type="text"
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+          required
+          className={styles.formInput}
+        />
+
+        <input
+          placeholder="Issued Date"
+          type="date"
+          value={issueDate}
+          onChange={(e) => setIssueDate(e.target.value)}
+          required
+          className={styles.formInput}
+        />
+
+        <input
+          placeholder="Certificte ID"
+          type="text"
+          value={certificateId}
+          onChange={(e) => setCertificateId(e.target.value)}
+          required
+          className={styles.formInput}
+        />
+
+        <input
+          placeholder="Roll No."
+          type="text"
+          value={rollNo}
+          onChange={(e) => setRollNo(e.target.value)}
+          required
+          className={styles.formInput}
+        />
+
+        <button className={styles.formButton} type="submit">
+          Add Certificate
+        </button>
       </form>
       {message && <p>{message}</p>}
     </div>

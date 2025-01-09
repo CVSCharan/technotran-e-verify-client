@@ -1,0 +1,121 @@
+.mainBody {
+  margin-left: auto;
+  margin-right: auto;
+  overflow-x: hidden;
+  position: relative;
+  color: #333; /* Dark text for contrast */
+}
+
+.landingSection {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 2rem; /* Added padding for a spacious feel */
+  background-color: #f8fafc; /* Light background color */
+  background-image: radial-gradient(circle, #d1d5db 1px, transparent 1px),
+    radial-gradient(circle, #d1d5db 1px, transparent 1px); /* Grid pattern */
+  background-position: 0 0, 25px 25px; /* Offset the grid */
+  background-size: 50px 50px; /* Set the grid size */
+}
+
+/* Welcome Section */
+.welcomeSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 30%;
+  max-width: 80rem;
+  width: 100%;
+  padding: 1rem;
+}
+
+.heading {
+  font-size: 2.2rem;
+  font-family: "Georgia", serif; /* Elegant serif font */
+  font-weight: 600;
+  color: #2c3e50; /* Dark gray for a refined look */
+  margin-bottom: 0.5rem;
+}
+
+.subHeading {
+  font-size: 1.1rem;
+  font-weight: 500;
+  font-family: "Georgia", serif;
+  color: #34495e; /* Softer gray */
+  margin-bottom: 1rem;
+}
+
+.welcomeText {
+  font-size: 1.2rem;
+  font-family: "Georgia", serif;
+  color: #555;
+  max-width: 770px;
+  line-height: 1.6;
+}
+
+/* Form container styles */
+.formContainer {
+  margin-top: 0.5rem;
+  padding: 2rem;
+  background-color: #ffffff; /* White background */
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  max-width: 550px;
+  width: 100%;
+  height: 50%;
+  text-align: center;
+}
+
+.title {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.inputGroup {
+  margin-bottom: 15px;
+}
+
+.label {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.submitButton {
+  padding: 12px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.submitButton:hover {
+  background-color: #45a049;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
