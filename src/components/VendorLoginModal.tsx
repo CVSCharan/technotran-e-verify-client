@@ -28,6 +28,7 @@ export default function VendorLoginModal({
     // Example validation
     if (!username || !password) {
       setError("Please fill in both fields.");
+      console.log(message);
       return;
     }
 
