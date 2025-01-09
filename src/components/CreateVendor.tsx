@@ -49,7 +49,7 @@ const CreateVendor = () => {
 
   return (
     <form onSubmit={handleSubmit} className={styles.formContainer}>
-      <h2 className={styles.formHeading}>Vendor's Form</h2>
+      <h2 className={styles.formHeading}>{`Vendor's Form`}</h2>
       <input
         placeholder="Username"
         type="text"
