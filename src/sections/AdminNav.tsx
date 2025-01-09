@@ -29,12 +29,12 @@ const AdminNav = () => {
             </Link>
           </li>
           <li>
-            <Link href="/" onClick={() => setIsOpen(false)}>
+            <Link href="/view-certificates" onClick={() => setIsOpen(false)}>
               Certificates
             </Link>
           </li>
           <li>
-            <Link href="/vendor-portal" onClick={() => setIsOpen(false)}>
+            <Link href="/view-vendors" onClick={() => setIsOpen(false)}>
               Vendors
             </Link>
           </li>

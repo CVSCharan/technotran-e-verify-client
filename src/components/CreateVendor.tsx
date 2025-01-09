@@ -82,7 +82,7 @@ const CreateVendor = () => {
       />
 
       <input
-        placeholder="Org Logo Url"
+        placeholder="Org Logo URL"
         type="text"
         id="orgPic"
         value={orgPic}

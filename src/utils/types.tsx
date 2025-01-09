@@ -56,3 +56,10 @@ export type Certificate = {
   certificateId: string;
   rollNo: string;
 };
+
+export type Vendors = {
+  _id: string;
+  name: string;
+  email: string;
+  orgPic: string;
+};

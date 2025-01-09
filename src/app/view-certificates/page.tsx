@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import styles from "./page.module.css"; // Import the CSS module
 import { Certificate } from "@/utils/types";
 import AdminNav from "@/sections/AdminNav";
+import Footer from "@/sections/Footer";
 
 const CertificatesPage = () => {
   const [certificates, setCertificates] = useState<Certificate[]>([]);
@@ -45,44 +46,47 @@ const CertificatesPage = () => {
   }
 
   return (
-    <main>
+    <main id="E-Verify Portal View Certificates">
       <AdminNav />
-      <div className={styles.container}>
-        <h1 className={styles.heading}>Certificates</h1>
-        {certificates.length === 0 ? (
-          <p className={styles.noCertificates}>No certificates found.</p>
-        ) : (
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Issue Date</th>
-                <th>View</th>
-              </tr>
-            </thead>
-            <tbody>
-              {certificates.map((certificate) => (
-                <tr key={certificate._id}>
-                  <td>{certificate.name}</td>
-                  <td>{certificate.type}</td>
-                  <td>
-                    {new Date(certificate.issueDate).toLocaleDateString()}
-                  </td>
-                  <td>
-                    <Link
-                      href={`/certificate/${certificate.certificateId}`}
-                      className={styles.link}
-                    >
-                      View
-                    </Link>
-                  </td>
+      <section className={styles.mainBody}>
+        <div className={styles.landingSection}>
+          <h2 className={styles.heading}>E-Verify Portal Certificates</h2>
+          {certificates.length === 0 ? (
+            <p className={styles.noCertificates}>No certificates found.</p>
+          ) : (
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Type</th>
+                  <th>Issue Date</th>
+                  <th>View</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
+              </thead>
+              <tbody>
+                {certificates.map((certificate) => (
+                  <tr key={certificate._id}>
+                    <td>{certificate.name}</td>
+                    <td>{certificate.type}</td>
+                    <td>
+                      {new Date(certificate.issueDate).toLocaleDateString()}
+                    </td>
+                    <td>
+                      <Link
+                        href={`/certificate/${certificate.certificateId}`}
+                        className={styles.link}
+                      >
+                        View
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+      </section>
+      <Footer />
     </main>
   );
 };

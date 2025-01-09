@@ -23,19 +23,36 @@
 }
 
 .landingHeading {
-  margin-bottom: 1.7rem;
-  font-family: "Georgia", serif;
-  font-size: 1.5rem;
+  font-size: 2.2rem;
+  font-family: "Georgia", serif; /* Elegant serif font */
   font-weight: 600;
-  text-align: center;
+  color: #2c3e50; /* Dark gray for a refined look */
+  margin-bottom: 0.5rem;
   line-height: 1.6;
+}
+
+.subHeading {
+  font-size: 1.1rem;
+  font-weight: 500;
+  font-family: "Georgia", serif;
+  color: #34495e; /* Softer gray */
+  margin-bottom: 1rem;
 }
 
 .button {
   margin: 5px;
-  padding: 10px 20px;
+  padding: 0.5rem 0.7rem;
   font-size: 1rem;
   cursor: pointer;
+  background: #f8fafc;
+  border-radius: 1rem;
+  border: 1.5px solid #d1d5db;
+  font-weight: 600;
+}
+
+.button:hover {
+  background: linear-gradient(90deg, #4b0406, #6b0f12, #a82b30);
+  color: white;
 }
 
 .modalBox {
@@ -58,6 +75,15 @@
 
 .modalContent {
   margin-bottom: 20px;
+}
+
+.btnContainer {
+  display: flex;
+  height: 10%;
+  width: 100%;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-top: 0.5rem;
 }
 
 .modalButton {
