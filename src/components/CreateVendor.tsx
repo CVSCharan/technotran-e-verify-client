@@ -39,10 +39,11 @@ const CreateVendor = () => {
         setPassword("");
         setOrgPic("");
       } else {
-        alert(`Error: ${result.message}`);
+        console.log(`Error: ${result.message}`);
       }
     } catch (error) {
-      alert("Error submitting data");
+      console.log(error);
+      console.log("Error submitting data");
     }
   };
 

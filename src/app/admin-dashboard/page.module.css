@@ -23,10 +23,55 @@
 }
 
 .landingHeading {
-  margin-bottom: 1rem;
+  margin-bottom: 1.7rem;
   font-family: "Georgia", serif;
   font-size: 1.5rem;
   font-weight: 600;
   text-align: center;
   line-height: 1.6;
+}
+
+.button {
+  margin: 5px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.modalBox {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 600px;
+  background-color: white;
+  box-shadow: 24px;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.modalTitle {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.modalContent {
+  margin-bottom: 20px;
+}
+
+.modalButton {
+  background-color: #f44336;
+  color: white;
+  padding: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+.modalButton:hover {
+  background-color: #d32f2f;
 }

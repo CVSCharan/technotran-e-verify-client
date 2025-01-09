@@ -9,10 +9,14 @@ const CreateCertificate = () => {
   const [issueDate, setIssueDate] = useState("");
   const [certificateId, setCertificateId] = useState("");
   const [rollNo, setRollNo] = useState("");
+  const [orgName, setOrgName] = useState("");
+  const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    console.log(process.env.NEXT_PUBLC_API_URL);
 
     try {
       const response = await fetch(
@@ -28,11 +32,19 @@ const CreateCertificate = () => {
             issueDate,
             certificateId,
             rollNo,
+            email,
+            orgName,
           }),
         }
       );
 
       const result = await response.json();
+      console.log("Response:", result);
+
+      if (!response.ok) {
+        setMessage(`Error: ${result}`);
+        return;
+      }
       if (response.ok) {
         setMessage("Certificate created successfully!");
         setName("");
@@ -50,61 +62,77 @@ const CreateCertificate = () => {
   };
 
   return (
-    <div style={{ maxWidth: "400px", margin: "auto", padding: "20px" }}>
-      <h2 className={styles.formHeading}>Certificate's Form</h2>
+    <form onSubmit={handleSubmit} className={styles.formContainer}>
+      <h2 className={styles.formHeading}>{`Certificate's Form`}</h2>
+      <input
+        placeholder="Username"
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        required
+        className={styles.formInput}
+      />
 
-      <form onSubmit={handleSubmit}>
-        <input
-          placeholder="Username"
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-          className={styles.formInput}
-        />
+      <input
+        placeholder="Type"
+        type="text"
+        value={type}
+        onChange={(e) => setType(e.target.value)}
+        required
+        className={styles.formInput}
+      />
 
-        <input
-          placeholder="Type"
-          type="text"
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-          required
-          className={styles.formInput}
-        />
+      <input
+        placeholder="Issued Date"
+        type="date"
+        value={issueDate}
+        onChange={(e) => setIssueDate(e.target.value)}
+        required
+        className={styles.formInput}
+      />
 
-        <input
-          placeholder="Issued Date"
-          type="date"
-          value={issueDate}
-          onChange={(e) => setIssueDate(e.target.value)}
-          required
-          className={styles.formInput}
-        />
+      <input
+        placeholder="Certificte ID"
+        type="text"
+        value={certificateId}
+        onChange={(e) => setCertificateId(e.target.value)}
+        required
+        className={styles.formInput}
+      />
 
-        <input
-          placeholder="Certificte ID"
-          type="text"
-          value={certificateId}
-          onChange={(e) => setCertificateId(e.target.value)}
-          required
-          className={styles.formInput}
-        />
+      <input
+        placeholder="Roll No."
+        type="text"
+        value={rollNo}
+        onChange={(e) => setRollNo(e.target.value)}
+        required
+        className={styles.formInput}
+      />
 
-        <input
-          placeholder="Roll No."
-          type="text"
-          value={rollNo}
-          onChange={(e) => setRollNo(e.target.value)}
-          required
-          className={styles.formInput}
-        />
+      <input
+        placeholder="Email"
+        type="text"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+        className={styles.formInput}
+      />
 
-        <button className={styles.formButton} type="submit">
-          Add Certificate
-        </button>
-      </form>
+      <input
+        placeholder="Organization"
+        type="text"
+        value={orgName}
+        onChange={(e) => setOrgName(e.target.value)}
+        required
+        className={styles.formInput}
+      />
+
+      <button className={styles.formButton} type="submit">
+        Add Certificate
+      </button>
+
       {message && <p>{message}</p>}
-    </div>
+    </form>
   );
 };
 

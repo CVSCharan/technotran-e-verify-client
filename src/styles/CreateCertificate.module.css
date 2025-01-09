@@ -11,10 +11,10 @@
 .formInput {
   width: 100%;
   padding: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.7rem;
   border: 1px solid #ccc; /* Soft border */
   border-radius: 8px; /* Rounded corners */
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-family: "Georgia", serif;
   outline: none;
   transition: border-color 0.3s ease;

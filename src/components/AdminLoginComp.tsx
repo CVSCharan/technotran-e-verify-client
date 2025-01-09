@@ -20,6 +20,7 @@ const AdminLoginComp = () => {
       console.log("Admin Login", { username, password });
       setError(null);
     } catch (err) {
+      console.log(err);
       setError("Login failed. Please try again.");
     }
   };

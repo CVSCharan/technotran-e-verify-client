@@ -26,6 +26,8 @@ const VendorVerifyComp: React.FC<VendorVerifyCompProps> = ({ org }) => {
     setOpenModal(true); // Open the modal when the login button is clicked
   };
 
+  console.log(router);
+
   return (
     <>
       {orgData && (
