@@ -22,7 +22,8 @@ const CreateVendor = () => {
 
     // Sending the data to the backend API to insert into MongoDB
     try {
-      const response = await fetch("/api/vendors", {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(`${apiUrl}/vendors`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

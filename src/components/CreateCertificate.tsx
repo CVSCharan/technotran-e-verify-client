@@ -19,24 +19,22 @@ const CreateCertificate = () => {
     console.log(process.env.NEXT_PUBLC_API_URL);
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLC_API_URL}/certificates`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name,
-            type,
-            issueDate,
-            certificateId,
-            rollNo,
-            email,
-            orgName,
-          }),
-        }
-      );
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(`${apiUrl}/certificates`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          type,
+          issueDate,
+          certificateId,
+          rollNo,
+          email,
+          org: orgName,
+        }),
+      });
 
       const result = await response.json();
       console.log("Response:", result);
