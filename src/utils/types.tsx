@@ -33,16 +33,16 @@ export interface VendorUser {
 }
 
 export interface AdminContextType {
-  user: AdminUser | null;
-  setUser: React.Dispatch<React.SetStateAction<AdminUser | null>>;
+  adminUser: AdminUser | null;
+  setAdminUser: React.Dispatch<React.SetStateAction<AdminUser | null>>;
   logout: () => void;
   login: (user: AdminUser) => void;
   showModal: boolean;
 }
 
 export interface VendorContextType {
-  user: VendorUser | null;
-  setUser: React.Dispatch<React.SetStateAction<VendorUser | null>>;
+  vendorUser: VendorUser | null;
+  setVendorUser: React.Dispatch<React.SetStateAction<VendorUser | null>>;
   logout: () => void;
   login: (user: VendorUser) => void;
   showModal: boolean;
@@ -63,3 +63,9 @@ export type Vendors = {
   email: string;
   orgPic: string;
 };
+
+export interface VendorLoginModalProps {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  orgData: Vendor | null; // Accept orgData as a prop
+}

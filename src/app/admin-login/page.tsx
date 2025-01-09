@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./page.module.css"; // Import CSS module
 import AdminLoginComp from "@/components/AdminLoginComp";
+import Footer from "@/sections/Footer";
 
 const AdminLoginPage = () => {
   return (
@@ -18,6 +19,7 @@ const AdminLoginPage = () => {
           </div>
         </div>
       </section>
+      <Footer />
     </main>
   );
 };

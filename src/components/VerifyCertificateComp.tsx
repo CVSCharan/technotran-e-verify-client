@@ -27,9 +27,8 @@ const VerifyCertificateComp = () => {
   const fetchCertificate = async (id: string) => {
     try {
       setLoading(true);
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/certificates/${id}`
-      );
+      const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(`${API_BASE_URL}/certificates/${id}`);
       if (!response.ok) {
         throw new Error("Failed to fetch certificate details");
       }
@@ -63,7 +62,27 @@ const VerifyCertificateComp = () => {
 
     try {
       const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
-      const response = await fetch(`${API_BASE_URL}/verify/send-otp`, {
+
+      // Step 1: Check if email exists in the database
+      const emailCheckResponse = await fetch(
+        `${API_BASE_URL}/certificates/verify-email`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email: formData.email }),
+        }
+      );
+
+      if (!emailCheckResponse.ok) {
+        const errorData = await emailCheckResponse.json();
+        setErrorMessage(errorData.message || "Email not found in our records.");
+        return; // Stop execution if email doesn't exist
+      }
+
+      // Step 2: Send OTP if email exists
+      const otpResponse = await fetch(`${API_BASE_URL}/verify/send-otp`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -71,14 +90,14 @@ const VerifyCertificateComp = () => {
         body: JSON.stringify({ email: formData.email }),
       });
 
-      if (response.ok) {
-        const data = await response.json();
+      if (otpResponse.ok) {
+        const data = await otpResponse.json();
         console.log(data);
         setOtpSent(true);
         setShowOtpInput(true);
-        console.log("OTP sent successfully:"); // For testing, remove in production
+        console.log("OTP sent successfully:");
       } else {
-        const errorData = await response.json();
+        const errorData = await otpResponse.json();
         setErrorMessage(errorData.message || "Failed to send OTP");
       }
     } catch (error) {

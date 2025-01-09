@@ -2,11 +2,18 @@
 
 import React, { useState } from "react";
 import styles from "../styles/AdminLoginComp.module.css";
+import { useAdmin } from "@/context/AdminContext";
+import { useRouter } from "next/navigation";
 
 const AdminLoginComp = () => {
-  const [username, setUsername] = useState<string>(""); // Explicitly type username
-  const [password, setPassword] = useState<string>(""); // Explicitly type password
-  const [error, setError] = useState<string | null>(null); // Explicitly type error state
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
+
+  const router = useRouter();
+
+  const { setAdminUser } = useAdmin();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,11 +24,31 @@ const AdminLoginComp = () => {
     }
 
     try {
-      console.log("Admin Login", { username, password });
-      setError(null);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/admins/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username, password }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setAdminUser(data.admin);
+        setMessage(data.message);
+        setError(null);
+        router.push(`/admin-dashboard`);
+      } else {
+        setMessage(null);
+        setError(data.message || "Login failed. Please try again.");
+      }
     } catch (err) {
-      console.log(err);
-      setError("Login failed. Please try again.");
+      console.error(err);
+      setError("Something went wrong. Please try again.");
     }
   };
 
@@ -53,8 +80,8 @@ const AdminLoginComp = () => {
         Login
       </button>
 
-      {/* Display error message */}
       {error && <p className={styles.error}>{error}</p>}
+      {message && <p className={styles.success}>{message}</p>}
     </form>
   );
 };

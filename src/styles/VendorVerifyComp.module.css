@@ -50,8 +50,10 @@
 }
 
 .formImg {
-  height: 100px;
-  width: 100px;
+  height: 120px;
+  width: 120px;
+  background-color: #ccc;
+  border-radius: 0.5rem;
 }
 
 /* Extra Small Mobile Devices (Portrait) */

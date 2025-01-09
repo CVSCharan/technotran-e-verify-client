@@ -1,7 +1,7 @@
 "use client";
 
 import Navbar from "@/sections/NavBar";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./page.module.css";
 import Footer from "@/sections/Footer";
 import VendorVerifyComp from "@/components/VendorVerifyComp";
@@ -13,6 +13,10 @@ const VendorPortalPage = () => {
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedOrganization(event.target.value);
   };
+
+  useEffect(() => {
+    setSelectedOrganization("");
+  }, []);
 
   return (
     <main id="E-Verify Vendor Portal">

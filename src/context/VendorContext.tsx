@@ -8,7 +8,7 @@ const VendorContext = createContext<VendorContextType | undefined>(undefined);
 export const VendorProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [user, setUser] = useState<VendorUser | null>(null); // Use AdminUser type
+  const [vendorUser, setVendorUser] = useState<VendorUser | null>(null); // Use AdminUser type
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
 
@@ -16,25 +16,27 @@ export const VendorProvider: React.FC<{ children: React.ReactNode }> = ({
     const storedUser = localStorage.getItem("vendor-user"); // Adjusted storage key
     if (storedUser) {
       const parsedStoredUser = JSON.parse(storedUser);
-      setUser(parsedStoredUser);
+      setVendorUser(parsedStoredUser);
     }
   }, []);
 
   const login = (user: VendorUser) => {
     localStorage.setItem("vendor-user", JSON.stringify(user)); // Adjusted storage key
-    setUser(user);
+    setVendorUser(user);
     router.push("/vendor-login");
   };
 
   const logout = () => {
     localStorage.removeItem("vendor-user"); // Adjusted storage key
-    setUser(null);
+    setVendorUser(null);
     setShowModal(true);
     router.push("/vendor-portal");
   };
 
   return (
-    <VendorContext.Provider value={{ user, setUser, logout, login, showModal }}>
+    <VendorContext.Provider
+      value={{ vendorUser, setVendorUser, logout, login, showModal }}
+    >
       {children}
     </VendorContext.Provider>
   );

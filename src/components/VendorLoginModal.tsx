@@ -1,38 +1,60 @@
-import * as React from "react";
+import React, { useState } from "react";
 import Modal from "@mui/material/Modal";
-import { Vendor } from "@/utils/types"; // Assuming you have Vendor type
+import { VendorLoginModalProps } from "@/utils/types"; // Assuming you have Vendor type
 import styles from "../styles/VendorLoginModal.module.css";
 import Image from "next/image";
-
-interface VendorLoginModalProps {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  orgData: Vendor | null; // Accept orgData as a prop
-}
+import { useVendor } from "@/context/VendorContext";
+import { useRouter } from "next/navigation";
 
 export default function VendorLoginModal({
   open,
   setOpen,
   orgData,
 }: VendorLoginModalProps) {
-  const [username, setUsername] = React.useState(""); // State to manage the username
-  const [password, setPassword] = React.useState(""); // State to manage the password
-  const [error, setError] = React.useState(""); // State for error message
+  const [username, setUsername] = useState(""); // State to manage the username
+  const [password, setPassword] = useState(""); // State to manage the password
+  const [error, setError] = useState<string | null>(null); // State for error message
+  const [message, setMessage] = useState<string | null>(null);
+
+  const router = useRouter();
 
   const handleClose = () => setOpen(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const { setVendorUser } = useVendor();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Example validation
     if (!username || !password) {
       setError("Please fill in both fields.");
-    } else {
-      setError("");
-      // Submit form (you can add your login logic here)
-      console.log("Logged in with:", { username, password });
-      // Close the modal after successful login
-      handleClose();
+      return;
+    }
+
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(`${apiUrl}/vendors/login/${orgData?.name}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name: username, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setVendorUser(data.admin);
+        setMessage(data.message);
+        setError(null);
+        router.push(`/vendor-dashboard`);
+      } else {
+        setMessage(null);
+        setError(data.message || "Login failed. Please try again.");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Something went wrong. Please try again.");
     }
   };
 

@@ -8,12 +8,17 @@ import CreateCertificate from "@/components/CreateCertificate";
 import CreateVendor from "@/components/CreateVendor";
 import { Modal } from "@mui/material";
 import CreateAdmin from "@/components/CreateAdmin";
+import Image from "next/image";
+import { useAdmin } from "@/context/AdminContext";
 
 const AdminDashboardPage = () => {
   const [openModal, setOpenModal] = useState(false);
   const [modalContent, setModalContent] = useState<
     "vendor" | "certificate" | "admin" | null
   >(null);
+
+  const { adminUser } = useAdmin();
+  console.log(adminUser);
 
   // Open Modal and Set Content
   const openCreateVendorModal = () => {
@@ -44,6 +49,18 @@ const AdminDashboardPage = () => {
         <div className={styles.landingSection}>
           <h2 className={styles.landingHeading}>E-Verify Portal Dashboard</h2>
           <h2 className={styles.subHeading}>A Technotran Solutions Venture</h2>
+          <div className={styles.userProfileContainer}>
+            <Image
+              src={
+                adminUser?.profilePic ||
+                "https://github.com/CVSCharan/Technotran_Assets/blob/main/Picture11.png?raw=true"
+              } // Fallback image
+              alt="admin profile pic"
+              height={100}
+              width={100}
+            />
+            <h2>{adminUser?.username}</h2>
+          </div>
           <div className={styles.btnContainer}>
             <button
               onClick={openCreateVendorModal}

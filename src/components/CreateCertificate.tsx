@@ -50,6 +50,8 @@ const CreateCertificate = () => {
         setIssueDate("");
         setCertificateId("");
         setRollNo("");
+        setEmail("");
+        setOrgName("");
       } else {
         setMessage(result.error || "Something went wrong!");
       }
