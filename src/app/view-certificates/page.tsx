@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./page.module.css";
 import { Certificate } from "@/utils/types";
 import AdminNav from "@/sections/AdminNav";
 import Footer from "@/sections/Footer";
 import EditCertificateModal from "@/components/EditCertificateModal";
+import DeleteCertificateModal from "@/components/DeleteCertificateModal";
 import CertificatesTable from "@/components/CertificatesTable";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 
@@ -15,7 +16,8 @@ const CertificatesPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [selectedCertificate, setSelectedCertificate] =
     useState<Certificate | null>(null);
-  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
 
   // Pagination states
   const [page, setPage] = useState<number>(0);
@@ -52,11 +54,21 @@ const CertificatesPage = () => {
 
   const handleEditClick = (certificate: Certificate) => {
     setSelectedCertificate(certificate);
-    setModalOpen(true);
+    setEditModalOpen(true);
   };
 
-  const handleModalClose = () => {
-    setModalOpen(false);
+  const handleDeleteClick = (certificate: Certificate) => {
+    setSelectedCertificate(certificate);
+    setDeleteModalOpen(true);
+  };
+
+  const handleEditModalClose = () => {
+    setEditModalOpen(false);
+    setSelectedCertificate(null);
+  };
+
+  const handleDeleteModalClose = () => {
+    setDeleteModalOpen(false);
     setSelectedCertificate(null);
   };
 
@@ -67,6 +79,16 @@ const CertificatesPage = () => {
       )
     );
     console.log("Updated certificate:", updatedCertificate);
+  };
+
+  const handleDeleteConfirmation = () => {
+    setCertificates((prevCertificates) =>
+      prevCertificates.filter(
+        (certificate) => certificate._id !== selectedCertificate?._id
+      )
+    );
+    setDeleteModalOpen(false);
+    console.log("Deleted certificate:", selectedCertificate);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -160,6 +182,7 @@ const CertificatesPage = () => {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
                 onEditClick={handleEditClick}
+                onDeleteClick={handleDeleteClick}
               />
             )}
           </>
@@ -167,10 +190,17 @@ const CertificatesPage = () => {
       </section>
 
       <EditCertificateModal
-        open={modalOpen}
-        onClose={handleModalClose}
+        open={editModalOpen}
+        onClose={handleEditModalClose}
         certificate={selectedCertificate}
         onSave={handleSaveChanges}
+      />
+
+      <DeleteCertificateModal
+        open={deleteModalOpen}
+        onClose={handleDeleteModalClose}
+        certificate={selectedCertificate}
+        onDelete={handleDeleteConfirmation}
       />
 
       <Footer />

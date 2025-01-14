@@ -55,6 +55,8 @@ export type Certificate = {
   issueDate: string;
   certificateId: string;
   rollNo: string;
+  email: string;
+  org: string;
 };
 
 export type Vendors = {
@@ -77,6 +79,7 @@ export interface CertificatesTableProps {
   onPageChange: (event: unknown, newPage: number) => void;
   onRowsPerPageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onEditClick: (certificate: Certificate) => void;
+  onDeleteClick: (certificate: Certificate) => void; // Added type for delete click
 }
 
 export interface EditCertificateModalProps {

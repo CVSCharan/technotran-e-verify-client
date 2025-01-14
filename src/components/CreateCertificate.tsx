@@ -11,7 +11,7 @@ const CreateCertificate = () => {
 
   return (
     <div>
-      <h2 className={styles.formHeading}>Certificate's Form</h2>
+      <h2 className={styles.formHeading}>{`Certificate's Form`}</h2>
       <div className={styles.viewToggleButtonContainer}>
         <button
           className={`${styles.viewToggleButton} ${

@@ -4,7 +4,6 @@ import { useState } from "react";
 import styles from "../styles/CreateCertificate.module.css";
 import { SingleEntryFormProps } from "@/utils/types";
 
-
 const SingleEntryForm: React.FC<SingleEntryFormProps> = ({ onMessage }) => {
   const [name, setName] = useState("");
   const [type, setType] = useState("");
@@ -49,6 +48,7 @@ const SingleEntryForm: React.FC<SingleEntryFormProps> = ({ onMessage }) => {
       setEmail("");
       setOrgName("");
     } catch (error) {
+      console.log(error);
       onMessage("Failed to create certificate!");
     }
   };

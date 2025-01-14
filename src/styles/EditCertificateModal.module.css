@@ -1,0 +1,149 @@
+.modalMainContainer {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalContainer {
+  height: 70%;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 1rem;
+  padding: 1rem; /* Added padding for a spacious feel */
+  background-color: #f8fafc; /* Light background color */
+  background-image: radial-gradient(circle, #d1d5db 1px, transparent 1px),
+    radial-gradient(circle, #d1d5db 1px, transparent 1px); /* Grid pattern */
+  background-position: 0 0, 25px 25px; /* Offset the grid */
+  background-size: 50px 50px; /* Set the grid size */
+  outline: none;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly; /* Distribute items evenly */
+  align-items: center;
+  gap: 1rem; /* Increased gap for better spacing */
+  width: 100%;
+}
+
+.formInput {
+  flex: 1 1 calc(50% - 1rem); /* Adjust width to half of the container with gap */
+  min-width: 200px; /* Ensure a minimum width for smaller screens */
+  padding: 0.7rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s ease;
+  font-family: "Quicksand", sans-serif;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.formInput:focus {
+  border-color: #4b0406;
+}
+
+.formHeading {
+  margin-bottom: 1rem;
+  font-family: "Georgia", serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.formButton {
+  padding: 0.5rem 2rem;
+  background: linear-gradient(90deg, #4b0406, #6b0f12, #a82b30);
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.formButton:hover {
+  background: linear-gradient(90deg, #4b0406, #6b0f12, #a82b30);
+}
+
+/* Extra Small Mobile Devices (Portrait) */
+/* iPhone SE, older Android phones */
+@media only screen and (max-width: 320px) {
+  .modalContainer {
+    height: 60%;
+    width: 90%;
+  }
+
+  .formButton {
+    font-size: 0.9rem;
+  }
+
+  .formInput {
+    font-size: 1rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .formHeading {
+    font-size: 0.9rem;
+  }
+}
+
+/* Small Mobile Devices (Portrait) */
+/* iPhone 6/7/8, Galaxy S8 */
+@media only screen and (min-width: 321px) and (max-width: 375px) {
+  .modalContainer {
+    height: 60%;
+    width: 90%;
+  }
+
+  .formButton {
+    font-size: 1rem;
+  }
+
+  .formInput {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .formHeading {
+    font-size: 1rem;
+  }
+}
+
+/* Medium Mobile Devices (Portrait) */
+/* iPhone 11 Pro, Google Pixel 2 */
+@media only screen and (min-width: 376px) and (max-width: 425px) {
+  .modalContainer {
+    height: 60%;
+    width: 90%;
+  }
+
+  .formButton {
+    font-size: 1rem;
+  }
+
+  .formInput {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .formHeading {
+    font-size: 1rem;
+  }
+}
+
+/* Tablets (portrait and landscape) */
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+}

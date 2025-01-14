@@ -12,6 +12,7 @@ const CertificatesTable: React.FC<CertificatesTableProps> = ({
   onPageChange,
   onRowsPerPageChange,
   onEditClick,
+  onDeleteClick, // New prop to handle delete action
 }) => {
   const displayedCertificates = certificates.slice(
     page * rowsPerPage,
@@ -51,7 +52,7 @@ const CertificatesTable: React.FC<CertificatesTableProps> = ({
               </td>
               <td>
                 <DeleteOutlineIcon
-                  onClick={() => onEditClick(certificate)}
+                  onClick={() => onDeleteClick(certificate)} // Trigger delete modal
                   style={{ cursor: "pointer", fontSize: "1.2rem" }}
                 />
               </td>
@@ -69,11 +70,11 @@ const CertificatesTable: React.FC<CertificatesTableProps> = ({
         rowsPerPageOptions={[5, 7]}
         sx={{
           "& .MuiTablePagination-toolbar": {
-            fontFamily: `"Quicksand", sans-serif`, // Replace with your desired font family
+            fontFamily: `"Quicksand", sans-serif`,
           },
           "& .MuiTablePagination-selectLabel, & .MuiTablePagination-input, & .MuiTablePagination-displayedRows":
             {
-              fontFamily: `"Quicksand", sans-serif`, // Consistent font for all parts of pagination
+              fontFamily: `"Quicksand", sans-serif`,
             },
         }}
       />

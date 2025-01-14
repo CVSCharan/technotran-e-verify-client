@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
-import { Modal, Box, Typography, Button, TextField } from "@mui/material";
+import { Modal } from "@mui/material";
 import { Certificate, EditCertificateModalProps } from "@/utils/types";
+import styles from "../styles/EditCertificateModal.module.css";
 
 const EditCertificateModal: React.FC<EditCertificateModalProps> = ({
   open,
@@ -32,72 +33,97 @@ const EditCertificateModal: React.FC<EditCertificateModalProps> = ({
     <Modal
       open={open}
       onClose={onClose}
+      className={styles.modalMainContainer}
       aria-labelledby="edit-certificate-modal-title"
       aria-describedby="edit-certificate-modal-description"
     >
-      <Box
-        sx={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: 400,
-          bgcolor: "background.paper",
-          boxShadow: 24,
-          p: 4,
-          borderRadius: "8px",
-        }}
-      >
-        <Typography
-          id="edit-certificate-modal-title"
-          variant="h6"
-          component="h2"
-        >
+      <div className={styles.modalContainer}>
+        <h2 id="edit-certificate-modal-title" className={styles.formHeading}>
           Edit Certificate
-        </Typography>
-        <TextField
-          fullWidth
-          margin="normal"
-          label="Name"
-          value={localCertificate.name}
-          onChange={(e) =>
-            setLocalCertificate({ ...localCertificate, name: e.target.value })
-          }
-        />
-        <TextField
-          fullWidth
-          margin="normal"
-          label="Type"
-          value={localCertificate.type}
-          onChange={(e) =>
-            setLocalCertificate({ ...localCertificate, type: e.target.value })
-          }
-        />
-        <TextField
-          fullWidth
-          margin="normal"
-          label="Issue Date"
-          type="date"
-          value={
-            new Date(localCertificate.issueDate).toISOString().split("T")[0]
-          }
-          onChange={(e) =>
-            setLocalCertificate({
-              ...localCertificate,
-              issueDate: new Date(e.target.value).toISOString(),
-            })
-          }
-          InputLabelProps={{ shrink: true }}
-        />
-        <Box sx={{ mt: 2, display: "flex", justifyContent: "space-between" }}>
-          <Button variant="outlined" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button variant="contained" onClick={handleSave}>
-            Save Changes
-          </Button>
-        </Box>
-      </Box>
+        </h2>
+        <form className={styles.formContainer}>
+          <input
+            value={localCertificate.name}
+            className={styles.formInput}
+            onChange={(e) =>
+              setLocalCertificate({ ...localCertificate, name: e.target.value })
+            }
+          />
+          <input
+            value={localCertificate.type}
+            className={styles.formInput}
+            onChange={(e) =>
+              setLocalCertificate({ ...localCertificate, type: e.target.value })
+            }
+          />
+          <input
+            type="date"
+            className={styles.formInput}
+            value={
+              new Date(localCertificate.issueDate).toISOString().split("T")[0]
+            }
+            onChange={(e) =>
+              setLocalCertificate({
+                ...localCertificate,
+                issueDate: new Date(e.target.value).toISOString(),
+              })
+            }
+          />
+          <input
+            value={localCertificate.certificateId}
+            className={styles.formInput}
+            onChange={(e) =>
+              setLocalCertificate({
+                ...localCertificate,
+                certificateId: e.target.value,
+              })
+            }
+          />
+          <input
+            value={localCertificate.rollNo}
+            className={styles.formInput}
+            onChange={(e) =>
+              setLocalCertificate({
+                ...localCertificate,
+                rollNo: e.target.value,
+              })
+            }
+          />
+          <input
+            value={localCertificate.email}
+            className={styles.formInput}
+            onChange={(e) =>
+              setLocalCertificate({
+                ...localCertificate,
+                email: e.target.value,
+              })
+            }
+          />
+          <input
+            value={localCertificate.org}
+            className={styles.formInput}
+            onChange={(e) =>
+              setLocalCertificate({ ...localCertificate, org: e.target.value })
+            }
+          />
+          <div
+            style={{
+              marginTop: 2,
+              display: "flex",
+              justifyContent: "center",
+              width: "70%",
+              gap: "10px",
+            }}
+          >
+            <button className={styles.formButton} onClick={onClose}>
+              Cancel
+            </button>
+            <button className={styles.formButton} onClick={handleSave}>
+              Save
+            </button>
+          </div>
+        </form>
+      </div>
     </Modal>
   );
 };
