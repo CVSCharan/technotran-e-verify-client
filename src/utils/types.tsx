@@ -69,3 +69,27 @@ export interface VendorLoginModalProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   orgData: Vendor | null; // Accept orgData as a prop
 }
+
+export interface CertificatesTableProps {
+  certificates: Certificate[];
+  page: number;
+  rowsPerPage: number;
+  onPageChange: (event: unknown, newPage: number) => void;
+  onRowsPerPageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onEditClick: (certificate: Certificate) => void;
+}
+
+export interface EditCertificateModalProps {
+  open: boolean;
+  onClose: () => void;
+  certificate: Certificate | null;
+  onSave: (updatedCertificate: Certificate) => void;
+}
+
+export interface MultipleEntryFormProps {
+  onMessage: (message: string) => void;
+}
+
+export interface SingleEntryFormProps {
+  onMessage: (message: string) => void;
+}
