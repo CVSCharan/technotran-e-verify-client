@@ -59,7 +59,24 @@
   transition: background 0.3s ease, transform 0.3s ease;
 }
 
+.navLinks li h2 {
+  color: white;
+  font-weight: 400;
+  text-decoration: none;
+  font-size: 0.85rem;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-family: "Parkinsans", serif;
+  transition: background 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+}
+
 .navLinks li a:hover {
+  background: rgba(255, 255, 255, 0.2); /* Highlight effect */
+  transform: scale(1.1); /* Slight zoom effect */
+}
+
+.navLinks li h2:hover {
   background: rgba(255, 255, 255, 0.2); /* Highlight effect */
   transform: scale(1.1); /* Slight zoom effect */
 }
@@ -91,6 +108,14 @@
   }
 
   .navLinks li a {
+    margin: 1rem 0;
+    padding: 0.3rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .navLinks li h2 {
     margin: 1rem 0;
     padding: 0.3rem 1rem;
     font-size: 0.9rem;

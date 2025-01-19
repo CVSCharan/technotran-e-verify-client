@@ -7,42 +7,60 @@ import React, {
   useMemo,
 } from "react";
 import { useRouter } from "next/navigation";
-import { AdminContextType, AdminUser } from "@/utils/types"; // Import the AdminUser type
+import Cookies from "js-cookie";
+import { AdminContextType, AdminUser } from "@/utils/types";
 
 const AdminContext = createContext<AdminContextType | undefined>(undefined);
 
 export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [adminUser, setAdminUser] = useState<AdminUser | null>(null); // Use AdminUser type
-  const [showModal, setShowModal] = useState(false);
+  const [adminUser, setAdminUser] = useState<AdminUser | null>(null);
+  const [showModal, setShowModal] = useState(false); // Initially false
   const router = useRouter();
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem("admin-user"); // Adjusted storage key
+  // Check for the user in cookies when the component mounts
+  const checkUserFromCookies = () => {
+    const storedUser = Cookies.get("admin_user");
     if (storedUser) {
-      const parsedStoredUser = JSON.parse(storedUser);
-      setAdminUser(parsedStoredUser);
+      setAdminUser(JSON.parse(storedUser));
+      setShowModal(false); // No modal if user is logged in
+    } else {
+      setAdminUser(null);
+      setShowModal(true); // Show modal if no user is logged in
     }
-  }, []);
+  };
+
+  useEffect(() => {
+    checkUserFromCookies();
+  }, []); // Empty dependency ensures this only runs on mount
 
   const login = (user: AdminUser) => {
-    localStorage.setItem("admin-user", JSON.stringify(user)); // Adjusted storage key
-    setAdminUser(user); // Fix here: Pass `user` instead of `adminUser`
+    setAdminUser(user);
+    Cookies.set("admin_user", JSON.stringify(user), {
+      expires: 1 / 48, // 30 minutes (0.0208 days)
+      sameSite: "Strict",
+    });
+    setShowModal(false);
     router.push("/admin-dashboard");
   };
 
-  const logout = () => {
-    localStorage.removeItem("admin-user"); // Adjusted storage key
+  const logout = async () => {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admins/logout`, {
+      method: "POST",
+      credentials: "include",
+    });
+
     setAdminUser(null);
-    setShowModal(true);
+    Cookies.remove("admin_user");
+    setShowModal(true); // Show modal on logout
     router.push("/admin-login");
   };
 
-  // Memoize the context value
+  // Memoize context value to avoid unnecessary re-renders
   const contextValue = useMemo(
-    () => ({ adminUser, setAdminUser, logout, login, showModal }),
-    [adminUser, logout, login, showModal]
+    () => ({ adminUser, setAdminUser, login, logout, showModal, setShowModal }),
+    [adminUser, showModal]
   );
 
   return (
@@ -52,7 +70,7 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-// Custom Hook
+// Custom Hook for using Admin Context
 export const useAdmin = () => {
   const context = useContext(AdminContext);
   if (!context) {

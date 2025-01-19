@@ -38,6 +38,7 @@ export interface AdminContextType {
   logout: () => void;
   login: (user: AdminUser) => void;
   showModal: boolean;
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>; // Added this
 }
 
 export interface VendorContextType {
@@ -63,6 +64,7 @@ export type Vendors = {
   _id: string;
   name: string;
   email: string;
+  org: string;
   orgPic: string;
 };
 
@@ -80,6 +82,16 @@ export interface CertificatesTableProps {
   onRowsPerPageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onEditClick: (certificate: Certificate) => void;
   onDeleteClick: (certificate: Certificate) => void; // Added type for delete click
+}
+
+export interface VendorsTableProps {
+  vendors: Vendors[];
+  page: number;
+  rowsPerPage: number;
+  onPageChange: (event: unknown, newPage: number) => void;
+  onRowsPerPageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onEditClick: (vendor: Vendors) => void;
+  onDeleteClick: (vendor: Vendors) => void; // Added type for delete click
 }
 
 export interface EditCertificateModalProps {

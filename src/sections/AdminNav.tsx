@@ -3,12 +3,19 @@
 import { useState } from "react";
 import Link from "next/link";
 import styles from "../styles/NavBar.module.css";
+import { useAdmin } from "@/context/AdminContext";
 
 const AdminNav = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { logout } = useAdmin();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handleLogoutBtnClick = () => {
+    setIsOpen(false);
+    logout();
   };
 
   return (
@@ -39,9 +46,7 @@ const AdminNav = () => {
             </Link>
           </li>
           <li>
-            <Link href="/" onClick={() => setIsOpen(false)}>
-              Logout
-            </Link>
+            <h2 onClick={() => handleLogoutBtnClick()}>Logout</h2>
           </li>
         </ul>
       </div>

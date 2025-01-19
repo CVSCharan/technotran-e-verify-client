@@ -9,6 +9,11 @@ import EditCertificateModal from "@/components/EditCertificateModal";
 import DeleteCertificateModal from "@/components/DeleteCertificateModal";
 import CertificatesTable from "@/components/CertificatesTable";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
+import Snackbar from "@mui/material/Snackbar";
+import { AlertColor } from "@mui/material/Alert";
+import Alert from "@mui/material/Alert";
+import { useAdmin } from "@/context/AdminContext";
+import LoginModal from "@/components/AdminAuthModal";
 
 const CertificatesPage = () => {
   const [certificates, setCertificates] = useState<Certificate[]>([]);
@@ -26,6 +31,13 @@ const CertificatesPage = () => {
   // Search and filter states
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedType, setSelectedType] = useState<string>("All");
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] =
+    useState<AlertColor>("success");
+
+  const { adminUser, showModal } = useAdmin(); // Get adminUser and showModal from context
 
   useEffect(() => {
     const fetchCertificates = async () => {
@@ -72,23 +84,76 @@ const CertificatesPage = () => {
     setSelectedCertificate(null);
   };
 
-  const handleSaveChanges = (updatedCertificate: Certificate) => {
-    setCertificates((prevCertificates) =>
-      prevCertificates.map((cert) =>
-        cert._id === updatedCertificate._id ? updatedCertificate : cert
-      )
-    );
-    console.log("Updated certificate:", updatedCertificate);
+  const showSnackbar = (message: string, severity: AlertColor) => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
   };
 
-  const handleDeleteConfirmation = () => {
-    setCertificates((prevCertificates) =>
-      prevCertificates.filter(
-        (certificate) => certificate._id !== selectedCertificate?._id
-      )
-    );
-    setDeleteModalOpen(false);
-    console.log("Deleted certificate:", selectedCertificate);
+  const API_BASE_URL = `${[process.env.NEXT_PUBLIC_API_URL]}/certificates`; // Replace with actual backend URL
+
+  const handleSaveChanges = async (updatedCertificate: Certificate) => {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/${updatedCertificate._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedCertificate),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to update certificate");
+      }
+
+      const data = await response.json();
+
+      setCertificates((prevCertificates) =>
+        prevCertificates.map((cert) =>
+          cert._id === updatedCertificate._id ? data : cert
+        )
+      );
+
+      showSnackbar("Certificate updated successfully!", "success");
+      console.log("Updated certificate:", data);
+    } catch (error) {
+      showSnackbar("Failed to update certificate!", "warning");
+      showSnackbar("Failed to update certificate!", "warning");
+      console.error("Error updating certificate:", error);
+    }
+  };
+
+  const handleDeleteConfirmation = async () => {
+    if (!selectedCertificate) return;
+
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/${selectedCertificate._id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to delete certificate");
+      }
+
+      setCertificates((prevCertificates) =>
+        prevCertificates.filter(
+          (certificate) => certificate._id !== selectedCertificate._id
+        )
+      );
+
+      showSnackbar("Certificate deleted successfully!", "success");
+      setDeleteModalOpen(false);
+      console.log("Deleted certificate:", selectedCertificate);
+    } catch (error) {
+      showSnackbar("Failed to delete certificate!", "warning");
+      console.error("Error deleting certificate:", error);
+    }
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -129,15 +194,38 @@ const CertificatesPage = () => {
   );
 
   if (loading) {
-    return <p className={styles.loading}>Loading certificates...</p>;
+    return (
+      <main id="E-Verify Portal View Certificates">
+        <AdminNav />
+        <section className={styles.mainBody}>
+          <div className={styles.landingSection}>
+            <span className={styles.loader}></span>
+          </div>
+        </section>
+        <Footer />
+      </main>
+    );
   }
 
   if (error) {
-    return <p className={styles.error}>Error: {error}</p>;
+    return (
+      <main id="E-Verify Portal View Certificates">
+        <AdminNav />
+        <section className={styles.mainBody}>
+          <div className={styles.landingSection}>
+            <p className={styles.error}>Server Error: {error}</p>
+          </div>
+        </section>
+        <Footer />
+      </main>
+    );
   }
 
   return (
     <main id="E-Verify Portal View Certificates">
+      {/* Show the LoginModal if user is not authenticated */}
+      {!adminUser && showModal && <LoginModal />}
+
       <AdminNav />
       <section className={styles.mainBody}>
         <div className={styles.landingSection}>
@@ -202,6 +290,20 @@ const CertificatesPage = () => {
         certificate={selectedCertificate}
         onDelete={handleDeleteConfirmation}
       />
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={() => setSnackbarOpen(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <Alert
+          severity={snackbarSeverity}
+          onClose={() => setSnackbarOpen(false)}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
 
       <Footer />
     </main>

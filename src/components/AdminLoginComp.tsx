@@ -13,7 +13,7 @@ const AdminLoginComp = () => {
 
   const router = useRouter();
 
-  const { setAdminUser } = useAdmin();
+  const { login } = useAdmin();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,21 +24,20 @@ const AdminLoginComp = () => {
     }
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/admins/login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ username, password }),
-        }
-      );
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(`${apiUrl}/admins/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+        credentials: "include", // ✅ Ensures the cookie is set
+      });
 
       const data = await response.json();
 
       if (response.ok) {
-        setAdminUser(data.admin);
+        login(data); // ✅ Store user data in cookies
         setMessage(data.message);
         setError(null);
         router.push(`/admin-dashboard`);

@@ -1,7 +1,7 @@
 "use client";
 
 import AdminNav from "@/sections/AdminNav";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./page.module.css";
 import Footer from "@/sections/Footer";
 import CreateCertificate from "@/components/CreateCertificate";
@@ -10,6 +10,7 @@ import { Modal } from "@mui/material";
 import CreateAdmin from "@/components/CreateAdmin";
 import Image from "next/image";
 import { useAdmin } from "@/context/AdminContext";
+import LoginModal from "@/components/AdminAuthModal"; // Import the LoginModal component
 
 const AdminDashboardPage = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -17,8 +18,7 @@ const AdminDashboardPage = () => {
     "vendor" | "certificate" | "admin" | null
   >(null);
 
-  const { adminUser } = useAdmin();
-  console.log(adminUser);
+  const { adminUser, showModal } = useAdmin(); // Get adminUser and showModal from context
 
   // Open Modal and Set Content
   const openCreateVendorModal = () => {
@@ -44,6 +44,9 @@ const AdminDashboardPage = () => {
 
   return (
     <main id="E-Verify Portal Admin Dashboard">
+      {/* Show the LoginModal if user is not authenticated */}
+      {!adminUser && showModal && <LoginModal />}
+
       <AdminNav />
       <section className={styles.mainBody}>
         <div className={styles.landingSection}>
@@ -60,6 +63,9 @@ const AdminDashboardPage = () => {
               width={100}
             />
             <h2>{adminUser?.username}</h2>
+            <h3>
+              {adminUser?.role === "superadmin" ? "Super Admin" : "Admin"}
+            </h3>
           </div>
           <div className={styles.btnContainer}>
             <button
@@ -84,7 +90,7 @@ const AdminDashboardPage = () => {
         </div>
       </section>
 
-      {/* Modal Component */}
+      {/* Modal Component for Create Vendor, Certificate, Admin */}
       <Modal
         open={openModal}
         onClose={handleCloseModal}

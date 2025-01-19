@@ -36,7 +36,7 @@ const VendorPortalPage = () => {
           {/* Add Select Component */}
           <div className={styles.selectContainer}>
             <label htmlFor="vendor-options" className={styles.selectLabel}>
-              Organization
+              Vendor Organization
             </label>
             <select
               id="vendor-options"
