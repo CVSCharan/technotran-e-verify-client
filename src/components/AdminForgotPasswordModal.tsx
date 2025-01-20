@@ -46,6 +46,7 @@ const AdminForgotPasswordModal: React.FC<AdminForgotPasswordModalProps> = ({
         setError(data.message || "Failed to send OTP.");
       }
     } catch (err) {
+      console.error(err);
       setError("An error occurred. Try again later.");
     } finally {
       setLoading(false);
@@ -77,6 +78,7 @@ const AdminForgotPasswordModal: React.FC<AdminForgotPasswordModalProps> = ({
         setError(data.message || "Invalid OTP.");
       }
     } catch (err) {
+      console.error(err);
       setError("An error occurred. Try again later.");
     } finally {
       setLoading(false);
@@ -111,6 +113,7 @@ const AdminForgotPasswordModal: React.FC<AdminForgotPasswordModalProps> = ({
         setError(data.message || "Failed to reset password.");
       }
     } catch (err) {
+      console.error(err);
       setError("An error occurred. Try again later.");
     } finally {
       setLoading(false);

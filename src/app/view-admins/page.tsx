@@ -29,7 +29,7 @@ const ViewAdminsPage = () => {
 
   // Search and filter states
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [selectedType, setSelectedType] = useState<string>("All");
+  // const [selectedType, setSelectedType] = useState<string>("All");
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
