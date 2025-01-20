@@ -46,23 +46,33 @@ const CertificateDetails = () => {
       const ctx = canvas.getContext("2d");
 
       if (ctx) {
+        let imgSrc =
+          "https://github.com/CVSCharan/Technotran_Assets/blob/main/Internship_Cert.png?raw=true"; // Default for AICTE Internship & Internship
+        if (certificate.type === "Workshop") {
+          imgSrc =
+            "https://github.com/CVSCharan/Technotran_Assets/blob/main/Workshop_Cert.png?raw=true"; // Different image for Workshop
+        }
+
         const img = new Image();
-        img.src = "/Images/certificate-img.jpeg"; // Replace with your image path
+        img.src = imgSrc;
 
         img.onload = () => {
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-          // Add certificate details
+          // Set font styles
           ctx.font = "bold 30px Arial";
           ctx.fillStyle = "black";
+
+          // Common fields for all certificates
           ctx.fillText(certificate.name, 50, 320);
-
-          ctx.font = "bold 50px Arial";
           ctx.fillText(certificate.type, 70, 150);
-
-          ctx.font = "bold 18px Arial";
           ctx.fillText(certificate.certificateId, 150, 510);
           ctx.fillText(certificate.rollNo, 85, 535);
+
+          // Additional field for AICTE Internship
+          if (certificate.type === "AICTE Internship") {
+            ctx.fillText(`AICTE ID: ${certificate.aicteId || "N/A"}`, 150, 560);
+          }
 
           // Generate QR code and draw on canvas
           QRCode.toCanvas(
@@ -81,7 +91,7 @@ const CertificateDetails = () => {
                   canvas.height - 120,
                   100,
                   100
-                ); // Adjust QR code position and size
+                );
               }
             }
           );

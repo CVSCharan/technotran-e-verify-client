@@ -53,12 +53,13 @@ export interface VendorContextType {
 export type Certificate = {
   _id: string;
   name: string;
-  type: string;
+  type: "AICTE Internship" | "Internship" | "Workshop"; // Restricting to known types
   issueDate: string;
   certificateId: string;
   rollNo: string;
   email: string;
   org: string;
+  aicteId?: string; // Optional AICTE ID (only for AICTE Internship)
 };
 
 export type Vendors = {

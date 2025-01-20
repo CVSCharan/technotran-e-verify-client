@@ -54,7 +54,13 @@ const EditCertificateModal: React.FC<EditCertificateModalProps> = ({
           <select
             value={localCertificate.type}
             onChange={(e) =>
-              setLocalCertificate({ ...localCertificate, type: e.target.value })
+              setLocalCertificate({
+                ...localCertificate,
+                type: e.target.value as
+                  | "AICTE Internship"
+                  | "Internship"
+                  | "Workshop",
+              })
             }
             required
             className={styles.formInput}
