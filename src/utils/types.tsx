@@ -154,3 +154,7 @@ export interface MultipleEntryFormProps {
 export interface SingleEntryFormProps {
   onMessage: (message: string) => void;
 }
+
+export interface CreateModelProps {
+  handleCloseModal: () => void;
+}

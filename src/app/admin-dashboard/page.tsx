@@ -136,9 +136,13 @@ const AdminDashboardPage = () => {
       >
         <div className={styles.modalBox}>
           <div className={styles.modalContent}>
-            {modalContent === "vendor" && <CreateVendor />}
+            {modalContent === "vendor" && (
+              <CreateVendor handleCloseModal={handleCloseModal} />
+            )}
             {modalContent === "certificate" && <CreateCertificate />}
-            {modalContent === "admin" && <CreateAdmin />}
+            {modalContent === "admin" && (
+              <CreateAdmin handleCloseModal={handleCloseModal} />
+            )}
           </div>
         </div>
       </Modal>

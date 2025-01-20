@@ -49,13 +49,21 @@ const EditCertificateModal: React.FC<EditCertificateModalProps> = ({
               setLocalCertificate({ ...localCertificate, name: e.target.value })
             }
           />
-          <input
+
+          {/* Dropdown for Type Selection */}
+          <select
             value={localCertificate.type}
-            className={styles.formInput}
             onChange={(e) =>
               setLocalCertificate({ ...localCertificate, type: e.target.value })
             }
-          />
+            required
+            className={styles.formInput}
+          >
+            <option value="AICTE Internship">AICTE Internship</option>
+            <option value="Internship">Internship</option>
+            <option value="Workshop">Workshop</option>
+          </select>
+
           <input
             type="date"
             className={styles.formInput}
@@ -116,7 +124,7 @@ const EditCertificateModal: React.FC<EditCertificateModalProps> = ({
             }}
           >
             <button className={styles.formButton} onClick={onClose}>
-              Cancel
+              Close
             </button>
             <button className={styles.formButton} onClick={handleSave}>
               Save

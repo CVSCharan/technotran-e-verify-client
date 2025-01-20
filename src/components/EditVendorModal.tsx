@@ -85,7 +85,7 @@ const EditVendorModal: React.FC<EditVendorModalProps> = ({
             }}
           >
             <button className={styles.formButton} onClick={onClose}>
-              Cancel
+              Close
             </button>
             <button className={styles.formButton} onClick={handleSave}>
               Save

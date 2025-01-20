@@ -98,7 +98,7 @@ const EditAdminsModal: React.FC<EditAdminModalProps> = ({
               className={styles.formButton}
               onClick={onClose}
             >
-              Cancel
+              Close
             </button>
             <button
               type="button"

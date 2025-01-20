@@ -2,8 +2,9 @@
 
 import React, { useState } from "react";
 import styles from "../styles/CreateAdmin.module.css";
+import { CreateModelProps } from "@/utils/types";
 
-const CreateAdmin = () => {
+const CreateAdmin: React.FC<CreateModelProps> = ({ handleCloseModal }) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,7 +27,7 @@ const CreateAdmin = () => {
           username,
           email,
           password,
-          profilePic: profilePic || undefined, // Default value from schema will be used if empty
+          profilePic: profilePic || undefined,
           role,
         }),
       });
@@ -50,7 +51,7 @@ const CreateAdmin = () => {
 
   return (
     <form onSubmit={handleSubmit} className={styles.formContainer}>
-      <h2 className={styles.formHeading}>{`Admin's Form`}</h2>
+      <h2 className={styles.formHeading}>Admin's Form</h2>
       <div className={styles.formSubContainer}>
         <input
           type="text"
@@ -97,9 +98,19 @@ const CreateAdmin = () => {
         </select>
       </div>
 
-      <button type="submit" className={styles.formButton}>
-        Add User
-      </button>
+      <div className={styles.btnContainer}>
+        <button
+          type="button"
+          onClick={handleCloseModal}
+          className={styles.formButton}
+        >
+          Close
+        </button>
+
+        <button type="submit" className={styles.formButton}>
+          Add User
+        </button>
+      </div>
 
       {message && <p className={styles.message}>{message}</p>}
     </form>

@@ -6,7 +6,7 @@ import { SingleEntryFormProps } from "@/utils/types";
 
 const SingleEntryForm: React.FC<SingleEntryFormProps> = ({ onMessage }) => {
   const [name, setName] = useState("");
-  const [type, setType] = useState("");
+  const [type, setType] = useState("AICTE Internship"); // Default value
   const [issueDate, setIssueDate] = useState("");
   const [certificateId, setCertificateId] = useState("");
   const [rollNo, setRollNo] = useState("");
@@ -41,7 +41,7 @@ const SingleEntryForm: React.FC<SingleEntryFormProps> = ({ onMessage }) => {
 
       onMessage("Certificate created successfully!");
       setName("");
-      setType("");
+      setType("AICTE Internship"); // Reset to default
       setIssueDate("");
       setCertificateId("");
       setRollNo("");
@@ -64,14 +64,19 @@ const SingleEntryForm: React.FC<SingleEntryFormProps> = ({ onMessage }) => {
           required
           className={styles.formInput}
         />
-        <input
-          placeholder="Type"
-          type="text"
+
+        {/* Dropdown for Type Selection */}
+        <select
           value={type}
           onChange={(e) => setType(e.target.value)}
           required
-          className={styles.formInput}
-        />
+          className={styles.formInput} // Use the same styling as input fields
+        >
+          <option value="AICTE Internship">AICTE Internship</option>
+          <option value="Internship">Internship</option>
+          <option value="Workshop">Workshop</option>
+        </select>
+
         <input
           placeholder="Issued Date"
           type="date"

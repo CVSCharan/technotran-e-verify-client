@@ -14,6 +14,7 @@ import LoginModal from "@/components/AdminAuthModal";
 import AdminsTable from "@/components/AdminsTable";
 import EditAdminsModal from "@/components/EditAdminsModal";
 import DeleteAdminsModal from "@/components/DeleteAdminsModal";
+import Cookies from "js-cookie";
 
 const ViewAdminsPage = () => {
   const [admins, setAdmins] = useState<AdminUser[]>([]);
@@ -42,13 +43,34 @@ const ViewAdminsPage = () => {
     const fetchAdmins = async () => {
       try {
         const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+        // ✅ Retrieve user from cookies
+        const userCookie = Cookies.get("admin_user");
+
+        if (!userCookie) {
+          throw new Error("Authentication token not found in cookies");
+        }
+
+        const user = JSON.parse(userCookie);
+        const token = user?.token;
+
+        if (!token) {
+          throw new Error("Token missing in stored user data");
+        }
+
         const response = await fetch(`${apiUrl}/admins`, {
           method: "GET",
-          credentials: "include", // ✅ Ensures cookies (JWT token) are included
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // ✅ Send the token
+          },
         });
+
         if (!response.ok) {
-          throw new Error("Failed to fetch admins");
+          const errorMessage = await response.text();
+          throw new Error(`Error ${response.status}: ${errorMessage}`);
         }
+
         const data: AdminUser[] = await response.json();
         setAdmins(data);
       } catch (err) {

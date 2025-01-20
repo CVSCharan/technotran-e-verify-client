@@ -2,8 +2,9 @@
 
 import React, { useState } from "react";
 import styles from "../styles/CreateVendor.module.css";
+import { CreateModelProps } from "@/utils/types";
 
-const CreateVendor = () => {
+const CreateVendor: React.FC<CreateModelProps> = ({ handleCloseModal }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -104,9 +105,18 @@ const CreateVendor = () => {
         />
       </div>
 
-      <button type="submit" className={styles.formButton}>
-        Add Vendor
-      </button>
+      <div className={styles.btnContainer}>
+        <button
+          type="button"
+          onClick={handleCloseModal}
+          className={styles.formButton}
+        >
+          Close
+        </button>
+        <button type="submit" className={styles.formButton}>
+          Add Vendor
+        </button>
+      </div>
     </form>
   );
 };
