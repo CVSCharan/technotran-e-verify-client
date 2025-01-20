@@ -170,7 +170,7 @@ const AdminForgotPasswordModal: React.FC<AdminForgotPasswordModalProps> = ({
             onClick={onClose}
             disabled={loading}
           >
-            <Close></Close>
+            Close
           </button>
           {step === "email" && (
             <button
