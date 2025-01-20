@@ -8,20 +8,31 @@
   gap: 0.7rem;
 }
 
+.formSubContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.7rem;
+}
+
 .formInput {
-  width: 100%;
-  padding: 1rem;
-  margin-bottom: 0.7rem;
-  border: 1px solid #ccc; /* Soft border */
-  border-radius: 8px; /* Rounded corners */
+  min-width: 270px; /* Ensure a minimum width for smaller screens */
+  padding: 0.7rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
   font-size: 1rem;
-  font-family: "Georgia", serif;
   outline: none;
   transition: border-color 0.3s ease;
+  font-family: "Quicksand", sans-serif;
+  font-weight: 500;
+  font-size: 0.9rem;
 }
 
 .formInput:focus {
-  border-color: #4b0406; /* Soft blue for focus state */
+  border-color: #4b0406;
 }
 
 .formHeading {

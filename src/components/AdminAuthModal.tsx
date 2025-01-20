@@ -1,16 +1,13 @@
 "use client";
 import React from "react";
-import { Modal, Box, Typography, Button } from "@mui/material";
+import { Modal } from "@mui/material";
 import { useAdmin } from "@/context/AdminContext";
 import { useRouter } from "next/navigation";
+import styles from "../styles/AdminAuthModal.module.css";
 
 const LoginModal = () => {
-  const { showModal, setShowModal } = useAdmin();
+  const { setShowModal } = useAdmin();
   const router = useRouter();
-
-  const handleClose = () => {
-    setShowModal(false); // Close the modal
-  };
 
   const handleGoToLogin = () => {
     setShowModal(false); // Close modal on redirection
@@ -18,35 +15,21 @@ const LoginModal = () => {
   };
 
   return (
-    <Modal open={true}>
-      <Box
-        sx={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: 400,
-          bgcolor: "background.paper",
-          boxShadow: 24,
-          p: 4,
-          borderRadius: 2,
-        }}
-      >
-        <Typography variant="h6" component="h2">
-          Authentication Required
-        </Typography>
-        <Typography sx={{ mt: 2 }}>
-          You need to log in to access this page.
-        </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          sx={{ mt: 3, width: "100%" }}
-          onClick={handleGoToLogin}
-        >
-          Go to Login
-        </Button>
-      </Box>
+    <Modal
+      open={true}
+      className={styles.modalMainContainer}
+      aria-labelledby="admin-login-auth-modal-title"
+      aria-describedby="admin-login-auth-modal-description"
+    >
+      <div className={styles.modalContainer}>
+        <h2 className={styles.heading}>Authentication Required</h2>
+        <h3 className={styles.subHeading}>
+          Please log in to access this page.
+        </h3>
+        <button onClick={handleGoToLogin} className={styles.routeButton}>
+          Log In
+        </button>
+      </div>
     </Modal>
   );
 };

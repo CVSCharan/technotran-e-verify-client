@@ -4,6 +4,7 @@ import { VendorsTableProps } from "@/utils/types";
 import { TablePagination } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import { useAdmin } from "@/context/AdminContext";
 
 const VendorsTable: React.FC<VendorsTableProps> = ({
   vendors,
@@ -14,6 +15,13 @@ const VendorsTable: React.FC<VendorsTableProps> = ({
   onEditClick,
   onDeleteClick,
 }) => {
+  const { adminUser } = useAdmin();
+
+  const displayedVendors = vendors.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
+
   return (
     <>
       <table className={styles.table}>
@@ -22,28 +30,36 @@ const VendorsTable: React.FC<VendorsTableProps> = ({
             <th>Name</th>
             <th>Email</th>
             <th>Organization</th>
-            <th>Edit</th>
-            <th>Delete</th>
+            {adminUser?.role === "superadmin" && (
+              <>
+                <th>Edit</th>
+                <th>Delete</th>
+              </>
+            )}
           </tr>
         </thead>
         <tbody>
-          {vendors.map((vendor) => (
+          {displayedVendors.map((vendor) => (
             <tr key={vendor._id}>
               <td>{vendor.name}</td>
               <td>{vendor.email}</td>
               <td>{vendor.org}</td>
-              <td>
-                <EditOutlinedIcon
-                  onClick={() => onEditClick(vendor)}
-                  style={{ cursor: "pointer", fontSize: "1.2rem" }}
-                />
-              </td>
-              <td>
-                <DeleteOutlineIcon
-                  onClick={() => onDeleteClick(vendor)} // Trigger delete modal
-                  style={{ cursor: "pointer", fontSize: "1.2rem" }}
-                />
-              </td>
+              {adminUser?.role === "superadmin" && (
+                <>
+                  <td>
+                    <EditOutlinedIcon
+                      onClick={() => onEditClick(vendor)}
+                      style={{ cursor: "pointer", fontSize: "1.2rem" }}
+                    />
+                  </td>
+                  <td>
+                    <DeleteOutlineIcon
+                      onClick={() => onDeleteClick(vendor)} // Trigger delete modal
+                      style={{ cursor: "pointer", fontSize: "1.2rem" }}
+                    />
+                  </td>
+                </>
+              )}
             </tr>
           ))}
         </tbody>

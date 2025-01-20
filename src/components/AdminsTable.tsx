@@ -1,23 +1,23 @@
-import Link from "next/link";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import React from "react";
+import styles from "../styles/AdminsTable.module.css";
+import { AdminsTableProps } from "@/utils/types";
 import { TablePagination } from "@mui/material";
-import styles from "../styles/CertificatesTable.module.css";
-import { CertificatesTableProps } from "@/utils/types";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { useAdmin } from "@/context/AdminContext";
 
-const CertificatesTable: React.FC<CertificatesTableProps> = ({
-  certificates,
+const AdminsTable: React.FC<AdminsTableProps> = ({
+  admins,
   page,
   rowsPerPage,
   onPageChange,
   onRowsPerPageChange,
   onEditClick,
-  onDeleteClick, // New prop to handle delete action
+  onDeleteClick,
 }) => {
   const { adminUser } = useAdmin();
 
-  const displayedCertificates = certificates.slice(
+  const displayedAdmins = admins.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
@@ -27,9 +27,9 @@ const CertificatesTable: React.FC<CertificatesTableProps> = ({
       <table className={styles.table}>
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Issue Date</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Role</th>
             {adminUser?.role === "superadmin" && (
               <>
                 <th>Edit</th>
@@ -39,29 +39,22 @@ const CertificatesTable: React.FC<CertificatesTableProps> = ({
           </tr>
         </thead>
         <tbody>
-          {displayedCertificates.map((certificate) => (
-            <tr key={certificate._id}>
-              <td>
-                <Link
-                  href={`/certificate/${certificate.certificateId}`}
-                  className={styles.link}
-                >
-                  {certificate.name}
-                </Link>
-              </td>
-              <td>{certificate.type}</td>
-              <td>{new Date(certificate.issueDate).toLocaleDateString()}</td>
+          {displayedAdmins.map((admin) => (
+            <tr key={admin._id}>
+              <td>{admin.username}</td>
+              <td>{admin.email}</td>
+              <td>{admin.role}</td>
               {adminUser?.role === "superadmin" && (
                 <>
                   <td>
                     <EditOutlinedIcon
-                      onClick={() => onEditClick(certificate)}
+                      onClick={() => onEditClick(admin)}
                       style={{ cursor: "pointer", fontSize: "1.2rem" }}
                     />
                   </td>
                   <td>
                     <DeleteOutlineIcon
-                      onClick={() => onDeleteClick(certificate)} // Trigger delete modal
+                      onClick={() => onDeleteClick(admin)} // Trigger delete modal
                       style={{ cursor: "pointer", fontSize: "1.2rem" }}
                     />
                   </td>
@@ -73,7 +66,7 @@ const CertificatesTable: React.FC<CertificatesTableProps> = ({
       </table>
       <TablePagination
         component="div"
-        count={certificates.length}
+        count={admins.length}
         page={page}
         onPageChange={onPageChange}
         rowsPerPage={rowsPerPage}
@@ -93,4 +86,4 @@ const CertificatesTable: React.FC<CertificatesTableProps> = ({
   );
 };
 
-export default CertificatesTable;
+export default AdminsTable;

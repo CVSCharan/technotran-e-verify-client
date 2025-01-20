@@ -9,6 +9,7 @@ import React, {
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { AdminContextType, AdminUser } from "@/utils/types";
+import { usePathname } from "next/navigation";
 
 const AdminContext = createContext<AdminContextType | undefined>(undefined);
 
@@ -17,7 +18,10 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [adminUser, setAdminUser] = useState<AdminUser | null>(null);
   const [showModal, setShowModal] = useState(false); // Initially false
+
   const router = useRouter();
+
+  const pathname = usePathname();
 
   // Check for the user in cookies when the component mounts
   const checkUserFromCookies = () => {
@@ -34,6 +38,10 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     checkUserFromCookies();
   }, []); // Empty dependency ensures this only runs on mount
+
+  useEffect(() => {
+    checkUserFromCookies();
+  }, [pathname]);
 
   const login = (user: AdminUser) => {
     setAdminUser(user);

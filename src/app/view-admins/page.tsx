@@ -1,50 +1,56 @@
 "use client";
 
+import { useAdmin } from "@/context/AdminContext";
 import AdminNav from "@/sections/AdminNav";
+import { AdminUser } from "@/utils/types";
 import React, { useEffect, useState } from "react";
-import styles from "./page.module.css";
-import Footer from "@/sections/Footer";
-import { Vendors } from "@/utils/types";
-import VendorsTable from "@/components/VendorsTable";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import Snackbar from "@mui/material/Snackbar";
 import { AlertColor } from "@mui/material/Alert";
 import Alert from "@mui/material/Alert";
-import { useAdmin } from "@/context/AdminContext";
+import styles from "./page.module.css";
+import Footer from "@/sections/Footer";
 import LoginModal from "@/components/AdminAuthModal";
-import EditVendorModal from "@/components/EditVendorModal";
-import DeleteVendorModal from "@/components/DeleteVendorModal";
+import AdminsTable from "@/components/AdminsTable";
+import EditAdminsModal from "@/components/EditAdminsModal";
+import DeleteAdminsModal from "@/components/DeleteAdminsModal";
 
-const VendorsPage = () => {
-  const [vendors, setVendors] = useState<Vendors[]>([]);
+const ViewAdminsPage = () => {
+  const [admins, setAdmins] = useState<AdminUser[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedAdmin, setSelectedAdmin] = useState<AdminUser | null>(null);
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
-  const [selectedVendor, setSelectedVendor] = useState<Vendors | null>(null);
-  const [searchQuery, setSearchQuery] = useState<string>("");
 
   // Pagination states
   const [page, setPage] = useState<number>(0);
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
+
+  // Search and filter states
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [selectedType, setSelectedType] = useState<string>("All");
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] =
     useState<AlertColor>("success");
 
-  const { adminUser, showModal } = useAdmin(); // Get adminUser and showModal from context
+  const { adminUser, showModal } = useAdmin();
 
   useEffect(() => {
-    const fetchVendors = async () => {
+    const fetchAdmins = async () => {
       try {
         const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-        const response = await fetch(`${apiUrl}/vendors`);
+        const response = await fetch(`${apiUrl}/admins`, {
+          method: "GET",
+          credentials: "include", // ✅ Ensures cookies (JWT token) are included
+        });
         if (!response.ok) {
-          throw new Error("Failed to fetch vendors");
+          throw new Error("Failed to fetch admins");
         }
-        const data: Vendors[] = await response.json();
-        setVendors(data);
+        const data: AdminUser[] = await response.json();
+        setAdmins(data);
       } catch (err) {
         if (err instanceof Error) {
           setError(err.message);
@@ -56,54 +62,15 @@ const VendorsPage = () => {
       }
     };
 
-    fetchVendors();
+    fetchAdmins();
   }, []);
-
-  const showSnackbar = (message: string, severity: AlertColor) => {
-    setSnackbarMessage(message);
-    setSnackbarSeverity(severity);
-    setSnackbarOpen(true);
-  };
-
-  // Filter vendors based on search query
-  const filteredVendors = vendors.filter((vendor) =>
-    vendor?.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  if (loading) {
-    return (
-      <main id="E-Verify Vendor Page">
-        <AdminNav />
-        <section className={styles.mainBody}>
-          <div className={styles.landingSection}>
-            <span className={styles.loader}></span>
-          </div>
-        </section>
-        <Footer />
-      </main>
-    );
-  }
-
-  if (error) {
-    return (
-      <main id="E-Verify Vendor Page">
-        <AdminNav />
-        <section className={styles.mainBody}>
-          <div className={styles.landingSection}>
-            <p className={styles.error}>Server Error: {error}</p>
-          </div>
-        </section>
-        <Footer />
-      </main>
-    );
-  }
-
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(event.target.value);
-  };
 
   const handleClearSearch = () => {
     setSearchQuery("");
+  };
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -117,93 +84,132 @@ const VendorsPage = () => {
     setPage(0);
   };
 
-  const handleEditClick = (vendor: Vendors) => {
-    setSelectedVendor(vendor);
+  const handleEditClick = (admin: AdminUser) => {
+    setSelectedAdmin(admin);
     setEditModalOpen(true);
   };
 
-  const handleDeleteClick = (vendor: Vendors) => {
-    setSelectedVendor(vendor);
+  const handleDeleteClick = (admin: AdminUser) => {
+    setSelectedAdmin(admin);
     setDeleteModalOpen(true);
   };
 
   const handleEditModalClose = () => {
     setEditModalOpen(false);
-    setSelectedVendor(null);
+    setSelectedAdmin(null);
   };
 
   const handleDeleteModalClose = () => {
     setDeleteModalOpen(false);
-    setSelectedVendor(null);
+    setSelectedAdmin(null);
   };
 
-  const API_BASE_URL = `${[process.env.NEXT_PUBLIC_API_URL]}/vendors`; // Replace with actual backend URL
+  // Filter admins based on search query
+  const filteredAdmins = admins.filter((admin) =>
+    admin?.username.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-  const handleSaveChanges = async (updatedVendor: Vendors) => {
+  const showSnackbar = (message: string, severity: AlertColor) => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
+  };
+
+  const API_BASE_URL = `${[process.env.NEXT_PUBLIC_API_URL]}/admins`; // Replace with actual backend URL
+
+  const handleSaveChanges = async (updatedAdmin: AdminUser) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/${updatedVendor._id}`, {
+      const response = await fetch(`${API_BASE_URL}/${updatedAdmin._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(updatedVendor),
+        credentials: "include",
+        body: JSON.stringify(updatedAdmin),
       });
 
       if (!response.ok) {
-        throw new Error("Failed to update certificate");
+        throw new Error("Failed to update admin");
       }
 
       const data = await response.json();
 
-      setVendors((prevVendors) =>
-        prevVendors.map((vend) =>
-          vend._id === updatedVendor._id ? data : vend
-        )
+      setAdmins((prevAdmins) =>
+        prevAdmins.map((admn) => (admn._id === updatedAdmin._id ? data : admn))
       );
 
-      showSnackbar("Vendor updated successfully!", "success");
-      console.log("Updated vendor:", data);
+      showSnackbar("User updated successfully!", "success");
+      console.log("Updated user:", data);
     } catch (error) {
-      showSnackbar("Failed to update vendor!", "warning");
-      showSnackbar("Failed to update vendor!", "warning");
-      console.error("Error updating vendor:", error);
+      showSnackbar("Failed to update user!", "warning");
+      showSnackbar("Failed to update user!", "warning");
+      console.error("Error updating user:", error);
     }
   };
 
   const handleDeleteConfirmation = async () => {
-    if (!selectedVendor) return;
+    if (!selectedAdmin) return;
 
     try {
-      const response = await fetch(`${API_BASE_URL}/${selectedVendor._id}`, {
+      const response = await fetch(`${API_BASE_URL}/${selectedAdmin._id}`, {
         method: "DELETE",
+        credentials: "include",
       });
 
       if (!response.ok) {
-        throw new Error("Failed to delete certificate");
+        throw new Error("Failed to delete user");
       }
 
-      setVendors((prevVendors) =>
-        prevVendors.filter((vendor) => vendor._id !== selectedVendor._id)
+      setAdmins((prevAdmins) =>
+        prevAdmins.filter((admn) => admn._id !== selectedAdmin._id)
       );
 
-      showSnackbar("Vendor deleted successfully!", "success");
+      showSnackbar("User deleted successfully!", "success");
       setDeleteModalOpen(false);
-      console.log("Deleted vendor:", selectedVendor);
+      console.log("Deleted sser:", selectedAdmin);
     } catch (error) {
-      showSnackbar("Failed to delete vendor!", "warning");
-      console.error("Error deleting vendor:", error);
+      showSnackbar("Failed to delete user!", "warning");
+      console.error("Error deleting user:", error);
     }
   };
 
+  if (loading) {
+    return (
+      <main id="E-Verify Portal View Admins">
+        <AdminNav />
+        <section className={styles.mainBody}>
+          <div className={styles.landingSection}>
+            <span className={styles.loader}></span>
+          </div>
+        </section>
+        <Footer />
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main id="E-Verify Portal View Admins">
+        <AdminNav />
+        <section className={styles.mainBody}>
+          <div className={styles.landingSection}>
+            <p className={styles.error}>Server Error: {error}</p>
+          </div>
+        </section>
+        <Footer />
+      </main>
+    );
+  }
+
   return (
-    <main id="E-Verify Vendor Page">
+    <main id="E-Verify Portal View Admins">
       {/* Show the LoginModal if user is not authenticated */}
       {!adminUser && showModal && <LoginModal />}
 
       <AdminNav />
-      <section className={styles.mainBody}>
+      <section>
         <div className={styles.landingSection}>
-          <h2 className={styles.heading}>E-Verify Portal Vendors</h2>
+          <h2 className={styles.heading}>E-Verify Portal Users</h2>
           <div className={styles.searchBarContainer}>
             <input
               type="text"
@@ -221,11 +227,11 @@ const VendorsPage = () => {
             )}
           </div>
           <>
-            {filteredVendors.length === 0 ? (
+            {filteredAdmins.length === 0 ? (
               <p className={styles.noCertificates}>No certificates found.</p>
             ) : (
-              <VendorsTable
-                vendors={filteredVendors}
+              <AdminsTable
+                admins={filteredAdmins}
                 page={page}
                 rowsPerPage={rowsPerPage}
                 onPageChange={handleChangePage}
@@ -238,17 +244,17 @@ const VendorsPage = () => {
         </div>
       </section>
 
-      <EditVendorModal
+      <EditAdminsModal
         open={editModalOpen}
         onClose={handleEditModalClose}
-        vendor={selectedVendor}
+        admin={selectedAdmin}
         onSave={handleSaveChanges}
       />
 
-      <DeleteVendorModal
+      <DeleteAdminsModal
         open={deleteModalOpen}
         onClose={handleDeleteModalClose}
-        vendor={selectedVendor}
+        admin={selectedAdmin}
         onDelete={handleDeleteConfirmation}
       />
 
@@ -271,4 +277,4 @@ const VendorsPage = () => {
   );
 };
 
-export default VendorsPage;
+export default ViewAdminsPage;

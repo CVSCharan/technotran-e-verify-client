@@ -1,0 +1,45 @@
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+.table td {
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 500;
+  font-family: "Quicksand", sans-serif;
+}
+
+.table th {
+  background-color: #f4f4f4;
+  color: #333;
+  font-weight: bold;
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: "Josefin Sans", sans-serif;
+}
+
+.table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.link {
+  color: #a82b30;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.link:hover {
+  text-decoration: underline;
+  color: #a82b30;
+}

@@ -52,6 +52,7 @@ const MultipleEntryForm: React.FC<MultipleEntryFormProps> = ({ onMessage }) => {
         onMessage(`Error: ${result.error || "Failed to upload file!"}`);
         return;
       }
+      console.log(response, result);
 
       onMessage("File uploaded successfully!");
       setFile(null); // Clear file input after upload

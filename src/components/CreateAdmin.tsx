@@ -15,22 +15,21 @@ const CreateAdmin = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/admins`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username,
-            email,
-            password,
-            profilePic: profilePic || undefined, // Default value from schema will be used if empty
-            role,
-          }),
-        }
-      );
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(`${apiUrl}/admins`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          username,
+          email,
+          password,
+          profilePic: profilePic || undefined, // Default value from schema will be used if empty
+          role,
+        }),
+      });
 
       const result = await response.json();
       if (response.ok) {
@@ -51,54 +50,55 @@ const CreateAdmin = () => {
 
   return (
     <form onSubmit={handleSubmit} className={styles.formContainer}>
-      <h2 className={styles.formHeading}>Create Admin</h2>
+      <h2 className={styles.formHeading}>{`Admin's Form`}</h2>
+      <div className={styles.formSubContainer}>
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+          className={styles.formInput}
+        />
 
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        required
-        className={styles.formInput}
-      />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          className={styles.formInput}
+        />
 
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-        className={styles.formInput}
-      />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          className={styles.formInput}
+        />
 
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-        className={styles.formInput}
-      />
+        <input
+          type="text"
+          placeholder="Profile Pic URL"
+          value={profilePic}
+          onChange={(e) => setProfilePic(e.target.value)}
+          className={styles.formInput}
+        />
 
-      <input
-        type="text"
-        placeholder="Profile Pic URL"
-        value={profilePic}
-        onChange={(e) => setProfilePic(e.target.value)}
-        className={styles.formInput}
-      />
-
-      <select
-        value={role}
-        onChange={(e) => setRole(e.target.value)}
-        className={styles.formInput}
-      >
-        <option value="admin">Admin</option>
-        <option value="superadmin">Super Admin</option>
-      </select>
+        <select
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+          className={styles.formInput}
+        >
+          <option value="admin">Admin</option>
+          <option value="superadmin">Super Admin</option>
+        </select>
+      </div>
 
       <button type="submit" className={styles.formButton}>
-        Create Admin
+        Add User
       </button>
 
       {message && <p className={styles.message}>{message}</p>}

@@ -1,25 +1,25 @@
 "use client";
 
+import { DeleteVendorModalProps } from "@/utils/types";
 import React from "react";
 import { Modal } from "@mui/material";
-import styles from "../styles/DeleteCertificateModal.module.css";
-import { DeleteCertificateModalProps } from "@/utils/types";
+import styles from "../styles/DeleteVendorModal.module.css"
 
-const DeleteCertificateModal: React.FC<DeleteCertificateModalProps> = ({
+const DeleteVendorModal: React.FC<DeleteVendorModalProps> = ({
   open,
   onClose,
-  certificate,
+  vendor,
   onDelete,
 }) => {
-  if (!certificate) return null;
+  if (!vendor) return null;
 
   return (
     <Modal open={open} onClose={onClose} className={styles.modal}>
       <div className={styles.container}>
-        <h2>Delete Certificate</h2>
+        <h2>Delete Vendor</h2>
         <p>
-          Are you sure you want to delete the certificate for{" "}
-          <strong>{certificate.name}</strong>?
+          Are you sure you want to delete the vendor user{" "}
+          <strong>{vendor.name}</strong>?
         </p>
         <div className={styles.actions}>
           <button className={styles.cancelButton} onClick={onClose}>
@@ -34,4 +34,4 @@ const DeleteCertificateModal: React.FC<DeleteCertificateModalProps> = ({
   );
 };
 
-export default DeleteCertificateModal;
+export default DeleteVendorModal;

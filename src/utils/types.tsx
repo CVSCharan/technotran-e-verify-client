@@ -16,6 +16,7 @@ export interface VendorVerifyCompProps {
 }
 
 export interface AdminUser {
+  _id: string;
   username: string;
   email: string;
   profilePic?: string;
@@ -94,11 +95,56 @@ export interface VendorsTableProps {
   onDeleteClick: (vendor: Vendors) => void; // Added type for delete click
 }
 
+export interface AdminsTableProps {
+  admins: AdminUser[];
+  page: number;
+  rowsPerPage: number;
+  onPageChange: (event: unknown, newPage: number) => void;
+  onRowsPerPageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onEditClick: (admin: AdminUser) => void;
+  onDeleteClick: (admin: AdminUser) => void; // Added type for delete click
+}
+
 export interface EditCertificateModalProps {
   open: boolean;
   onClose: () => void;
   certificate: Certificate | null;
   onSave: (updatedCertificate: Certificate) => void;
+}
+
+export interface EditVendorModalProps {
+  open: boolean;
+  onClose: () => void;
+  vendor: Vendors | null;
+  onSave: (updateVendor: Vendors) => void;
+}
+
+export interface EditAdminModalProps {
+  open: boolean;
+  onClose: () => void;
+  admin: AdminUser | null;
+  onSave: (updateAdmin: AdminUser) => void;
+}
+
+export interface DeleteCertificateModalProps {
+  open: boolean;
+  onClose: () => void;
+  certificate: Certificate | null;
+  onDelete: () => void;
+}
+
+export interface DeleteVendorModalProps {
+  open: boolean;
+  onClose: () => void;
+  vendor: Vendors | null;
+  onDelete: () => void;
+}
+
+export interface DeleteAdminModalProps {
+  open: boolean;
+  onClose: () => void;
+  admin: AdminUser | null;
+  onDelete: () => void;
 }
 
 export interface MultipleEntryFormProps {

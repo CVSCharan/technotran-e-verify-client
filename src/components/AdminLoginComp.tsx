@@ -4,12 +4,14 @@ import React, { useState } from "react";
 import styles from "../styles/AdminLoginComp.module.css";
 import { useAdmin } from "@/context/AdminContext";
 import { useRouter } from "next/navigation";
+import AdminForgotPasswordModal from "./AdminForgotPasswordModal";
 
 const AdminLoginComp = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
 
   const router = useRouter();
 
@@ -75,9 +77,24 @@ const AdminLoginComp = () => {
         className={styles.formInput}
       />
 
-      <button type="submit" className={styles.formButton}>
-        Login
+      {/* Forgot Password Button */}
+      <button
+        type="button"
+        className={styles.forgotPassword}
+        onClick={() => setForgotPasswordOpen(true)}
+      >
+        Forgot Password?
       </button>
+
+      <button type="submit" className={styles.formButton}>
+        Log In
+      </button>
+
+      {/* Forgot Password Modal */}
+      <AdminForgotPasswordModal
+        open={forgotPasswordOpen}
+        onClose={() => setForgotPasswordOpen(false)}
+      />
 
       {error && <p className={styles.error}>{error}</p>}
       {message && <p className={styles.success}>{message}</p>}

@@ -1,7 +1,7 @@
 "use client";
 
 import AdminNav from "@/sections/AdminNav";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styles from "./page.module.css";
 import Footer from "@/sections/Footer";
 import CreateCertificate from "@/components/CreateCertificate";
@@ -10,6 +10,7 @@ import { Modal } from "@mui/material";
 import CreateAdmin from "@/components/CreateAdmin";
 import Image from "next/image";
 import { useAdmin } from "@/context/AdminContext";
+import { useRouter } from "next/navigation";
 import LoginModal from "@/components/AdminAuthModal"; // Import the LoginModal component
 
 const AdminDashboardPage = () => {
@@ -17,6 +18,8 @@ const AdminDashboardPage = () => {
   const [modalContent, setModalContent] = useState<
     "vendor" | "certificate" | "admin" | null
   >(null);
+
+  const router = useRouter();
 
   const { adminUser, showModal } = useAdmin(); // Get adminUser and showModal from context
 
@@ -61,30 +64,63 @@ const AdminDashboardPage = () => {
               alt="admin profile pic"
               height={100}
               width={100}
+              className={styles.userPic}
             />
-            <h2>{adminUser?.username}</h2>
-            <h3>
+            <h2 className={styles.userName}>{adminUser?.username}</h2>
+            <h3 className={styles.userRole}>
               {adminUser?.role === "superadmin" ? "Super Admin" : "Admin"}
             </h3>
           </div>
+          <>
+            {adminUser?.role === "superadmin" && (
+              <div className={styles.btnContainer}>
+                <button
+                  onClick={openCreateVendorModal}
+                  className={`${styles.button} quicksand-text`}
+                >
+                  Add Vendor
+                </button>
+                <button
+                  onClick={openCreateCertificateModal}
+                  className={`${styles.button} quicksand-text`}
+                >
+                  Add Certificate
+                </button>
+                <button
+                  onClick={openCreateAdminModal}
+                  className={`${styles.button} quicksand-text`}
+                >
+                  Add Admin
+                </button>
+              </div>
+            )}
+          </>
           <div className={styles.btnContainer}>
             <button
-              onClick={openCreateVendorModal}
               className={`${styles.button} quicksand-text`}
+              onClick={() => router.push("/view-vendors")}
             >
-              Add Vendor
+              View Vendors
             </button>
             <button
-              onClick={openCreateCertificateModal}
               className={`${styles.button} quicksand-text`}
+              onClick={() => router.push("/view-certificates")}
             >
-              Add Certificate
+              View Certificates
             </button>
             <button
-              onClick={openCreateAdminModal}
               className={`${styles.button} quicksand-text`}
+              onClick={() => router.push("/view-admins")}
             >
-              Add Admin
+              View Admins
+            </button>
+          </div>
+          <div className={styles.btnContainer}>
+            <button
+              className={`${styles.button} quicksand-text`}
+              onClick={() => router.push("/analytics")}
+            >
+              Analytics
             </button>
           </div>
         </div>
@@ -96,6 +132,7 @@ const AdminDashboardPage = () => {
         onClose={handleCloseModal}
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
+        className={styles.modalMainContainer}
       >
         <div className={styles.modalBox}>
           <div className={styles.modalContent}>

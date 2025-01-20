@@ -55,62 +55,64 @@ const SingleEntryForm: React.FC<SingleEntryFormProps> = ({ onMessage }) => {
 
   return (
     <form onSubmit={handleSubmit} className={styles.formContainer}>
-      <input
-        placeholder="Username"
-        type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        required
-        className={styles.formInput}
-      />
-      <input
-        placeholder="Type"
-        type="text"
-        value={type}
-        onChange={(e) => setType(e.target.value)}
-        required
-        className={styles.formInput}
-      />
-      <input
-        placeholder="Issued Date"
-        type="date"
-        value={issueDate}
-        onChange={(e) => setIssueDate(e.target.value)}
-        required
-        className={styles.formInput}
-      />
-      <input
-        placeholder="Certificate ID"
-        type="text"
-        value={certificateId}
-        onChange={(e) => setCertificateId(e.target.value)}
-        required
-        className={styles.formInput}
-      />
-      <input
-        placeholder="Roll No."
-        type="text"
-        value={rollNo}
-        onChange={(e) => setRollNo(e.target.value)}
-        required
-        className={styles.formInput}
-      />
-      <input
-        placeholder="Email"
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-        className={styles.formInput}
-      />
-      <input
-        placeholder="Organization"
-        type="text"
-        value={orgName}
-        onChange={(e) => setOrgName(e.target.value)}
-        required
-        className={styles.formInput}
-      />
+      <div className={styles.formSubContainer}>
+        <input
+          placeholder="Username"
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+          className={styles.formInput}
+        />
+        <input
+          placeholder="Type"
+          type="text"
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+          required
+          className={styles.formInput}
+        />
+        <input
+          placeholder="Issued Date"
+          type="date"
+          value={issueDate}
+          onChange={(e) => setIssueDate(e.target.value)}
+          required
+          className={styles.formInput}
+        />
+        <input
+          placeholder="Certificate ID"
+          type="text"
+          value={certificateId}
+          onChange={(e) => setCertificateId(e.target.value)}
+          required
+          className={styles.formInput}
+        />
+        <input
+          placeholder="Roll No."
+          type="text"
+          value={rollNo}
+          onChange={(e) => setRollNo(e.target.value)}
+          required
+          className={styles.formInput}
+        />
+        <input
+          placeholder="Email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          className={styles.formInput}
+        />
+        <input
+          placeholder="Organization"
+          type="text"
+          value={orgName}
+          onChange={(e) => setOrgName(e.target.value)}
+          required
+          className={styles.formInput}
+        />
+      </div>
       <button className={styles.formButton} type="submit">
         Add Certificate
       </button>

@@ -1,0 +1,62 @@
+.modalMainContainer {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(4px); /* Blur effect */
+  background-color: rgba(0, 0, 0, 0.3); /* Darken slightly */
+}
+
+.modalContainer {
+  height: 40%;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 1rem;
+  padding: 1rem; /* Added padding for a spacious feel */
+  background-color: #f8fafc; /* Light background color */
+  background-image: radial-gradient(circle, #d1d5db 1px, transparent 1px),
+    radial-gradient(circle, #d1d5db 1px, transparent 1px); /* Grid pattern */
+  background-position: 0 0, 25px 25px; /* Offset the grid */
+  background-size: 50px 50px; /* Set the grid size */
+  outline: none;
+}
+
+.heading {
+  margin-bottom: 1rem;
+  font-family: "Georgia", serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.subHeading {
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  font-family: "Georgia", serif;
+  color: #34495e; /* Softer gray */
+  text-align: center;
+  line-height: 1.6;
+}
+
+.routeButton {
+  padding: 0.5rem 2rem;
+  background: linear-gradient(90deg, #4b0406, #6b0f12, #a82b30);
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.routeButton:hover {
+  background: linear-gradient(90deg, #4b0406, #6b0f12, #a82b30);
+}
