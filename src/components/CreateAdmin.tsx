@@ -51,7 +51,7 @@ const CreateAdmin: React.FC<CreateModelProps> = ({ handleCloseModal }) => {
 
   return (
     <form onSubmit={handleSubmit} className={styles.formContainer}>
-      <h2 className={styles.formHeading}>Admin's Form</h2>
+      <h2 className={styles.formHeading}>{`Admin's Form`}</h2>
       <div className={styles.formSubContainer}>
         <input
           type="text"
