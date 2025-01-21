@@ -44,6 +44,7 @@ const EditCertificateModal: React.FC<EditCertificateModalProps> = ({
         <form className={styles.formContainer}>
           <input
             value={localCertificate.name}
+            placeholder="Name"
             className={styles.formInput}
             onChange={(e) =>
               setLocalCertificate({ ...localCertificate, name: e.target.value })
@@ -71,7 +72,44 @@ const EditCertificateModal: React.FC<EditCertificateModalProps> = ({
           </select>
 
           <input
+            value={localCertificate.program}
+            placeholder="Program"
+            className={styles.formInput}
+            onChange={(e) =>
+              setLocalCertificate({
+                ...localCertificate,
+                program: e.target.value,
+              })
+            }
+          />
+          <input
+            value={localCertificate.department}
+            placeholder="Department"
+            className={styles.formInput}
+            onChange={(e) =>
+              setLocalCertificate({
+                ...localCertificate,
+                department: e.target.value,
+              })
+            }
+          />
+          <input
             type="date"
+            placeholder="Start Date"
+            className={styles.formInput}
+            value={
+              new Date(localCertificate.startDate).toISOString().split("T")[0]
+            }
+            onChange={(e) =>
+              setLocalCertificate({
+                ...localCertificate,
+                startDate: new Date(e.target.value).toISOString(),
+              })
+            }
+          />
+          <input
+            type="date"
+            placeholder="Issue Date"
             className={styles.formInput}
             value={
               new Date(localCertificate.issueDate).toISOString().split("T")[0]
@@ -85,6 +123,7 @@ const EditCertificateModal: React.FC<EditCertificateModalProps> = ({
           />
           <input
             value={localCertificate.certificateId}
+            placeholder="Certificate ID"
             className={styles.formInput}
             onChange={(e) =>
               setLocalCertificate({
@@ -95,6 +134,7 @@ const EditCertificateModal: React.FC<EditCertificateModalProps> = ({
           />
           <input
             value={localCertificate.rollNo}
+            placeholder="Roll No."
             className={styles.formInput}
             onChange={(e) =>
               setLocalCertificate({
@@ -105,6 +145,7 @@ const EditCertificateModal: React.FC<EditCertificateModalProps> = ({
           />
           <input
             value={localCertificate.email}
+            placeholder="Email"
             className={styles.formInput}
             onChange={(e) =>
               setLocalCertificate({
@@ -115,6 +156,7 @@ const EditCertificateModal: React.FC<EditCertificateModalProps> = ({
           />
           <input
             value={localCertificate.org}
+            placeholder="Organization"
             className={styles.formInput}
             onChange={(e) =>
               setLocalCertificate({ ...localCertificate, org: e.target.value })

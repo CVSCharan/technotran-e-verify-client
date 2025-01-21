@@ -54,6 +54,9 @@ export type Certificate = {
   _id: string;
   name: string;
   type: "AICTE Internship" | "Internship" | "Workshop"; // Restricting to known types
+  program: string;
+  department: string;
+  startDate: string;
   issueDate: string;
   certificateId: string;
   rollNo: string;

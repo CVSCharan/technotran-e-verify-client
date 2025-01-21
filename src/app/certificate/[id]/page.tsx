@@ -2,9 +2,10 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useParams } from "next/navigation";
-import QRCode from "qrcode"; // Import the qrcode library
-import styles from "./page.module.css"; // Import CSS module
+import QRCode from "qrcode";
+import styles from "./page.module.css";
 import { Certificate } from "@/utils/types";
+import { vendorsData } from "@/utils/helper";
 
 const CertificateDetails = () => {
   const params = useParams();
@@ -40,6 +41,17 @@ const CertificateDetails = () => {
     fetchCertificate();
   }, [id]);
 
+  // Function to format date as dd/mm/yy
+  const formatDate = (dateString: string) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "2-digit",
+    }).format(date);
+  };
+
   useEffect(() => {
     if (certificate && canvasRef.current) {
       const canvas = canvasRef.current;
@@ -47,10 +59,10 @@ const CertificateDetails = () => {
 
       if (ctx) {
         let imgSrc =
-          "https://github.com/CVSCharan/Technotran_Assets/blob/main/Internship_Cert.png?raw=true"; // Default for AICTE Internship & Internship
+          "https://github.com/CVSCharan/Technotran_Assets/blob/main/Internship_Cert.png?raw=true"; // Default to Internship
         if (certificate.type === "Workshop") {
           imgSrc =
-            "https://github.com/CVSCharan/Technotran_Assets/blob/main/Workshop_Cert.png?raw=true"; // Different image for Workshop
+            "https://github.com/CVSCharan/Technotran_Assets/blob/main/Workshop_Cert_Final.png?raw=true"; // Use Workshop Template
         }
 
         const img = new Image();
@@ -59,22 +71,50 @@ const CertificateDetails = () => {
         img.onload = () => {
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-          // Set font styles
-          ctx.font = "bold 30px Arial";
-          ctx.fillStyle = "black";
-
-          // Common fields for all certificates
-          ctx.fillText(certificate.name, 50, 320);
-          ctx.fillText(certificate.type, 70, 150);
-          ctx.fillText(certificate.certificateId, 150, 510);
-          ctx.fillText(certificate.rollNo, 85, 535);
-
-          // Additional field for AICTE Internship
-          if (certificate.type === "AICTE Internship") {
-            ctx.fillText(`AICTE ID: ${certificate.aicteId || "N/A"}`, 150, 560);
+          // **Embed Vendor Logo**
+          const vendor = vendorsData.find((v) => v.name === certificate.org);
+          if (vendor) {
+            const vendorLogo = new Image();
+            vendorLogo.src = vendor.imgSrc;
+            vendorLogo.onload = () => {
+              ctx.drawImage(vendorLogo, 90, 40, 50, 50); // Adjust position & size
+            };
           }
 
-          // Generate QR code and draw on canvas
+          // **Text Styles**
+          ctx.font = `bold 16px Arial`;
+          ctx.fillStyle = "black";
+
+          // **Display Student Details**
+          ctx.fillText(certificate.name, 400, 185);
+
+          ctx.font = `bold 22px Arial`;
+          ctx.fillStyle = "#4b0406";
+
+          ctx.fillText(certificate.program, 260, 250);
+
+          ctx.font = `bold 16px Arial`;
+          ctx.fillStyle = "#4b0406";
+
+          ctx.fillText(certificate.department, 270, 283);
+          ctx.fillText(certificate.org, 170, 335);
+
+          ctx.font = `bold 16px Arial`;
+          ctx.fillStyle = "black";
+
+          // **Format Dates (dd/mm/yy)**
+          const formattedStartDate = formatDate(certificate.startDate);
+          const formattedIssueDate = formatDate(certificate.issueDate);
+
+          ctx.fillText(formattedStartDate, 357, 360);
+          ctx.fillText(formattedIssueDate, 462, 360);
+
+          ctx.font = `bold 10px Arial`;
+          ctx.fillStyle = "#4b0406";
+
+          ctx.fillText(certificate.certificateId, 730, 380);
+
+          // **Generate QR Code**
           QRCode.toCanvas(
             qrCanvasRef.current,
             `https://technotran-e-verify-client.vercel.app/certificate/${id}`,
@@ -87,11 +127,11 @@ const CertificateDetails = () => {
                 const qrImg = qrCanvasRef.current;
                 ctx.drawImage(
                   qrImg,
-                  canvas.width - 120,
-                  canvas.height - 120,
-                  100,
-                  100
-                );
+                  canvas.width - 137,
+                  canvas.height - 130,
+                  90,
+                  90
+                ); // Adjust QR position
               }
             }
           );
@@ -120,15 +160,15 @@ const CertificateDetails = () => {
       <h1 className={styles.title}>Certificate Details</h1>
       <canvas
         ref={canvasRef}
-        width={800}
-        height={600}
+        width={850}
+        height={550}
         className={styles.certificateCanvas}
       ></canvas>
       <canvas
         ref={qrCanvasRef}
         width={100}
         height={100}
-        style={{ display: "none" }} // QR code canvas is hidden, only used for rendering
+        style={{ display: "none" }}
       ></canvas>
       <button className={styles.downloadButton} onClick={downloadImage}>
         Download Certificate with Details
