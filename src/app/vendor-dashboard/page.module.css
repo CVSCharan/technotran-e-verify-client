@@ -21,3 +21,81 @@
   background-position: 0 0, 25px 25px; /* Offset the grid */
   background-size: 50px 50px; /* Set the grid size */
 }
+
+.landingSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.logoImg {
+  height: 90px;
+  width: 90px;
+  border: 2px solid #4b0406;
+  border-radius: 50%;
+  object-fit: fill;
+}
+
+.userName {
+  font-size: 1.2rem;
+  font-family: "Georgia", serif; /* Elegant serif font */
+  font-weight: 600;
+  color: #2c3e50; /* Dark gray for a refined look */
+  margin: 0.5rem 0;
+}
+
+.heading {
+  font-size: 2.2rem;
+  font-family: "Georgia", serif; /* Elegant serif font */
+  font-weight: 600;
+  color: #2c3e50; /* Dark gray for a refined look */
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+}
+
+.loading {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.error {
+  font-size: 1.2rem;
+  color: red;
+}
+
+.noCertificates {
+  font-size: 1.1rem;
+  font-weight: 500;
+  font-family: "Georgia", serif;
+  color: #34495e; /* Softer gray */
+  margin-bottom: 1rem;
+}
+
+.searchBarContainer {
+  margin: 0.5rem 0;
+  text-align: center;
+  width: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.searchBar {
+  width: 100%;
+  max-width: 450px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border: 1px solid #ccc;
+  border-radius: 1rem;
+  outline: none;
+  transition: all 0.3s ease;
+  font-family: "Quicksand", sans-serif;
+}
+
+.searchBar:focus {
+  border-color: #4b0406; /* Soft blue for focus state */
+  box-shadow: 0 0 5px #4b0406;
+}

@@ -5,7 +5,7 @@ import Footer from "@/sections/Footer";
 import React from "react";
 // import styles from "./page.module.css";
 import { useAdmin } from "@/context/AdminContext";
-import LoginModal from "@/components/AdminAuthModal";
+import LoginModal from "@/components/AuthModal";
 
 const AnalyticsPage = () => {
   const { adminUser, showModal } = useAdmin();

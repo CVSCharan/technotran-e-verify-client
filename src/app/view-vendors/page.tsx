@@ -11,7 +11,7 @@ import Snackbar from "@mui/material/Snackbar";
 import { AlertColor } from "@mui/material/Alert";
 import Alert from "@mui/material/Alert";
 import { useAdmin } from "@/context/AdminContext";
-import LoginModal from "@/components/AdminAuthModal";
+import LoginModal from "@/components/AuthModal";
 import EditVendorModal from "@/components/EditVendorModal";
 import DeleteVendorModal from "@/components/DeleteVendorModal";
 
@@ -198,7 +198,7 @@ const VendorsPage = () => {
   return (
     <main id="E-Verify Vendor Page">
       {/* Show the LoginModal if user is not authenticated */}
-      {!adminUser && showModal && <LoginModal />}
+      {!adminUser && showModal && <LoginModal authParams="Admin" />}
 
       <AdminNav />
       <section className={styles.mainBody}>

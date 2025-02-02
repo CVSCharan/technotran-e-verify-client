@@ -41,6 +41,7 @@ const VendorVerifyComp: React.FC<VendorVerifyCompProps> = ({ org }) => {
             priority
           />
           <h2 className={styles.formHeading}>{orgData.name}</h2>
+
           <button className={styles.formButton} onClick={handleLoginClick}>
             Login
           </button>

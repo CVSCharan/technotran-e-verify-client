@@ -13,7 +13,7 @@ import Snackbar from "@mui/material/Snackbar";
 import { AlertColor } from "@mui/material/Alert";
 import Alert from "@mui/material/Alert";
 import { useAdmin } from "@/context/AdminContext";
-import LoginModal from "@/components/AdminAuthModal";
+import LoginModal from "@/components/AuthModal";
 
 const CertificatesPage = () => {
   const [certificates, setCertificates] = useState<Certificate[]>([]);
@@ -224,7 +224,7 @@ const CertificatesPage = () => {
   return (
     <main id="E-Verify Portal View Certificates">
       {/* Show the LoginModal if user is not authenticated */}
-      {!adminUser && showModal && <LoginModal />}
+      {!adminUser && showModal && <LoginModal authParams="Admin" />}
 
       <AdminNav />
       <section className={styles.mainBody}>

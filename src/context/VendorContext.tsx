@@ -1,6 +1,8 @@
 "use client";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
+import { usePathname } from "next/navigation";
 import { VendorContextType, VendorUser } from "@/utils/types"; // Import the AdminUser type
 
 const VendorContext = createContext<VendorContextType | undefined>(undefined);
@@ -10,32 +12,63 @@ export const VendorProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [vendorUser, setVendorUser] = useState<VendorUser | null>(null); // Use AdminUser type
   const [showModal, setShowModal] = useState(false);
+
   const router = useRouter();
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem("vendor-user"); // Adjusted storage key
-    if (storedUser) {
-      const parsedStoredUser = JSON.parse(storedUser);
-      setVendorUser(parsedStoredUser);
-    }
-  }, []);
+  const pathname = usePathname();
 
-  const login = (user: VendorUser) => {
-    localStorage.setItem("vendor-user", JSON.stringify(user)); // Adjusted storage key
-    setVendorUser(user);
-    router.push("/vendor-login");
+  // Check for the user in cookies when the component mounts
+  const checkUserFromCookies = () => {
+    const storedUser = Cookies.get("vendor_user");
+    if (storedUser) {
+      setVendorUser(JSON.parse(storedUser));
+      setShowModal(false); // No modal if user is logged in
+    } else {
+      setVendorUser(null);
+      setShowModal(true); // Show modal if no user is logged in
+    }
   };
 
-  const logout = () => {
-    localStorage.removeItem("vendor-user"); // Adjusted storage key
+  useEffect(() => {
+    checkUserFromCookies();
+  }, []); // Empty dependency ensures this only runs on mount
+
+  useEffect(() => {
+    checkUserFromCookies();
+  }, [pathname]);
+
+  const login = (user: VendorUser) => {
+    setVendorUser(user);
+    Cookies.set("vendor_user", JSON.stringify(user), {
+      expires: 1 / 48, // 30 minutes (0.0208 days)
+      sameSite: "Strict",
+    });
+    setShowModal(false);
+    router.push("/vendor-dashboard");
+  };
+
+  const logout = async () => {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/vendors/logout`, {
+      method: "POST",
+      credentials: "include",
+    });
+
     setVendorUser(null);
-    setShowModal(true);
+    Cookies.remove("vendor_user");
+    setShowModal(true); // Show modal on logout
     router.push("/vendor-portal");
   };
 
   return (
     <VendorContext.Provider
-      value={{ vendorUser, setVendorUser, logout, login, showModal }}
+      value={{
+        vendorUser,
+        setVendorUser,
+        logout,
+        login,
+        showModal,
+        setShowModal,
+      }}
     >
       {children}
     </VendorContext.Provider>

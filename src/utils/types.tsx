@@ -26,8 +26,10 @@ export interface AdminUser {
 }
 
 export interface VendorUser {
+  _id: string;
   username: string;
   email: string;
+  org: string;
   orgPic?: string;
   createdAt: string;
   updatedAt: string;
@@ -48,6 +50,7 @@ export interface VendorContextType {
   logout: () => void;
   login: (user: VendorUser) => void;
   showModal: boolean;
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export type Certificate = {
@@ -87,6 +90,14 @@ export interface CertificatesTableProps {
   onRowsPerPageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onEditClick: (certificate: Certificate) => void;
   onDeleteClick: (certificate: Certificate) => void; // Added type for delete click
+}
+
+export interface VendorCertificatesTableProps {
+  certificates: Certificate[];
+  page: number;
+  rowsPerPage: number;
+  onPageChange: (event: unknown, newPage: number) => void;
+  onRowsPerPageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export interface VendorsTableProps {
@@ -161,4 +172,8 @@ export interface SingleEntryFormProps {
 
 export interface CreateModelProps {
   handleCloseModal: () => void;
+}
+
+export interface LoginModalProps {
+  authParams: string;
 }

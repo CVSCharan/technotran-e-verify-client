@@ -99,8 +99,8 @@ const VendorPortalPage = () => {
             </div>
           )}
         </div>
-        <Footer />
       </section>
+      <Footer />
     </main>
   );
 };

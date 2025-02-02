@@ -1,7 +1,7 @@
 "use client";
 
-import AdminNav from "@/sections/AdminNav";
 import React, { useState } from "react";
+import AdminNav from "@/sections/AdminNav";
 import styles from "./page.module.css";
 import Footer from "@/sections/Footer";
 import CreateCertificate from "@/components/CreateCertificate";
@@ -11,7 +11,7 @@ import CreateAdmin from "@/components/CreateAdmin";
 import Image from "next/image";
 import { useAdmin } from "@/context/AdminContext";
 import { useRouter } from "next/navigation";
-import LoginModal from "@/components/AdminAuthModal"; // Import the LoginModal component
+import LoginModal from "@/components/AuthModal"; // Import the LoginModal component
 
 const AdminDashboardPage = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -48,7 +48,7 @@ const AdminDashboardPage = () => {
   return (
     <main id="E-Verify Portal Admin Dashboard">
       {/* Show the LoginModal if user is not authenticated */}
-      {!adminUser && showModal && <LoginModal />}
+      {!adminUser && showModal && <LoginModal authParams="Admin" />}
 
       <AdminNav />
       <section className={styles.mainBody}>

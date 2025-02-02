@@ -10,7 +10,7 @@ import { AlertColor } from "@mui/material/Alert";
 import Alert from "@mui/material/Alert";
 import styles from "./page.module.css";
 import Footer from "@/sections/Footer";
-import LoginModal from "@/components/AdminAuthModal";
+import LoginModal from "@/components/AuthModal";
 import AdminsTable from "@/components/AdminsTable";
 import EditAdminsModal from "@/components/EditAdminsModal";
 import DeleteAdminsModal from "@/components/DeleteAdminsModal";
@@ -226,7 +226,7 @@ const ViewAdminsPage = () => {
   return (
     <main id="E-Verify Portal View Admins">
       {/* Show the LoginModal if user is not authenticated */}
-      {!adminUser && showModal && <LoginModal />}
+      {!adminUser && showModal && <LoginModal authParams="Admin" />}
 
       <AdminNav />
       <section>

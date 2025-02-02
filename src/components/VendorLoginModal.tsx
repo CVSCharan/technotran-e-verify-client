@@ -15,19 +15,20 @@ export default function VendorLoginModal({
   const [password, setPassword] = useState(""); // State to manage the password
   const [error, setError] = useState<string | null>(null); // State for error message
   const [message, setMessage] = useState<string | null>(null);
+  const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
 
   const router = useRouter();
 
   const handleClose = () => setOpen(false);
 
-  const { setVendorUser } = useVendor();
+  const { login } = useVendor();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Example validation
     if (!username || !password) {
-      setError("Please fill in both fields.");
+      setError("Please enter username & password to Log In");
       console.log(message);
       return;
     }
@@ -39,13 +40,13 @@ export default function VendorLoginModal({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name: username, password }),
+        body: JSON.stringify({ username, password }), // Removed orgName from body
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        setVendorUser(data.admin);
+        login(data);
         setMessage(data.message);
         setError(null);
         router.push(`/vendor-dashboard`);
@@ -99,11 +100,20 @@ export default function VendorLoginModal({
             className={styles.formInput}
           />
 
-          {error && <h2 color="error">{error}</h2>}
+          {/* Forgot Password Button */}
+          <button
+            type="button"
+            className={styles.forgotPassword}
+            onClick={() => setForgotPasswordOpen(true)}
+          >
+            Forgot Password?
+          </button>
 
           <button className={styles.formButton} type="submit">
-            Login
+            Log In
           </button>
+
+          {error && <h2 className={styles.formMsg}>{error}</h2>}
         </form>
       </div>
     </Modal>

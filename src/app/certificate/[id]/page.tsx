@@ -6,6 +6,7 @@ import QRCode from "qrcode";
 import styles from "./page.module.css";
 import { Certificate } from "@/utils/types";
 import { vendorsData } from "@/utils/helper";
+import Footer from "@/sections/Footer";
 
 const CertificateDetails = () => {
   const params = useParams();
@@ -156,24 +157,29 @@ const CertificateDetails = () => {
     return <p className={styles.noData}>No certificate found</p>;
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>Certificate Details</h1>
-      <canvas
-        ref={canvasRef}
-        width={850}
-        height={550}
-        className={styles.certificateCanvas}
-      ></canvas>
-      <canvas
-        ref={qrCanvasRef}
-        width={100}
-        height={100}
-        style={{ display: "none" }}
-      ></canvas>
-      <button className={styles.downloadButton} onClick={downloadImage}>
-        Download Certificate with Details
-      </button>
-    </div>
+    <main id="E-Verify Portal Certificate">
+      <section className={styles.mainBody}>
+        <div className={styles.container}>
+          <h1 className={styles.title}>Certificate Details</h1>
+          <canvas
+            ref={canvasRef}
+            width={850}
+            height={550}
+            className={styles.certificateCanvas}
+          ></canvas>
+          <canvas
+            ref={qrCanvasRef}
+            width={100}
+            height={100}
+            style={{ display: "none" }}
+          ></canvas>
+          <button className={styles.downloadButton} onClick={downloadImage}>
+            Download Certificate with Details
+          </button>
+        </div>
+      </section>
+      <Footer />
+    </main>
   );
 };
 

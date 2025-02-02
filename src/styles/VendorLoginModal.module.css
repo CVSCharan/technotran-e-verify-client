@@ -64,6 +64,15 @@
   line-height: 1.6;
 }
 
+.formMsg {
+  margin-top: 0.5rem;
+  font-family: "Georgia", serif;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
+  line-height: 1.6;
+}
+
 .formButton {
   padding: 0.5rem 2rem;
   background: linear-gradient(90deg, #4b0406, #6b0f12, #a82b30);
@@ -78,6 +87,19 @@
 
 .formButton:hover {
   background: linear-gradient(90deg, #4b0406, #6b0f12, #a82b30);
+}
+
+.forgotPassword {
+  margin-bottom: 1rem;
+  font-family: "Georgia", serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.6;
+  background-color: transparent;
+  border: 0;
+  align-self: flex-end;
+  text-decoration: underline;
 }
 
 /* Extra Small Mobile Devices (Portrait) */
