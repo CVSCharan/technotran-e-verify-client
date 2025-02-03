@@ -93,7 +93,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
 
     try {
       const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
-      var TARGET_API_CALL;
+      let TARGET_API_CALL;
       if (target === "Vendor") {
         TARGET_API_CALL = `${API_BASE_URL}/vendors/reset-password`;
       } else {
