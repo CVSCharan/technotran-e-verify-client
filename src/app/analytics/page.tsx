@@ -12,7 +12,7 @@ const AnalyticsPage = () => {
   return (
     <main id="E-Verify Portal Analytics">
       {/* Show the LoginModal if user is not authenticated */}
-      {!adminUser && showModal && <LoginModal />}
+      {!adminUser && showModal && <LoginModal authParams="Admin" />}
 
       <AdminNav />
 
