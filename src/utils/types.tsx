@@ -177,3 +177,9 @@ export interface CreateModelProps {
 export interface LoginModalProps {
   authParams: string;
 }
+
+export interface ForgotPasswordModalProps {
+  target: string;
+  open: boolean;
+  onClose: () => void;
+}

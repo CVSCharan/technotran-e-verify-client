@@ -31,11 +31,13 @@
 }
 
 .logoImg {
-  height: 90px;
-  width: 90px;
-  border: 2px solid #4b0406;
   border-radius: 50%;
   object-fit: fill;
+  height: 120px;
+  width: 120px;
+  height: auto;
+  border: 6px solid #ddd;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
 }
 
 .userName {

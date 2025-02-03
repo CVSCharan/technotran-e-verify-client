@@ -29,29 +29,42 @@ const VendorDashboardPage = () => {
 
   useEffect(() => {
     const fetchCertificates = async () => {
+      if (!vendorOrg) return; // Prevents fetching when vendorOrg is null
+
       try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/certificates/${vendorOrg}`
+        const encodedVendorOrg = encodeURIComponent(vendorOrg.trim()); // 🔹 Encode the string
+
+        console.log(
+          "API CALL",
+          `${process.env.NEXT_PUBLIC_API_URL}/certificates/${encodedVendorOrg}`
         );
+
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/certificates/${encodedVendorOrg}`
+        );
+
         if (!response.ok) {
           throw new Error("Failed to fetch certificates");
         }
         const data: Certificate[] = await response.json();
         setCertificates(data);
       } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError("An unknown error occurred");
-        }
+        setError(
+          err instanceof Error ? err.message : "An unknown error occurred"
+        );
       } finally {
         setLoading(false);
       }
     };
 
+    fetchCertificates();
+  }, [vendorOrg]);
+
+  useEffect(() => {
     const checkUserFromCookies = () => {
       const storedUser = Cookies.get("vendor_user");
       if (storedUser) {
+        console.log(JSON.parse(storedUser).org);
         setVendorOrg(JSON.parse(storedUser).org);
       } else {
         setVendorOrg(null);
@@ -59,7 +72,6 @@ const VendorDashboardPage = () => {
     };
 
     checkUserFromCookies();
-    fetchCertificates();
   }, []);
 
   const handleChangePage = (event: unknown, newPage: number) => {

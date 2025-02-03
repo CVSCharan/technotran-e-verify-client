@@ -5,6 +5,7 @@ import styles from "../styles/VendorLoginModal.module.css";
 import Image from "next/image";
 import { useVendor } from "@/context/VendorContext";
 import { useRouter } from "next/navigation";
+import ForgotPasswordModal from "./ForgotPasswordModal";
 
 export default function VendorLoginModal({
   open,
@@ -22,6 +23,11 @@ export default function VendorLoginModal({
   const handleClose = () => setOpen(false);
 
   const { login } = useVendor();
+
+  const handleForgotPasswordClick = () => {
+    setOpen(false);
+    setForgotPasswordOpen(true);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,61 +67,69 @@ export default function VendorLoginModal({
   };
 
   return (
-    <Modal
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-      className={styles.modalMainContainer}
-    >
-      <div className={styles.modalContainer}>
-        {orgData && (
-          <>
-            <h2 id="modal-modal-title" className={styles.formHeading}>
-              {orgData.name}
-            </h2>
-            <Image
-              src={orgData.imgSrc}
-              alt={orgData.name}
-              height={150}
-              width={150}
-              className={styles.formImg}
+    <>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        className={styles.modalMainContainer}
+      >
+        <div className={styles.modalContainer}>
+          {orgData && (
+            <>
+              <h2 id="modal-modal-title" className={styles.formHeading}>
+                {orgData.name}
+              </h2>
+              <Image
+                src={orgData.imgSrc}
+                alt={orgData.name}
+                height={150}
+                width={150}
+                className={styles.formImg}
+              />
+            </>
+          )}
+
+          {/* Login Form */}
+          <form className={styles.formContainer} onSubmit={handleSubmit}>
+            <input
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className={styles.formInput}
             />
-          </>
-        )}
+            <input
+              placeholder="Password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className={styles.formInput}
+            />
 
-        {/* Login Form */}
-        <form className={styles.formContainer} onSubmit={handleSubmit}>
-          <input
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className={styles.formInput}
-          />
-          <input
-            placeholder="Password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className={styles.formInput}
-          />
+            {/* Forgot Password Button */}
+            <button
+              type="button"
+              className={styles.forgotPassword}
+              onClick={() => handleForgotPasswordClick()}
+            >
+              Forgot Password?
+            </button>
 
-          {/* Forgot Password Button */}
-          <button
-            type="button"
-            className={styles.forgotPassword}
-            onClick={() => setForgotPasswordOpen(true)}
-          >
-            Forgot Password?
-          </button>
+            <button className={styles.formButton} type="submit">
+              Log In
+            </button>
 
-          <button className={styles.formButton} type="submit">
-            Log In
-          </button>
-
-          {error && <h2 className={styles.formMsg}>{error}</h2>}
-        </form>
-      </div>
-    </Modal>
+            {error && <h2 className={styles.formMsg}>{error}</h2>}
+          </form>
+        </div>
+      </Modal>
+      {/* Forgot Password Modal */}
+      <ForgotPasswordModal
+        target="Vendor"
+        open={forgotPasswordOpen}
+        onClose={() => setForgotPasswordOpen(false)}
+      />
+    </>
   );
 }

@@ -10,6 +10,7 @@ const VendorPortalPage = () => {
   const [selectedOrganization, setSelectedOrganization] = useState("");
   const [openModal, setOpenModal] = useState(false); // Add state for the modal
 
+
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedOrganization(event.target.value);
   };
@@ -17,6 +18,7 @@ const VendorPortalPage = () => {
   useEffect(() => {
     setSelectedOrganization("");
   }, []);
+
 
   return (
     <main id="E-Verify Vendor Portal">

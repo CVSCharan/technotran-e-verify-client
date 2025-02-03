@@ -2,14 +2,11 @@
 
 import React, { useState } from "react";
 import { Modal } from "@mui/material";
-import styles from "../styles/AdminForgotPasswordModal.module.css";
+import styles from "../styles/ForgotPasswordModal.module.css";
+import { ForgotPasswordModalProps } from "@/utils/types";
 
-interface AdminForgotPasswordModalProps {
-  open: boolean;
-  onClose: () => void;
-}
-
-const AdminForgotPasswordModal: React.FC<AdminForgotPasswordModalProps> = ({
+const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
+  target,
   open,
   onClose,
 }) => {
@@ -96,7 +93,13 @@ const AdminForgotPasswordModal: React.FC<AdminForgotPasswordModalProps> = ({
 
     try {
       const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
-      const response = await fetch(`${API_BASE_URL}/admins/reset-password`, {
+      var TARGET_API_CALL;
+      if (target === "Vendor") {
+        TARGET_API_CALL = `${API_BASE_URL}/vendors/reset-password`;
+      } else {
+        TARGET_API_CALL = `${API_BASE_URL}/admins/reset-password`;
+      }
+      const response = await fetch(TARGET_API_CALL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, newPassword }),
@@ -211,4 +214,4 @@ const AdminForgotPasswordModal: React.FC<AdminForgotPasswordModalProps> = ({
   );
 };
 
-export default AdminForgotPasswordModal;
+export default ForgotPasswordModal;

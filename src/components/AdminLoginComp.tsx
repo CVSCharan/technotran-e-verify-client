@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import styles from "../styles/AdminLoginComp.module.css";
 import { useAdmin } from "@/context/AdminContext";
 import { useRouter } from "next/navigation";
-import AdminForgotPasswordModal from "./AdminForgotPasswordModal";
+import ForgotPasswordModal from "./ForgotPasswordModal";
 
 const AdminLoginComp = () => {
   const [username, setUsername] = useState<string>("");
@@ -91,7 +91,8 @@ const AdminLoginComp = () => {
       </button>
 
       {/* Forgot Password Modal */}
-      <AdminForgotPasswordModal
+      <ForgotPasswordModal
+        target="Admin"
         open={forgotPasswordOpen}
         onClose={() => setForgotPasswordOpen(false)}
       />
