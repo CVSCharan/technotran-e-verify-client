@@ -25,7 +25,7 @@ const CertificateDetails = () => {
     const fetchCertificate = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/certificates/${id}`
+          `${process.env.NEXT_PUBLIC_API_URL}/certificates/id/${id}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch certificate details");

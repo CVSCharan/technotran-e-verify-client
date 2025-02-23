@@ -19,7 +19,7 @@ const Footer = () => {
       </h3>
       {isHomeRoute && (
         <h3 className="quicksand-text footer-sub-heading">
-          Made with 💗 by CVS CHARAN
+          Developed with 💛 by CVS CHARAN
         </h3>
       )}
     </section>

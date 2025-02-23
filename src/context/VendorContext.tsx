@@ -1,5 +1,11 @@
 "use client";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useMemo,
+} from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { usePathname } from "next/navigation";
@@ -59,17 +65,21 @@ export const VendorProvider: React.FC<{ children: React.ReactNode }> = ({
     router.push("/vendor-portal");
   };
 
+  // Memoize context value to avoid unnecessary re-renders
+  const contextValue = useMemo(
+    () => ({
+      vendorUser,
+      setVendorUser,
+      login,
+      logout,
+      showModal,
+      setShowModal,
+    }),
+    [vendorUser, showModal]
+  );
+
   return (
-    <VendorContext.Provider
-      value={{
-        vendorUser,
-        setVendorUser,
-        logout,
-        login,
-        showModal,
-        setShowModal,
-      }}
-    >
+    <VendorContext.Provider value={contextValue}>
       {children}
     </VendorContext.Provider>
   );

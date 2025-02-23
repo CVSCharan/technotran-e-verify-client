@@ -3,14 +3,13 @@
 import React, { useEffect, useState } from "react";
 import styles from "./page.module.css";
 import { useVendor } from "@/context/VendorContext";
-import LoginModal from "@/components/AuthModal";
 import Image from "next/image";
 import VendorNav from "@/sections/VendorNav";
 import Footer from "@/sections/Footer";
 import { Certificate } from "@/utils/types";
-import Cookies from "js-cookie";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import VendorCertificatesTable from "@/components/VendorCertificatesTable";
+import LoginModal from "@/components/AuthModal";
 
 const VendorDashboardPage = () => {
   const { vendorUser, showModal } = useVendor();
@@ -18,7 +17,6 @@ const VendorDashboardPage = () => {
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [vendorOrg, setVendorOrg] = useState<string | null>("");
 
   // Pagination states
   const [page, setPage] = useState<number>(0);
@@ -27,52 +25,34 @@ const VendorDashboardPage = () => {
   // Search and filter states
   const [searchQuery, setSearchQuery] = useState<string>("");
 
-  useEffect(() => {
-    const fetchCertificates = async () => {
-      if (!vendorOrg) return; // Prevents fetching when vendorOrg is null
+  const fetchCertificates = async () => {
+    try {
+      const encodedVendorOrg =
+        vendorUser && encodeURIComponent(vendorUser.org.trim()); // 🔹 Encode the string
 
-      try {
-        const encodedVendorOrg = encodeURIComponent(vendorOrg.trim()); // 🔹 Encode the string
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/certificates/${encodedVendorOrg}`
+      );
 
-        console.log(
-          "API CALL",
-          `${process.env.NEXT_PUBLIC_API_URL}/certificates/${encodedVendorOrg}`
-        );
-
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/certificates/${encodedVendorOrg}`
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch certificates");
+      if (!response.ok) {
+        if (!vendorUser) {
         }
-        const data: Certificate[] = await response.json();
-        setCertificates(data);
-      } catch (err) {
-        setError(
-          err instanceof Error ? err.message : "An unknown error occurred"
-        );
-      } finally {
-        setLoading(false);
+        throw new Error("Failed to fetch certificates");
       }
-    };
-
-    fetchCertificates();
-  }, [vendorOrg]);
+      const data: Certificate[] = await response.json();
+      setCertificates(data);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "An unknown error occurred"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const checkUserFromCookies = () => {
-      const storedUser = Cookies.get("vendor_user");
-      if (storedUser) {
-        console.log(JSON.parse(storedUser).org);
-        setVendorOrg(JSON.parse(storedUser).org);
-      } else {
-        setVendorOrg(null);
-      }
-    };
-
-    checkUserFromCookies();
-  }, []);
+    fetchCertificates();
+  }, [vendorUser]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);

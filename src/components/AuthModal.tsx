@@ -5,23 +5,26 @@ import { useAdmin } from "@/context/AdminContext";
 import { useRouter } from "next/navigation";
 import styles from "../styles/AdminAuthModal.module.css";
 import { LoginModalProps } from "@/utils/types";
+import { useVendor } from "@/context/VendorContext";
 
 const LoginModal: React.FC<LoginModalProps> = ({ authParams }) => {
-  const { showModal, setShowModal } = useAdmin();
+  const adminContext = useAdmin();
+  const vendorContext = useVendor();
   const router = useRouter();
 
   const handleGoToLogin = () => {
-    setShowModal(false); // Close modal on redirection
     if (authParams === "Vendor") {
+      vendorContext.setShowModal(false); // Close modal on redirection
       router.push("/vendor-portal");
     } else {
+      adminContext.setShowModal(false); // Close modal on redirection
       router.push("/admin-login");
     }
   };
 
   return (
     <Modal
-      open={showModal}
+      open={true}
       className={styles.modalMainContainer}
       aria-labelledby="admin-login-auth-modal-title"
       aria-describedby="admin-login-auth-modal-description"

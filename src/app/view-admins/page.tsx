@@ -48,7 +48,7 @@ const ViewAdminsPage = () => {
         const userCookie = Cookies.get("admin_user");
 
         if (!userCookie) {
-          throw new Error("Authentication token not found in cookies");
+          throw new Error("Authentication failed, Please re-login.");
         }
 
         const user = JSON.parse(userCookie);

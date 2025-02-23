@@ -23,6 +23,7 @@ const AdminDashboardPage = () => {
 
   const { adminUser, showModal } = useAdmin(); // Get adminUser and showModal from context
 
+  console.log(adminUser, showModal);
   // Open Modal and Set Content
   const openCreateVendorModal = () => {
     setModalContent("vendor");

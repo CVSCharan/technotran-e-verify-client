@@ -53,7 +53,7 @@ export interface VendorContextType {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export type Certificate = {
+export interface Certificate {
   _id: string;
   name: string;
   type: "AICTE Internship" | "Internship" | "Workshop"; // Restricting to known types
@@ -66,15 +66,15 @@ export type Certificate = {
   email: string;
   org: string;
   aicteId?: string; // Optional AICTE ID (only for AICTE Internship)
-};
+}
 
-export type Vendors = {
+export interface Vendors {
   _id: string;
   name: string;
   email: string;
   org: string;
   orgPic: string;
-};
+}
 
 export interface VendorLoginModalProps {
   open: boolean;
@@ -175,11 +175,11 @@ export interface CreateModelProps {
 }
 
 export interface LoginModalProps {
-  authParams: string;
+  authParams: "Vendor" | "Admin";
 }
 
 export interface ForgotPasswordModalProps {
-  target: string;
+  target: "Vendor" | "Admin";
   open: boolean;
   onClose: () => void;
 }

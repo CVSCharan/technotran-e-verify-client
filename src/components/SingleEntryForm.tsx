@@ -5,13 +5,30 @@ import styles from "../styles/CreateCertificate.module.css";
 import { SingleEntryFormProps } from "@/utils/types";
 
 const SingleEntryForm: React.FC<SingleEntryFormProps> = ({ onMessage }) => {
-  const [name, setName] = useState("");
-  const [type, setType] = useState("AICTE Internship"); // Default value
-  const [issueDate, setIssueDate] = useState("");
-  const [certificateId, setCertificateId] = useState("");
-  const [rollNo, setRollNo] = useState("");
-  const [orgName, setOrgName] = useState("");
-  const [email, setEmail] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    type: "AICTE Internship",
+    program: "",
+    department: "",
+    startDate: "",
+    issueDate: "",
+    certificateId: "",
+    rollNo: "",
+    email: "",
+    org: "",
+  });
+
+  const handleFormItem = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,13 +40,16 @@ const SingleEntryForm: React.FC<SingleEntryFormProps> = ({ onMessage }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name,
-          type,
-          issueDate,
-          certificateId,
-          rollNo,
-          email,
-          org: orgName,
+          name: formData.name,
+          type: formData.type,
+          program: formData.program,
+          department: formData.department,
+          startDate: formData.startDate,
+          issueDate: formData.issueDate,
+          certificateId: formData.certificateId,
+          rollNo: formData.rollNo,
+          email: formData.email,
+          org: formData.org,
         }),
       });
 
@@ -40,13 +60,19 @@ const SingleEntryForm: React.FC<SingleEntryFormProps> = ({ onMessage }) => {
       }
 
       onMessage("Certificate created successfully!");
-      setName("");
-      setType("AICTE Internship"); // Reset to default
-      setIssueDate("");
-      setCertificateId("");
-      setRollNo("");
-      setEmail("");
-      setOrgName("");
+
+      setFormData({
+        name: "",
+        type: "AICTE Internship",
+        program: "",
+        department: "",
+        startDate: "",
+        issueDate: "",
+        certificateId: "",
+        rollNo: "",
+        email: "",
+        org: "",
+      });
     } catch (error) {
       console.log(error);
       onMessage("Failed to create certificate!");
@@ -58,17 +84,19 @@ const SingleEntryForm: React.FC<SingleEntryFormProps> = ({ onMessage }) => {
       <div className={styles.formSubContainer}>
         <input
           placeholder="Username"
+          name={"name"}
           type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={formData.name}
+          onChange={handleFormItem}
           required
           className={styles.formInput}
         />
 
         {/* Dropdown for Type Selection */}
         <select
-          value={type}
-          onChange={(e) => setType(e.target.value)}
+          value={formData.type}
+          name={"type"}
+          onChange={handleFormItem}
           required
           className={styles.formInput} // Use the same styling as input fields
         >
@@ -78,42 +106,81 @@ const SingleEntryForm: React.FC<SingleEntryFormProps> = ({ onMessage }) => {
         </select>
 
         <input
-          placeholder="Issued Date"
-          type="date"
-          value={issueDate}
-          onChange={(e) => setIssueDate(e.target.value)}
+          placeholder="Program"
+          name={"program"}
+          type="text"
+          value={formData.program}
+          onChange={handleFormItem}
           required
           className={styles.formInput}
         />
+
+        <input
+          placeholder="Department"
+          name={"department"}
+          type="text"
+          value={formData.department}
+          onChange={handleFormItem}
+          required
+          className={styles.formInput}
+        />
+
+        <input
+          placeholder="Start Date"
+          type="date"
+          value={formData.startDate}
+          name={"startDate"}
+          onChange={handleFormItem}
+          required
+          className={styles.formInput}
+        />
+
+        <input
+          placeholder="Issued Date"
+          type="date"
+          value={formData.issueDate}
+          name={"issueDate"}
+          onChange={handleFormItem}
+          required
+          className={styles.formInput}
+        />
+
         <input
           placeholder="Certificate ID"
           type="text"
-          value={certificateId}
-          onChange={(e) => setCertificateId(e.target.value)}
+          value={formData.certificateId}
+          name={"certificateId"}
+          onChange={handleFormItem}
           required
           className={styles.formInput}
         />
+
         <input
           placeholder="Roll No."
           type="text"
-          value={rollNo}
-          onChange={(e) => setRollNo(e.target.value)}
+          name={"rollNo"}
+          value={formData.rollNo}
+          onChange={handleFormItem}
           required
           className={styles.formInput}
         />
+
         <input
           placeholder="Email"
           type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          name={"email"}
+          value={formData.email}
+          onChange={handleFormItem}
           required
           className={styles.formInput}
         />
+
         <input
           placeholder="Organization"
           type="text"
-          value={orgName}
-          onChange={(e) => setOrgName(e.target.value)}
+          name={"org"}
+          value={formData.org}
+          onChange={handleFormItem}
           required
           className={styles.formInput}
         />
