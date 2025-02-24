@@ -8,6 +8,7 @@ import { Certificate } from "@/utils/types";
 import { vendorsData } from "@/utils/helper";
 import Footer from "@/sections/Footer";
 import Image from "next/image";
+import Head from "next/head";
 
 const CertificateDetails = () => {
   const params = useParams();
@@ -89,13 +90,13 @@ const CertificateDetails = () => {
           }
 
           // **Text Styles**
-          ctx.font = `16px Arial`;
+          ctx.font = `16px 'Arial', sans-serif`;
           ctx.fillStyle = "black";
 
           // **Display Student Details**
           ctx.fillText(certificate.name, 400, 190);
 
-          ctx.font = `22px Arial`;
+          ctx.font = `22px 'Arial', sans-serif`;
           ctx.fillStyle = "#4b0406";
 
           // Calculate dynamic X position
@@ -105,7 +106,7 @@ const CertificateDetails = () => {
           // Draw centered text
           ctx.fillText(certificate.program, centerXPrgm, 245);
 
-          ctx.font = `16px Arial`;
+          ctx.font = `16px 'Arial', sans-serif`;
           ctx.fillStyle = "#4b0406";
 
           // Calculate dynamic X position
@@ -120,7 +121,7 @@ const CertificateDetails = () => {
           ctx.fillText(certificate.department, centerXDept, 263);
           ctx.fillText(certificate.org, centerXOrg, 335);
 
-          ctx.font = `16px Arial`;
+          ctx.font = `16px 'Arial', sans-serif`;
           ctx.fillStyle = "black";
 
           // **Format Dates (dd/mm/yy)**
@@ -130,7 +131,7 @@ const CertificateDetails = () => {
           ctx.fillText(formattedStartDate, 325, 360);
           ctx.fillText(formattedIssueDate, 495, 360);
 
-          ctx.font = `11px Arial`;
+          ctx.font = `11px 'Arial', sans-serif`;
           ctx.fillStyle = "#4b0406";
 
           ctx.fillText(certificate.certificateId, 160, 435);
@@ -195,29 +196,37 @@ const CertificateDetails = () => {
   }
 
   return (
-    <main id="E-Verify Portal Certificate">
-      <section className={styles.mainBody}>
-        <div className={styles.container}>
-          <h1 className={styles.title}>Certificate Details</h1>
-          <canvas
-            ref={canvasRef}
-            width={850}
-            height={550}
-            className={styles.certificateCanvas}
-          ></canvas>
-          <canvas
-            ref={qrCanvasRef}
-            width={100}
-            height={100}
-            style={{ display: "none" }}
-          ></canvas>
-          <button className={styles.downloadButton} onClick={downloadImage}>
-            Download Certificate with Details
-          </button>
-        </div>
-      </section>
-      <Footer />
-    </main>
+    <>
+      <Head>
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Arial:wght@400&display=swap"
+        />
+      </Head>
+      <main id="E-Verify Portal Certificate">
+        <section className={styles.mainBody}>
+          <div className={styles.container}>
+            <h1 className={styles.title}>Certificate Details</h1>
+            <canvas
+              ref={canvasRef}
+              width={850}
+              height={550}
+              className={styles.certificateCanvas}
+            ></canvas>
+            <canvas
+              ref={qrCanvasRef}
+              width={100}
+              height={100}
+              style={{ display: "none", fontFamily: "'Arial', sans-serif" }}
+            ></canvas>
+            <button className={styles.downloadButton} onClick={downloadImage}>
+              Download Certificate with Details
+            </button>
+          </div>
+        </section>
+        <Footer />
+      </main>
+    </>
   );
 };
 
