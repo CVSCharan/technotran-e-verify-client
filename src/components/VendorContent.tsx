@@ -1,7 +1,7 @@
 import { useVendor } from "@/context/VendorContext";
 import Footer from "@/sections/Footer";
 import { Certificate } from "@/utils/types";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../app/vendor-dashboard/page.module.css";
 import Image from "next/image";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
