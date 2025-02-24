@@ -53,6 +53,7 @@
   width: 100%;
   max-width: 800px;
   height: auto;
+  font-family: Arial, sans-serif !important;
 }
 
 .downloadButton {

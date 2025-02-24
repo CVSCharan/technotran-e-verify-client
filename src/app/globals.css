@@ -21,6 +21,10 @@ body {
   overflow-x: hidden;
 }
 
+canvas {
+  font-family: Arial, sans-serif !important;
+}
+
 html {
   overflow: hidden;
 }
