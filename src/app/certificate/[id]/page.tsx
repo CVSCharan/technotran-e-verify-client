@@ -25,7 +25,7 @@ const CertificateDetails = () => {
     const fetchCertificate = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/certificates/id/${id}`
+          `${process.env.NEXT_PUBLIC_API_URL}/certificates//id/${id}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch certificate details");
@@ -63,7 +63,7 @@ const CertificateDetails = () => {
           "https://github.com/CVSCharan/Technotran_Assets/blob/main/Internship_Cert.png?raw=true"; // Default to Internship
         if (certificate.type === "Workshop") {
           imgSrc =
-            "https://github.com/CVSCharan/Technotran_Assets/blob/main/Workshop_Cert_Final.png?raw=true"; // Use Workshop Template
+            "https://github.com/CVSCharan/Technotran_Assets/blob/main/Blank_Workshop_Certificate.jpeg?raw=true"; // Use Workshop Template
         }
 
         const img = new Image();
@@ -83,37 +83,42 @@ const CertificateDetails = () => {
           }
 
           // **Text Styles**
-          ctx.font = `bold 16px Arial`;
+          ctx.font = `16px Arial`;
           ctx.fillStyle = "black";
 
           // **Display Student Details**
           ctx.fillText(certificate.name, 400, 185);
 
-          ctx.font = `bold 22px Arial`;
+          ctx.font = `22px Arial`;
           ctx.fillStyle = "#4b0406";
 
-          ctx.fillText(certificate.program, 260, 250);
+          // Calculate dynamic X position
+          const programTextWidth = ctx.measureText(certificate.program).width;
+          const centerX = (canvas.width - programTextWidth) / 2;
 
-          ctx.font = `bold 16px Arial`;
+          // Draw centered text
+          ctx.fillText(certificate.program, centerX, 250);
+
+          ctx.font = `16px Arial`;
           ctx.fillStyle = "#4b0406";
 
           ctx.fillText(certificate.department, 270, 283);
           ctx.fillText(certificate.org, 170, 335);
 
-          ctx.font = `bold 16px Arial`;
+          ctx.font = `16px Arial`;
           ctx.fillStyle = "black";
 
           // **Format Dates (dd/mm/yy)**
           const formattedStartDate = formatDate(certificate.startDate);
           const formattedIssueDate = formatDate(certificate.issueDate);
 
-          ctx.fillText(formattedStartDate, 357, 360);
-          ctx.fillText(formattedIssueDate, 462, 360);
+          ctx.fillText(formattedStartDate, 325, 360);
+          ctx.fillText(formattedIssueDate, 495, 360);
 
-          ctx.font = `bold 10px Arial`;
+          ctx.font = `11px Arial`;
           ctx.fillStyle = "#4b0406";
 
-          ctx.fillText(certificate.certificateId, 730, 380);
+          ctx.fillText(certificate.certificateId, 160, 435);
 
           // **Generate QR Code**
           QRCode.toCanvas(
@@ -128,8 +133,8 @@ const CertificateDetails = () => {
                 const qrImg = qrCanvasRef.current;
                 ctx.drawImage(
                   qrImg,
-                  canvas.width - 137,
-                  canvas.height - 130,
+                  canvas.width - 133,
+                  canvas.height - 125,
                   90,
                   90
                 ); // Adjust QR position
