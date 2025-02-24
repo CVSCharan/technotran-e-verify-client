@@ -7,6 +7,7 @@ import styles from "./page.module.css";
 import { Certificate } from "@/utils/types";
 import { vendorsData } from "@/utils/helper";
 import Footer from "@/sections/Footer";
+import Image from "next/image";
 
 const CertificateDetails = () => {
   const params = useParams();
@@ -27,6 +28,9 @@ const CertificateDetails = () => {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/certificates//id/${id}`
         );
+        if (response.status === 404) {
+          throw new Error("No Certificate details found");
+        }
         if (!response.ok) {
           throw new Error("Failed to fetch certificate details");
         }
@@ -66,16 +70,18 @@ const CertificateDetails = () => {
             "https://github.com/CVSCharan/Technotran_Assets/blob/main/Blank_Workshop_Certificate.jpeg?raw=true"; // Use Workshop Template
         }
 
-        const img = new Image();
+        const img = new window.Image();
         img.src = imgSrc;
 
-        img.onload = () => {
+        img.onload = async () => {
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+          await document.fonts.ready;
 
           // **Embed Vendor Logo**
           const vendor = vendorsData.find((v) => v.name === certificate.org);
           if (vendor) {
-            const vendorLogo = new Image();
+            const vendorLogo = new window.Image();
             vendorLogo.src = vendor.imgSrc;
             vendorLogo.onload = () => {
               ctx.drawImage(vendorLogo, 90, 40, 50, 50); // Adjust position & size
@@ -87,23 +93,32 @@ const CertificateDetails = () => {
           ctx.fillStyle = "black";
 
           // **Display Student Details**
-          ctx.fillText(certificate.name, 400, 185);
+          ctx.fillText(certificate.name, 400, 190);
 
           ctx.font = `22px Arial`;
           ctx.fillStyle = "#4b0406";
 
           // Calculate dynamic X position
           const programTextWidth = ctx.measureText(certificate.program).width;
-          const centerX = (canvas.width - programTextWidth) / 2;
+          const centerXPrgm = (canvas.width - programTextWidth) / 2;
 
           // Draw centered text
-          ctx.fillText(certificate.program, centerX, 250);
+          ctx.fillText(certificate.program, centerXPrgm, 245);
 
           ctx.font = `16px Arial`;
           ctx.fillStyle = "#4b0406";
 
-          ctx.fillText(certificate.department, 270, 283);
-          ctx.fillText(certificate.org, 170, 335);
+          // Calculate dynamic X position
+          const departmentTextWidth = ctx.measureText(
+            certificate.department
+          ).width;
+          const centerXDept = (canvas.width - departmentTextWidth) / 2;
+
+          const orgTextWidth = ctx.measureText(certificate.org).width;
+          const centerXOrg = (canvas.width - orgTextWidth) / 2;
+
+          ctx.fillText(certificate.department, centerXDept, 263);
+          ctx.fillText(certificate.org, centerXOrg, 335);
 
           ctx.font = `16px Arial`;
           ctx.fillStyle = "black";
@@ -157,9 +172,27 @@ const CertificateDetails = () => {
 
   if (loading)
     return <p className={styles.loading}>Loading certificate details...</p>;
-  if (error) return <p className={styles.error}>Error: {error}</p>;
-  if (!certificate)
-    return <p className={styles.noData}>No certificate found</p>;
+
+  if (error?.includes("No Certificate details found")) {
+    return (
+      <div className={styles.noCertFoundContainer}>
+        <Image
+          src={"/Images/warn-stock-img.png"}
+          alt="No Certificate Found"
+          height={300}
+          width={400}
+          priority
+          className={styles.noCertFoundImg}
+        />
+        <h2 className={styles.noCertFoundHeading}>No Certificate found!</h2>
+        <h2 className={styles.noCertFoundHeading}>
+          Please contact Technotran Solutions Support for further Details.
+        </h2>
+      </div>
+    );
+  } else if (error) {
+    return <p className={styles.error}>{error}</p>;
+  }
 
   return (
     <main id="E-Verify Portal Certificate">
