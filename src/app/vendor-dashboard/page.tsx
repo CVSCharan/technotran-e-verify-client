@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useVendor } from "@/context/VendorContext";
 import VendorNav from "@/sections/VendorNav";
 import Footer from "@/sections/Footer";
