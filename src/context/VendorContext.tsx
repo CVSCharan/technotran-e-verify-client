@@ -62,7 +62,7 @@ export const VendorProvider: React.FC<{ children: React.ReactNode }> = ({
     setVendorUser(null);
     Cookies.remove("vendor_user");
     setShowModal(true); // Show modal on logout
-    router.push("/vendor-portal");
+    // router.push("/vendor-portal");
   };
 
   // Memoize context value to avoid unnecessary re-renders

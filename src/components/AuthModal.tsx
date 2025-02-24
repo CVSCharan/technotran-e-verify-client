@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Modal } from "@mui/material";
 import { useAdmin } from "@/context/AdminContext";
 import { useRouter } from "next/navigation";
@@ -26,8 +26,8 @@ const LoginModal: React.FC<LoginModalProps> = ({ authParams }) => {
     <Modal
       open={true}
       className={styles.modalMainContainer}
-      aria-labelledby="admin-login-auth-modal-title"
-      aria-describedby="admin-login-auth-modal-description"
+      aria-labelledby="login-auth-modal-title"
+      aria-describedby="login-auth-modal-description"
     >
       <div className={styles.modalContainer}>
         <h2 className={styles.heading}>Authentication Required</h2>
