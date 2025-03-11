@@ -73,25 +73,32 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  width: 30px;
+  height: 30px;
   padding: 6px;
   border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .editIcon {
   color: #3b82f6;
+  background-color: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.3);
 }
 
 .editIcon:hover {
-  background-color: rgba(59, 130, 246, 0.1);
+  background-color: rgba(59, 130, 246, 0.2);
   transform: scale(1.1);
 }
 
 .deleteIcon {
   color: #ef4444;
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
 .deleteIcon:hover {
-  background-color: rgba(239, 68, 68, 0.1);
+  background-color: rgba(239, 68, 68, 0.2);
   transform: scale(1.1);
 }
 
@@ -109,4 +116,16 @@
     padding: 0.6rem 0.5rem;
     font-size: 0.8rem;
   }
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

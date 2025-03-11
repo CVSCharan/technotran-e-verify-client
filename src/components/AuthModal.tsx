@@ -28,13 +28,31 @@ const LoginModal: React.FC<LoginModalProps> = ({ authParams }) => {
       className={styles.modalMainContainer}
       aria-labelledby="login-auth-modal-title"
       aria-describedby="login-auth-modal-description"
+      role="dialog"
     >
-      <div className={styles.modalContainer}>
-        <h2 className={styles.heading}>Authentication Required</h2>
-        <h3 className={styles.subHeading}>
+      <div 
+        className={styles.modalContainer}
+        role="alertdialog"
+        aria-modal="true"
+        tabIndex={-1}
+      >
+        <h2 
+          id="login-auth-modal-title" 
+          className={styles.heading}
+        >
+          Authentication Required
+        </h2>
+        <p 
+          id="login-auth-modal-description" 
+          className={styles.subHeading}
+        >
           Please log in to access this page.
-        </h3>
-        <button onClick={handleGoToLogin} className={styles.routeButton}>
+        </p>
+        <button 
+          onClick={handleGoToLogin} 
+          className={styles.routeButton}
+          aria-label={`Log in to ${authParams} portal`}
+        >
           Log In
         </button>
       </div>

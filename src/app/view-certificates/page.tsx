@@ -14,6 +14,7 @@ import { AlertColor } from "@mui/material/Alert";
 import Alert from "@mui/material/Alert";
 import { useAdmin } from "@/context/AdminContext";
 import LoginModal from "@/components/AuthModal";
+import Head from "next/head";
 
 const CertificatesPage = () => {
   const [certificates, setCertificates] = useState<Certificate[]>([]);
@@ -193,120 +194,147 @@ const CertificatesPage = () => {
       (selectedType === "All" || certificate.type === selectedType)
   );
 
+  // Set page title dynamically
+  useEffect(() => {
+    document.title = "Certificate Management | E-Verify Portal Admin";
+  }, []);
+
   if (loading) {
     return (
-      <main id="E-Verify Portal View Certificates">
-        <AdminNav />
-        <section className={styles.mainBody}>
-          <div className={styles.landingSection}>
-            <span className={styles.loader}></span>
-          </div>
-        </section>
-        <Footer />
-      </main>
+      <>
+        <Head>
+          <title>Loading Certificates | E-Verify Portal</title>
+          <meta name="robots" content="noindex, nofollow" />
+        </Head>
+        <main id="E-Verify Portal View Certificates">
+          <AdminNav />
+          <section className={styles.mainBody}>
+            <div className={styles.landingSection}>
+              <span className={styles.loader}></span>
+            </div>
+          </section>
+          <Footer />
+        </main>
+      </>
     );
   }
 
   if (error) {
     return (
-      <main id="E-Verify Portal View Certificates">
-        <AdminNav />
-        <section className={styles.mainBody}>
-          <div className={styles.landingSection}>
-            <p className={styles.error}>Server Error: {error}</p>
-          </div>
-        </section>
-        <Footer />
-      </main>
+      <>
+        <Head>
+          <title>Error | E-Verify Portal</title>
+          <meta name="robots" content="noindex, nofollow" />
+        </Head>
+        <main id="E-Verify Portal View Certificates">
+          <AdminNav />
+          <section className={styles.mainBody}>
+            <div className={styles.landingSection}>
+              <p className={styles.error}>Server Error: {error}</p>
+            </div>
+          </section>
+          <Footer />
+        </main>
+      </>
     );
   }
 
   return (
-    <main id="E-Verify Portal View Certificates">
-      {/* Show the LoginModal if user is not authenticated */}
-      {!adminUser && showModal && <LoginModal authParams="Admin" />}
+    <>
+      <Head>
+        <title>Certificate Management | E-Verify Portal | Technotran Solutions</title>
+        <meta name="description" content="Administrative dashboard to manage certificates in the E-Verify Portal system. View, edit, and delete certificates for verification." />
+        <meta name="keywords" content="certificate management, e-verify portal, document verification, certificate administration, technotran solutions" />
+        <meta name="robots" content="noindex, nofollow" />
+        <link rel="canonical" href="https://e-verify-portal.com/view-certificates" />
+      </Head>
+      
+      <main id="E-Verify Portal View Certificates">
+        {/* Show the LoginModal if user is not authenticated */}
+        {!adminUser && showModal && <LoginModal authParams="Admin" />}
 
-      <AdminNav />
-      <section className={styles.mainBody}>
-        <div className={styles.landingSection}>
-          <h2 className={styles.heading}>E-Verify Portal Certificates</h2>
-          <div className={styles.searchBarContainer}>
-            <input
-              type="text"
-              placeholder="Search by Name"
-              value={searchQuery}
-              onChange={handleSearchChange}
-              className={styles.searchBar}
-            />
-            {searchQuery && (
-              <CancelOutlinedIcon
-                onClick={handleClearSearch}
-                className={styles.clearButton}
-                aria-label="clear search"
+        <AdminNav />
+        <section className={styles.mainBody}>
+          <div className={styles.landingSection}>
+            <h2 className={styles.heading}>E-Verify Portal Certificates</h2>
+            <div className={styles.searchBarContainer}>
+              <input
+                type="text"
+                placeholder="Search by Name"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                className={styles.searchBar}
               />
-            )}
+              {searchQuery && (
+                <CancelOutlinedIcon
+                  onClick={handleClearSearch}
+                  className={styles.clearButton}
+                  aria-label="clear search"
+                />
+              )}
+            </div>
+            <div className={styles.dropdownContainer}>
+              <select
+                value={selectedType}
+                onChange={handleTypeChange}
+                className={styles.dropdown}
+              >
+                {certificateTypes.map((type) => (
+                  <option key={type} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <>
+              {filteredCertificates.length === 0 ? (
+                <p className={styles.noCertificates}>No certificates found.</p>
+              ) : (
+                <CertificatesTable
+                  certificates={filteredCertificates}
+                  page={page}
+                  rowsPerPage={rowsPerPage}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                  onEditClick={handleEditClick}
+                  onDeleteClick={handleDeleteClick}
+                />
+              )}
+            </>
           </div>
-          <div className={styles.dropdownContainer}>
-            <select
-              value={selectedType}
-              onChange={handleTypeChange}
-              className={styles.dropdown}
-            >
-              {certificateTypes.map((type) => (
-                <option key={type} value={type}>
-                  {type}
-                </option>
-              ))}
-            </select>
-          </div>
-          <>
-            {filteredCertificates.length === 0 ? (
-              <p className={styles.noCertificates}>No certificates found.</p>
-            ) : (
-              <CertificatesTable
-                certificates={filteredCertificates}
-                page={page}
-                rowsPerPage={rowsPerPage}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-                onEditClick={handleEditClick}
-                onDeleteClick={handleDeleteClick}
-              />
-            )}
-          </>
-        </div>
-      </section>
+        </section>
 
-      <EditCertificateModal
-        open={editModalOpen}
-        onClose={handleEditModalClose}
-        certificate={selectedCertificate}
-        onSave={handleSaveChanges}
-      />
+        <EditCertificateModal
+          open={editModalOpen}
+          onClose={handleEditModalClose}
+          certificate={selectedCertificate}
+          onSave={handleSaveChanges}
+        />
 
-      <DeleteCertificateModal
-        open={deleteModalOpen}
-        onClose={handleDeleteModalClose}
-        certificate={selectedCertificate}
-        onDelete={handleDeleteConfirmation}
-      />
+        <DeleteCertificateModal
+          open={deleteModalOpen}
+          onClose={handleDeleteModalClose}
+          certificate={selectedCertificate}
+          onDelete={handleDeleteConfirmation}
+        />
 
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={() => setSnackbarOpen(false)}
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-      >
-        <Alert
-          severity={snackbarSeverity}
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={3000}
           onClose={() => setSnackbarOpen(false)}
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         >
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
+          <Alert
+            severity={snackbarSeverity}
+            onClose={() => setSnackbarOpen(false)}
+          >
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
 
-      <Footer />
-    </main>
+        <Footer />
+      </main>
+    </>
   );
 };
 

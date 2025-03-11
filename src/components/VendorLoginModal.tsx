@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useVendor } from "@/context/VendorContext";
 import { useRouter } from "next/navigation";
 import ForgotPasswordModal from "./ForgotPasswordModal";
+import Head from "next/head";
 
 export default function VendorLoginModal({
   open,
@@ -23,6 +24,14 @@ export default function VendorLoginModal({
   const handleClose = () => setOpen(false);
 
   const { login } = useVendor();
+
+  // SEO structured data
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Vendor Login",
+    "description": "Login portal for vendors in the E-Verify system"
+  };
 
   const handleForgotPasswordClick = () => {
     setOpen(false);
@@ -68,36 +77,53 @@ export default function VendorLoginModal({
 
   return (
     <>
+      <Head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </Head>
       <Modal
         open={open}
         onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        aria-labelledby="vendor-login-title"
+        aria-describedby="vendor-login-description"
         className={styles.modalMainContainer}
       >
         <div className={styles.modalContainer}>
           {orgData && (
             <>
-              <h2 id="modal-modal-title" className={styles.formHeading}>
+              <h2 id="vendor-login-title" className={styles.formHeading}>
                 {orgData.name}
               </h2>
-              <Image
-                src={orgData.imgSrc}
-                alt={orgData.name}
-                height={150}
-                width={150}
-                className={styles.formImg}
-              />
+              <div className={styles.imageContainer}>
+                <Image
+                  src={orgData.imgSrc}
+                  alt={orgData.name}
+                  height={150}
+                  width={150}
+                  className={styles.formImg}
+                  priority
+                />
+              </div>
             </>
           )}
 
           {/* Login Form */}
-          <form className={styles.formContainer} onSubmit={handleSubmit}>
+          <form 
+            className={styles.formContainer} 
+            onSubmit={handleSubmit}
+            id="vendor-login-description"
+          >
             <input
               placeholder="Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className={styles.formInput}
+              aria-label="Username"
+              name="username"
+              autoComplete="username"
             />
             <input
               placeholder="Password"
@@ -105,6 +131,9 @@ export default function VendorLoginModal({
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className={styles.formInput}
+              aria-label="Password"
+              name="password"
+              autoComplete="current-password"
             />
 
             {/* Forgot Password Button */}
@@ -112,15 +141,20 @@ export default function VendorLoginModal({
               type="button"
               className={styles.forgotPassword}
               onClick={() => handleForgotPasswordClick()}
+              aria-label="Forgot Password"
             >
               Forgot Password?
             </button>
 
-            <button className={styles.formButton} type="submit">
+            <button 
+              className={styles.formButton} 
+              type="submit"
+              aria-label="Log In"
+            >
               Log In
             </button>
 
-            {error && <h2 className={styles.formMsg}>{error}</h2>}
+            {error && <p className={styles.formMsg} role="alert">{error}</p>}
           </form>
         </div>
       </Modal>

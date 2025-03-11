@@ -15,6 +15,7 @@ import AdminsTable from "@/components/AdminsTable";
 import EditAdminsModal from "@/components/EditAdminsModal";
 import DeleteAdminsModal from "@/components/DeleteAdminsModal";
 import Cookies from "js-cookie";
+import Head from "next/head";
 
 const ViewAdminsPage = () => {
   const [admins, setAdmins] = useState<AdminUser[]>([]);
@@ -195,107 +196,134 @@ const ViewAdminsPage = () => {
     }
   };
 
+  // Set page title dynamically
+  useEffect(() => {
+    document.title = "User Management | E-Verify Portal Admin";
+  }, []);
+
   if (loading) {
     return (
-      <main id="E-Verify Portal View Admins">
-        <AdminNav />
-        <section className={styles.mainBody}>
-          <div className={styles.landingSection}>
-            <span className={styles.loader}></span>
-          </div>
-        </section>
-        <Footer />
-      </main>
+      <>
+        <Head>
+          <title>Loading Users | E-Verify Portal</title>
+          <meta name="robots" content="noindex, nofollow" />
+        </Head>
+        <main id="E-Verify Portal View Admins">
+          <AdminNav />
+          <section className={styles.mainBody}>
+            <div className={styles.landingSection}>
+              <span className={styles.loader}></span>
+            </div>
+          </section>
+          <Footer />
+        </main>
+      </>
     );
   }
 
   if (error) {
     return (
-      <main id="E-Verify Portal View Admins">
-        <AdminNav />
-        <section className={styles.mainBody}>
-          <div className={styles.landingSection}>
-            <p className={styles.error}>Server Error: {error}</p>
-          </div>
-        </section>
-        <Footer />
-      </main>
+      <>
+        <Head>
+          <title>Error | E-Verify Portal</title>
+          <meta name="robots" content="noindex, nofollow" />
+        </Head>
+        <main id="E-Verify Portal View Admins">
+          <AdminNav />
+          <section className={styles.mainBody}>
+            <div className={styles.landingSection}>
+              <p className={styles.error}>Server Error: {error}</p>
+            </div>
+          </section>
+          <Footer />
+        </main>
+      </>
     );
   }
 
   return (
-    <main id="E-Verify Portal View Admins">
-      {/* Show the LoginModal if user is not authenticated */}
-      {!adminUser && showModal && <LoginModal authParams="Admin" />}
+    <>
+      <Head>
+        <title>User Management | E-Verify Portal | Technotran Solutions</title>
+        <meta name="description" content="Administrative dashboard to manage users and administrators in the E-Verify Portal system. Control access and permissions for certificate verification." />
+        <meta name="keywords" content="user management, admin portal, e-verify portal, access control, technotran solutions" />
+        <meta name="robots" content="noindex, nofollow" />
+        <link rel="canonical" href="https://e-verify-portal.com/view-admins" />
+      </Head>
+      
+      <main id="E-Verify Portal View Admins">
+        {/* Show the LoginModal if user is not authenticated */}
+        {!adminUser && showModal && <LoginModal authParams="Admin" />}
 
-      <AdminNav />
-      <section>
-        <div className={styles.landingSection}>
-          <h2 className={styles.heading}>E-Verify Portal Users</h2>
-          <div className={styles.searchBarContainer}>
-            <input
-              type="text"
-              placeholder="Search by Name"
-              value={searchQuery}
-              onChange={handleSearchChange}
-              className={styles.searchBar}
-            />
-            {searchQuery && (
-              <CancelOutlinedIcon
-                onClick={handleClearSearch}
-                className={styles.clearButton}
-                aria-label="clear search"
+        <AdminNav />
+        <section>
+          <div className={styles.landingSection}>
+            <h2 className={styles.heading}>E-Verify Portal Users</h2>
+            <div className={styles.searchBarContainer}>
+              <input
+                type="text"
+                placeholder="Search by Name"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                className={styles.searchBar}
               />
-            )}
+              {searchQuery && (
+                <CancelOutlinedIcon
+                  onClick={handleClearSearch}
+                  className={styles.clearButton}
+                  aria-label="clear search"
+                />
+              )}
+            </div>
+            <>
+              {filteredAdmins.length === 0 ? (
+                <p className={styles.noCertificates}>No certificates found.</p>
+              ) : (
+                <AdminsTable
+                  admins={filteredAdmins}
+                  page={page}
+                  rowsPerPage={rowsPerPage}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                  onEditClick={handleEditClick}
+                  onDeleteClick={handleDeleteClick}
+                />
+              )}
+            </>
           </div>
-          <>
-            {filteredAdmins.length === 0 ? (
-              <p className={styles.noCertificates}>No certificates found.</p>
-            ) : (
-              <AdminsTable
-                admins={filteredAdmins}
-                page={page}
-                rowsPerPage={rowsPerPage}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-                onEditClick={handleEditClick}
-                onDeleteClick={handleDeleteClick}
-              />
-            )}
-          </>
-        </div>
-      </section>
+        </section>
 
-      <EditAdminsModal
-        open={editModalOpen}
-        onClose={handleEditModalClose}
-        admin={selectedAdmin}
-        onSave={handleSaveChanges}
-      />
+        <EditAdminsModal
+          open={editModalOpen}
+          onClose={handleEditModalClose}
+          admin={selectedAdmin}
+          onSave={handleSaveChanges}
+        />
 
-      <DeleteAdminsModal
-        open={deleteModalOpen}
-        onClose={handleDeleteModalClose}
-        admin={selectedAdmin}
-        onDelete={handleDeleteConfirmation}
-      />
+        <DeleteAdminsModal
+          open={deleteModalOpen}
+          onClose={handleDeleteModalClose}
+          admin={selectedAdmin}
+          onDelete={handleDeleteConfirmation}
+        />
 
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={() => setSnackbarOpen(false)}
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-      >
-        <Alert
-          severity={snackbarSeverity}
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={3000}
           onClose={() => setSnackbarOpen(false)}
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         >
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
+          <Alert
+            severity={snackbarSeverity}
+            onClose={() => setSnackbarOpen(false)}
+          >
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
 
-      <Footer />
-    </main>
+        <Footer />
+      </main>
+    </>
   );
 };
 

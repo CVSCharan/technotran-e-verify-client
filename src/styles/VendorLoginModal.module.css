@@ -170,5 +170,121 @@
 }
 
 /* Tablets (portrait and landscape) */
+@media only screen and (min-width: 426px) and (max-width: 768px) {
+  .modalContainer {
+    height: 65%;
+    width: 80%;
+  }
+  
+  .formContainer {
+    width: 80%;
+  }
+  
+  .formImg {
+    height: 100px;
+    width: 100px;
+  }
+  
+  .formHeading {
+    font-size: 1.3rem;
+  }
+}
+
+/* Tablets (portrait and landscape) */
 @media only screen and (min-width: 769px) and (max-width: 1024px) {
+  .modalContainer {
+    height: 65%;
+    width: 70%;
+  }
+  
+  .formContainer {
+    width: 75%;
+  }
+}
+
+/* Larger Tablets and Small Laptops */
+@media only screen and (min-width: 1025px) and (max-width: 1366px) {
+  .modalContainer {
+    height: 65%;
+    width: 60%;
+  }
+  
+  .formContainer {
+    width: 70%;
+  }
+}
+
+/* Landscape mode for mobile devices */
+@media only screen and (max-height: 500px) and (orientation: landscape) {
+  .modalContainer {
+    height: 90%;
+    width: 80%;
+    overflow-y: auto;
+  }
+  
+  .formImg {
+    height: 80px;
+    width: 80px;
+    margin-bottom: 0.5rem;
+  }
+  
+  .formHeading {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .formInput {
+    padding: 0.7rem;
+    margin-bottom: 0.7rem;
+  }
+  
+  .forgotPassword {
+    margin-bottom: 0.7rem;
+  }
+}
+
+/* High-resolution displays */
+@media only screen and (min-width: 1367px) {
+  .modalContainer {
+    max-width: 800px;
+    max-height: 700px;
+  }
+  
+  .formContainer {
+    max-width: 500px;
+  }
+}
+
+/* Ensure modal is accessible on very small screens */
+@media only screen and (max-width: 280px) {
+  .modalContainer {
+    width: 95%;
+    padding: 0.7rem;
+  }
+  
+  .formContainer {
+    width: 90%;
+  }
+  
+  .formImg {
+    height: 80px;
+    width: 80px;
+  }
+  
+  .formInput {
+    padding: 0.7rem;
+  }
+  
+  .formButton {
+    padding: 0.4rem 1.5rem;
+    font-size: 0.8rem;
+  }
+  
+  .formHeading {
+    font-size: 0.8rem;
+  }
+  
+  .forgotPassword {
+    font-size: 0.7rem;
+  }
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AdminNav from "@/sections/AdminNav";
 import styles from "./page.module.css";
 import Footer from "@/sections/Footer";
@@ -11,7 +11,8 @@ import CreateAdmin from "@/components/CreateAdmin";
 import Image from "next/image";
 import { useAdmin } from "@/context/AdminContext";
 import { useRouter } from "next/navigation";
-import LoginModal from "@/components/AuthModal"; // Import the LoginModal component
+import LoginModal from "@/components/AuthModal";
+import Head from "next/head";
 
 const AdminDashboardPage = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -20,10 +21,8 @@ const AdminDashboardPage = () => {
   >(null);
 
   const router = useRouter();
+  const { adminUser, showModal } = useAdmin();
 
-  const { adminUser, showModal } = useAdmin(); // Get adminUser and showModal from context
-
-  console.log(adminUser, showModal);
   // Open Modal and Set Content
   const openCreateVendorModal = () => {
     setModalContent("vendor");
@@ -47,109 +46,136 @@ const AdminDashboardPage = () => {
   };
 
   return (
-    <main id="E-Verify Portal Admin Dashboard">
-      {/* Show the LoginModal if user is not authenticated */}
-      {!adminUser && showModal && <LoginModal authParams="Admin" />}
+    <>
+      <Head>
+        <title>Admin Dashboard | E-Verify Portal | Technotran Solutions</title>
+        <meta name="description" content="Manage certificates, vendors, and administrators through the E-Verify Portal admin dashboard. A secure certificate verification system by Technotran Solutions." />
+        <meta name="keywords" content="admin dashboard, certificate management, vendor management, e-verify portal, technotran solutions" />
+        <meta name="robots" content="noindex, nofollow" />
+        <link rel="canonical" href="https://e-verify-portal.com/admin-dashboard" />
+      </Head>
 
-      <AdminNav />
-      <section className={styles.mainBody}>
-        <div className={styles.landingSection}>
-          <h2 className={styles.landingHeading}>E-Verify Portal Dashboard</h2>
-          <h2 className={styles.subHeading}>A Technotran Solutions Venture</h2>
-          <div className={styles.userProfileContainer}>
-            <Image
-              src={
-                adminUser?.profilePic ||
-                "https://github.com/CVSCharan/Technotran_Assets/blob/main/Picture11.png?raw=true"
-              } // Fallback image
-              alt="admin profile pic"
-              height={100}
-              width={100}
-              className={styles.userPic}
-            />
-            <h2 className={styles.userName}>{adminUser?.username}</h2>
-            <h3 className={styles.userRole}>
-              {adminUser?.role === "superadmin" ? "Super Admin" : "Admin"}
-            </h3>
-          </div>
-          <>
+      <main className={styles.dashboardMain} aria-labelledby="dashboard-heading">
+        {/* Show the LoginModal if user is not authenticated */}
+        {!adminUser && showModal && <LoginModal authParams="Admin" />}
+
+        <AdminNav />
+        <section className={styles.mainBody}>
+          <div className={styles.landingSection}>
+            <h1 id="dashboard-heading" className={styles.landingHeading}>E-Verify Portal Dashboard</h1>
+            <p className={styles.subHeading}>A Technotran Solutions Venture</p>
+            
+            <div className={styles.userProfileContainer} aria-label="Admin Profile">
+              <Image
+                src={
+                  adminUser?.profilePic ||
+                  "https://github.com/CVSCharan/Technotran_Assets/blob/main/Picture11.png?raw=true"
+                }
+                alt={`Profile picture of ${adminUser?.username || 'admin'}`}
+                height={100}
+                width={100}
+                className={styles.userPic}
+                priority
+              />
+              <h2 className={styles.userName}>{adminUser?.username}</h2>
+              <p className={styles.userRole}>
+                {adminUser?.role === "superadmin" ? "Super Admin" : "Admin"}
+              </p>
+            </div>
+            
             {adminUser?.role === "superadmin" && (
-              <div className={styles.btnContainer}>
+              <div className={styles.btnContainer} aria-label="Admin Actions">
                 <button
                   onClick={openCreateVendorModal}
                   className={`${styles.button} quicksand-text`}
+                  aria-label="Add Vendor"
                 >
                   Add Vendor
                 </button>
                 <button
                   onClick={openCreateCertificateModal}
                   className={`${styles.button} quicksand-text`}
+                  aria-label="Add Certificate"
                 >
                   Add Certificate
                 </button>
                 <button
                   onClick={openCreateAdminModal}
                   className={`${styles.button} quicksand-text`}
+                  aria-label="Add Admin"
                 >
                   Add Admin
                 </button>
               </div>
             )}
-          </>
-          <div className={styles.btnContainer}>
-            <button
-              className={`${styles.button} quicksand-text`}
-              onClick={() => router.push("/view-vendors")}
-            >
-              View Vendors
-            </button>
-            <button
-              className={`${styles.button} quicksand-text`}
-              onClick={() => router.push("/view-certificates")}
-            >
-              View Certificates
-            </button>
-            <button
-              className={`${styles.button} quicksand-text`}
-              onClick={() => router.push("/view-admins")}
-            >
-              View Admins
-            </button>
+            
+            <div className={styles.btnContainer} aria-label="View Options">
+              <button
+                className={`${styles.button} quicksand-text`}
+                onClick={() => router.push("/view-vendors")}
+                aria-label="View Vendors"
+              >
+                View Vendors
+              </button>
+              <button
+                className={`${styles.button} quicksand-text`}
+                onClick={() => router.push("/view-certificates")}
+                aria-label="View Certificates"
+              >
+                View Certificates
+              </button>
+              <button
+                className={`${styles.button} quicksand-text`}
+                onClick={() => router.push("/view-admins")}
+                aria-label="View Admins"
+              >
+                View Admins
+              </button>
+            </div>
+            
+            <div className={styles.btnContainer} aria-label="Additional Options">
+              <button
+                className={`${styles.button} quicksand-text`}
+                onClick={() => router.push("/analytics")}
+                aria-label="Analytics"
+              >
+                Analytics
+              </button>
+              <button
+                className={`${styles.button} quicksand-text`}
+                onClick={() => router.push("/downloads")}
+                aria-label="Downloads"
+              >
+                Downloads
+              </button>
+            </div>
           </div>
-          <div className={styles.btnContainer}>
-            <button
-              className={`${styles.button} quicksand-text`}
-              onClick={() => router.push("/analytics")}
-            >
-              Analytics
-            </button>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Modal Component for Create Vendor, Certificate, Admin */}
-      <Modal
-        open={openModal}
-        onClose={handleCloseModal}
-        aria-labelledby="modal-title"
-        aria-describedby="modal-description"
-        className={styles.modalMainContainer}
-      >
-        <div className={styles.modalBox}>
-          <div className={styles.modalContent}>
-            {modalContent === "vendor" && (
-              <CreateVendor handleCloseModal={handleCloseModal} />
-            )}
-            {modalContent === "certificate" && <CreateCertificate />}
-            {modalContent === "admin" && (
-              <CreateAdmin handleCloseModal={handleCloseModal} />
-            )}
+        {/* Modal Component for Create Vendor, Certificate, Admin */}
+        <Modal
+          open={openModal}
+          onClose={handleCloseModal}
+          aria-labelledby="modal-title"
+          aria-describedby="modal-description"
+          className={styles.modalMainContainer}
+        >
+          <div className={styles.modalBox} role="dialog">
+            <div className={styles.modalContent}>
+              {modalContent === "vendor" && (
+                <CreateVendor handleCloseModal={handleCloseModal} />
+              )}
+              {modalContent === "certificate" && <CreateCertificate />}
+              {modalContent === "admin" && (
+                <CreateAdmin handleCloseModal={handleCloseModal} />
+              )}
+            </div>
           </div>
-        </div>
-      </Modal>
+        </Modal>
 
-      <Footer />
-    </main>
+        <Footer />
+      </main>
+    </>
   );
 };
 

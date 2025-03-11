@@ -6,10 +6,28 @@ import { vendorsData } from "@/utils/helper";
 import Image from "next/image";
 import { Vendor, VendorVerifyCompProps } from "@/utils/types";
 import VendorLoginModal from "./VendorLoginModal"; // Import the modal component
+import Head from "next/head";
 
 const VendorVerifyComp: React.FC<VendorVerifyCompProps> = ({ org }) => {
   const [orgData, setOrgData] = useState<Vendor | null>(null); // Use Vendor type
   const [openModal, setOpenModal] = useState(false); // State to control modal visibility
+
+  // SEO structured data
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": orgData?.name || "Vendor Organization",
+    "description": "Vendor login portal for certificate verification system",
+    "image": orgData?.imgSrc || "",
+    "url": typeof window !== "undefined" ? window.location.href : "",
+    "potentialAction": {
+      "@type": "LoginAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": typeof window !== "undefined" ? window.location.href : ""
+      }
+    }
+  };
 
   // Debugging: Log the org prop and vendorsData
   useEffect(() => {
@@ -26,8 +44,18 @@ const VendorVerifyComp: React.FC<VendorVerifyCompProps> = ({ org }) => {
 
   return (
     <>
+      <Head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+      </Head>
       {orgData && (
-        <div className={styles.formContainer}>
+        <div 
+          className={styles.formContainer}
+          itemScope
+          itemType="https://schema.org/Organization"
+        >
           <Image
             height={150}
             width={150}
@@ -35,10 +63,22 @@ const VendorVerifyComp: React.FC<VendorVerifyCompProps> = ({ org }) => {
             alt={orgData.name}
             className={styles.formImg}
             priority
+            itemProp="image"
           />
-          <h2 className={styles.formHeading}>{orgData.name}</h2>
+          <h2 
+            className={styles.formHeading}
+            itemProp="name"
+            id="vendor-organization-heading"
+          >
+            {orgData.name}
+          </h2>
 
-          <button className={styles.formButton} onClick={handleLoginClick}>
+          <button 
+            className={styles.formButton} 
+            onClick={handleLoginClick}
+            aria-label={`Login to ${orgData.name}`}
+            aria-describedby="vendor-organization-heading"
+          >
             Login
           </button>
         </div>
@@ -50,8 +90,6 @@ const VendorVerifyComp: React.FC<VendorVerifyCompProps> = ({ org }) => {
         setOpen={setOpenModal}
         orgData={orgData}
       />
-
-
     </>
   );
 };

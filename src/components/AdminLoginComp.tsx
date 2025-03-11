@@ -54,28 +54,44 @@ const AdminLoginComp = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className={styles.formContainer}>
-      <input
-        placeholder="Username"
-        type="text"
-        id="username"
-        name="username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        required
-        className={styles.formInput}
-      />
+    <form 
+      onSubmit={handleSubmit} 
+      className={styles.formContainer}
+      aria-labelledby="login-heading"
+    >
+      <h2 id="login-heading" className={styles.formHeading}>Administrator Login</h2>
+      
+      <div className={styles.inputGroup}>
+        <label htmlFor="username" className={styles.visuallyHidden}>Username</label>
+        <input
+          placeholder="Username"
+          type="text"
+          id="username"
+          name="username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+          className={styles.formInput}
+          aria-required="true"
+          aria-invalid={error && !username ? "true" : "false"}
+        />
+      </div>
 
-      <input
-        placeholder="Password"
-        type="password"
-        id="password"
-        name="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-        className={styles.formInput}
-      />
+      <div className={styles.inputGroup}>
+        <label htmlFor="password" className={styles.visuallyHidden}>Password</label>
+        <input
+          placeholder="Password"
+          type="password"
+          id="password"
+          name="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          className={styles.formInput}
+          aria-required="true"
+          aria-invalid={error && !password ? "true" : "false"}
+        />
+      </div>
 
       {/* Forgot Password Button */}
       <button
@@ -97,8 +113,8 @@ const AdminLoginComp = () => {
         onClose={() => setForgotPasswordOpen(false)}
       />
 
-      {error && <p className={styles.error}>{error}</p>}
-      {message && <p className={styles.success}>{message}</p>}
+      {error && <p className={styles.error} role="alert">{error}</p>}
+      {message && <p className={styles.success} role="status">{message}</p>}
     </form>
   );
 };

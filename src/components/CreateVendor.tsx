@@ -53,8 +53,13 @@ const CreateVendor: React.FC<CreateModelProps> = ({ handleCloseModal }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className={styles.formContainer}>
-      <h2 className={styles.formHeading}>{`Vendor's Form`}</h2>
+    <form 
+      onSubmit={handleSubmit} 
+      className={styles.formContainer}
+      aria-labelledby="vendor-form-heading"
+      role="form"
+    >
+      <h2 id="vendor-form-heading" className={styles.formHeading}>{`Vendor's Form`}</h2>
       <div className={styles.formSubContainer}>
         <input
           placeholder="Username"
@@ -64,6 +69,8 @@ const CreateVendor: React.FC<CreateModelProps> = ({ handleCloseModal }) => {
           onChange={(e) => setName(e.target.value)}
           required
           className={styles.formInput}
+          aria-required="true"
+          aria-label="Username"
         />
 
         <input
@@ -74,6 +81,8 @@ const CreateVendor: React.FC<CreateModelProps> = ({ handleCloseModal }) => {
           onChange={(e) => setEmail(e.target.value)}
           required
           className={styles.formInput}
+          aria-required="true"
+          aria-label="Email"
         />
 
         <input
@@ -84,6 +93,8 @@ const CreateVendor: React.FC<CreateModelProps> = ({ handleCloseModal }) => {
           onChange={(e) => setPassword(e.target.value)}
           required
           className={styles.formInput}
+          aria-required="true"
+          aria-label="Password"
         />
 
         <input
@@ -93,6 +104,7 @@ const CreateVendor: React.FC<CreateModelProps> = ({ handleCloseModal }) => {
           value={orgName}
           onChange={(e) => setOrgName(e.target.value)}
           className={styles.formInput}
+          aria-label="Organization Name"
         />
 
         <input
@@ -102,6 +114,7 @@ const CreateVendor: React.FC<CreateModelProps> = ({ handleCloseModal }) => {
           value={orgPic}
           onChange={(e) => setOrgPic(e.target.value)}
           className={styles.formInput}
+          aria-label="Organization Logo URL"
         />
       </div>
 
@@ -110,10 +123,15 @@ const CreateVendor: React.FC<CreateModelProps> = ({ handleCloseModal }) => {
           type="button"
           onClick={handleCloseModal}
           className={styles.formButton}
+          aria-label="Close form"
         >
           Close
         </button>
-        <button type="submit" className={styles.formButton}>
+        <button 
+          type="submit" 
+          className={styles.formButton}
+          aria-label="Add vendor"
+        >
           Add
         </button>
       </div>

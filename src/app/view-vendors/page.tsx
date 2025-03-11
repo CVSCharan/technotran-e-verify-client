@@ -14,6 +14,7 @@ import { useAdmin } from "@/context/AdminContext";
 import LoginModal from "@/components/AuthModal";
 import EditVendorModal from "@/components/EditVendorModal";
 import DeleteVendorModal from "@/components/DeleteVendorModal";
+import Head from "next/head";
 
 const VendorsPage = () => {
   const [vendors, setVendors] = useState<Vendors[]>([]);
@@ -70,31 +71,48 @@ const VendorsPage = () => {
     vendor?.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // Set page title dynamically
+  useEffect(() => {
+    document.title = "Vendor Management | E-Verify Portal Admin";
+  }, []);
+
   if (loading) {
     return (
-      <main id="E-Verify Vendor Page">
-        <AdminNav />
-        <section className={styles.mainBody}>
-          <div className={styles.landingSection}>
-            <span className={styles.loader}></span>
-          </div>
-        </section>
-        <Footer />
-      </main>
+      <>
+        <Head>
+          <title>Loading Vendors | E-Verify Portal</title>
+          <meta name="robots" content="noindex, nofollow" />
+        </Head>
+        <main id="E-Verify Vendor Page">
+          <AdminNav />
+          <section className={styles.mainBody}>
+            <div className={styles.landingSection}>
+              <span className={styles.loader}></span>
+            </div>
+          </section>
+          <Footer />
+        </main>
+      </>
     );
   }
 
   if (error) {
     return (
-      <main id="E-Verify Vendor Page">
-        <AdminNav />
-        <section className={styles.mainBody}>
-          <div className={styles.landingSection}>
-            <p className={styles.error}>Server Error: {error}</p>
-          </div>
-        </section>
-        <Footer />
-      </main>
+      <>
+        <Head>
+          <title>Error | E-Verify Portal</title>
+          <meta name="robots" content="noindex, nofollow" />
+        </Head>
+        <main id="E-Verify Vendor Page">
+          <AdminNav />
+          <section className={styles.mainBody}>
+            <div className={styles.landingSection}>
+              <p className={styles.error}>Server Error: {error}</p>
+            </div>
+          </section>
+          <Footer />
+        </main>
+      </>
     );
   }
 
@@ -196,78 +214,88 @@ const VendorsPage = () => {
   };
 
   return (
-    <main id="E-Verify Vendor Page">
-      {/* Show the LoginModal if user is not authenticated */}
-      {!adminUser && showModal && <LoginModal authParams="Admin" />}
+    <>
+      <Head>
+        <title>Vendor Management | E-Verify Portal | Technotran Solutions</title>
+        <meta name="description" content="Administrative dashboard to manage vendor organizations in the E-Verify Portal certificate verification system." />
+        <meta name="keywords" content="vendor management, organization administration, e-verify portal, certificate verification, technotran solutions" />
+        <meta name="robots" content="noindex, nofollow" />
+        <link rel="canonical" href="https://e-verify-portal.com/view-vendors" />
+      </Head>
+      
+      <main id="E-Verify Vendor Page">
+        {/* Show the LoginModal if user is not authenticated */}
+        {!adminUser && showModal && <LoginModal authParams="Admin" />}
 
-      <AdminNav />
-      <section className={styles.mainBody}>
-        <div className={styles.landingSection}>
-          <h2 className={styles.heading}>E-Verify Portal Vendors</h2>
-          <div className={styles.searchBarContainer}>
-            <input
-              type="text"
-              placeholder="Search by Name"
-              value={searchQuery}
-              onChange={handleSearchChange}
-              className={styles.searchBar}
-            />
-            {searchQuery && (
-              <CancelOutlinedIcon
-                onClick={handleClearSearch}
-                className={styles.clearButton}
-                aria-label="clear search"
+        <AdminNav />
+        <section className={styles.mainBody}>
+          <div className={styles.landingSection}>
+            <h2 className={styles.heading}>E-Verify Portal Vendors</h2>
+            <div className={styles.searchBarContainer}>
+              <input
+                type="text"
+                placeholder="Search by Name"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                className={styles.searchBar}
               />
-            )}
+              {searchQuery && (
+                <CancelOutlinedIcon
+                  onClick={handleClearSearch}
+                  className={styles.clearButton}
+                  aria-label="clear search"
+                />
+              )}
+            </div>
+            <>
+              {filteredVendors.length === 0 ? (
+                <p className={styles.noCertificates}>No certificates found.</p>
+              ) : (
+                <VendorsTable
+                  vendors={filteredVendors}
+                  page={page}
+                  rowsPerPage={rowsPerPage}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                  onEditClick={handleEditClick}
+                  onDeleteClick={handleDeleteClick}
+                />
+              )}
+            </>
           </div>
-          <>
-            {filteredVendors.length === 0 ? (
-              <p className={styles.noCertificates}>No certificates found.</p>
-            ) : (
-              <VendorsTable
-                vendors={filteredVendors}
-                page={page}
-                rowsPerPage={rowsPerPage}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-                onEditClick={handleEditClick}
-                onDeleteClick={handleDeleteClick}
-              />
-            )}
-          </>
-        </div>
-      </section>
+        </section>
 
-      <EditVendorModal
-        open={editModalOpen}
-        onClose={handleEditModalClose}
-        vendor={selectedVendor}
-        onSave={handleSaveChanges}
-      />
+        <EditVendorModal
+          open={editModalOpen}
+          onClose={handleEditModalClose}
+          vendor={selectedVendor}
+          onSave={handleSaveChanges}
+        />
 
-      <DeleteVendorModal
-        open={deleteModalOpen}
-        onClose={handleDeleteModalClose}
-        vendor={selectedVendor}
-        onDelete={handleDeleteConfirmation}
-      />
+        <DeleteVendorModal
+          open={deleteModalOpen}
+          onClose={handleDeleteModalClose}
+          vendor={selectedVendor}
+          onDelete={handleDeleteConfirmation}
+        />
 
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={() => setSnackbarOpen(false)}
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-      >
-        <Alert
-          severity={snackbarSeverity}
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={3000}
           onClose={() => setSnackbarOpen(false)}
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         >
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
+          <Alert
+            severity={snackbarSeverity}
+            onClose={() => setSnackbarOpen(false)}
+          >
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
 
-      <Footer />
-    </main>
+        <Footer />
+      </main>
+    </>
   );
 };
 

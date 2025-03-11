@@ -34,17 +34,20 @@ const CertificatesTable: React.FC<CertificatesTableProps> = ({
 
   return (
     <>
-      <div className={styles.tableContainer}>
-        <table className={styles.table}>
+      <div className={styles.tableContainer} role="region" aria-label="Certificates list">
+        <table className={styles.table} aria-describedby="certificates-table-description">
+          <caption id="certificates-table-description" className={styles.visuallyHidden}>
+            List of certificates with their name, type, and issue date
+          </caption>
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Type</th>
-              <th>Issue Date</th>
+              <th scope="col">Name</th>
+              <th scope="col">Type</th>
+              <th scope="col">Issue Date</th>
               {adminUser?.role === "superadmin" && (
                 <>
-                  <th>Edit</th>
-                  <th>Delete</th>
+                  <th scope="col">Edit</th>
+                  <th scope="col">Delete</th>
                 </>
               )}
             </tr>
@@ -57,6 +60,7 @@ const CertificatesTable: React.FC<CertificatesTableProps> = ({
                     <Link
                       href={`/certificate/${certificate.certificateId}`}
                       className={styles.link}
+                      aria-label={`View certificate for ${certificate.name}`}
                     >
                       {certificate.name}
                     </Link>
@@ -67,26 +71,24 @@ const CertificatesTable: React.FC<CertificatesTableProps> = ({
                     <>
                       <td>
                         <Tooltip title="Edit Certificate">
-                          <div
+                          <button
                             className={`${styles.actionIcon} ${styles.editIcon}`}
+                            onClick={() => onEditClick(certificate)}
+                            aria-label={`Edit certificate for ${certificate.name}`}
                           >
-                            <EditOutlinedIcon
-                              onClick={() => onEditClick(certificate)}
-                              fontSize="small"
-                            />
-                          </div>
+                            <EditOutlinedIcon fontSize="small" />
+                          </button>
                         </Tooltip>
                       </td>
                       <td>
                         <Tooltip title="Delete Certificate">
-                          <div
+                          <button
                             className={`${styles.actionIcon} ${styles.deleteIcon}`}
+                            onClick={() => onDeleteClick(certificate)}
+                            aria-label={`Delete certificate for ${certificate.name}`}
                           >
-                            <DeleteOutlineIcon
-                              onClick={() => onDeleteClick(certificate)}
-                              fontSize="small"
-                            />
-                          </div>
+                            <DeleteOutlineIcon fontSize="small" />
+                          </button>
                         </Tooltip>
                       </td>
                     </>
@@ -114,6 +116,8 @@ const CertificatesTable: React.FC<CertificatesTableProps> = ({
         rowsPerPage={rowsPerPage}
         onRowsPerPageChange={onRowsPerPageChange}
         rowsPerPageOptions={[5, 7, 10]}
+        labelRowsPerPage="Certificates per page:"
+        getItemAriaLabel={(type) => `Go to ${type} page of certificates`}
         sx={{
           "& .MuiTablePagination-toolbar": {
             fontFamily: `"Quicksand", sans-serif`,

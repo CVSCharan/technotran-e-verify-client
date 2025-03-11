@@ -3,6 +3,7 @@
 import { useState } from "react";
 import styles from "../styles/VerifyCertificateComp.module.css";
 import { useRouter } from "next/navigation";
+import Head from "next/head";
 
 const VerifyCertificateComp = () => {
   const router = useRouter();
@@ -13,6 +14,20 @@ const VerifyCertificateComp = () => {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [showOtpInput, setShowOtpInput] = useState(false);
+
+  // SEO structured data
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Certificate Verification System",
+    "applicationCategory": "BusinessApplication",
+    "description": "Verify the authenticity of certificates through email OTP verification",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  };
 
   const resetForm = () => {
     setFormData({ certificateId: "", email: "" });
@@ -163,56 +178,75 @@ const VerifyCertificateComp = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className={styles.formContainer}>
-      <h1 className={styles.formHeading}>Verify Your Certificate</h1>
-      <input
-        type="text"
-        name="certificateId"
-        placeholder="Enter Your Certificate ID"
-        value={formData.certificateId}
-        onChange={handleInputChange}
-        required
-        className={styles.formInput}
-      />
-
-      <input
-        type="email"
-        name="email"
-        placeholder="Enter Your Email"
-        value={formData.email}
-        onChange={handleInputChange}
-        required
-        className={styles.formInput}
-      />
-
-      {showOtpInput && (
+    <>
+      <Head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+      </Head>
+      <form 
+        onSubmit={handleSubmit} 
+        className={styles.formContainer}
+        aria-labelledby="verify-certificate-heading"
+      >
+        <h1 id="verify-certificate-heading" className={styles.formHeading}>Verify Your Certificate</h1>
         <input
           type="text"
-          name="otp"
-          placeholder="Enter OTP"
-          value={otp}
-          onChange={handleOtpInputChange}
+          name="certificateId"
+          placeholder="Enter Your Certificate ID"
+          value={formData.certificateId}
+          onChange={handleInputChange}
           required
           className={styles.formInput}
+          aria-label="Certificate ID"
+          autoComplete="off"
         />
-      )}
 
-      <button
-        className={`${styles.formButton} quicksand-text`}
-        type="submit"
-        disabled={loading}
-      >
-        {loading
-          ? "Verifying..."
-          : otpVerified
-          ? "Check Certificate"
-          : otpSent
-          ? "Verify OTP"
-          : "Send OTP"}
-      </button>
+        <input
+          type="email"
+          name="email"
+          placeholder="Enter Your Email"
+          value={formData.email}
+          onChange={handleInputChange}
+          required
+          className={styles.formInput}
+          aria-label="Email Address"
+          autoComplete="email"
+        />
 
-      {errorMessage && <p className="quicksand-ext">{errorMessage}</p>}
-    </form>
+        {showOtpInput && (
+          <input
+            type="text"
+            name="otp"
+            placeholder="Enter OTP"
+            value={otp}
+            onChange={handleOtpInputChange}
+            required
+            className={styles.formInput}
+            aria-label="One-Time Password"
+            autoComplete="one-time-code"
+          />
+        )}
+
+        <button
+          className={`${styles.formButton} quicksand-text`}
+          type="submit"
+          disabled={loading}
+          aria-busy={loading}
+        >
+          {loading
+            ? "Verifying..."
+            : otpVerified
+            ? "Check Certificate"
+            : otpSent
+            ? "Verify OTP"
+            : "Send OTP"}
+        </button>
+
+        {errorMessage && <p className="quicksand-ext" role="alert">{errorMessage}</p>}
+      </form>
+    </>
   );
 };
 

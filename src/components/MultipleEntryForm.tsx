@@ -5,10 +5,21 @@ import { useDropzone } from "react-dropzone";
 import styles from "../styles/CreateCertificate.module.css";
 import Image from "next/image";
 import { MultipleEntryFormProps } from "@/utils/types";
+import Head from "next/head";
 
 const MultipleEntryForm: React.FC<MultipleEntryFormProps> = ({ onMessage }) => {
   const [file, setFile] = useState<File | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
+
+  // SEO structured data
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Certificate Bulk Upload Tool",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Any",
+    "description": "Upload multiple certificates at once using Excel spreadsheet format"
+  };
 
   const onDrop = (acceptedFiles: File[]) => {
     if (acceptedFiles && acceptedFiles.length > 0) {
@@ -64,32 +75,43 @@ const MultipleEntryForm: React.FC<MultipleEntryFormProps> = ({ onMessage }) => {
   };
 
   return (
-    <form onSubmit={handleFileUpload} className={styles.uploadFileContainer}>
-      <div
-        {...getRootProps()}
-        className={`${styles.dropZone} ${
-          isDragActive ? styles.active : styles.inactive
-        }`}
-      >
-        <input {...getInputProps()} />
-        <Image
-          className={styles.uploadFileImg}
-          src={"/Images/fileUploadImg.png"}
-          height={150}
-          width={150}
-          alt="File Upload Img"
+    <>
+      <Head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
-        {isDragActive ? (
-          <p>Drop your file here...</p>
-        ) : (
-          <p>Drag and drop your file here, or click to select a file</p>
-        )}
-        {fileName && <p className={styles.fileName}>Selected: {fileName}</p>}
-      </div>
-      <button className={styles.formButton} type="submit" disabled={!file}>
-        Upload Excel
-      </button>
-    </form>
+      </Head>
+      <form onSubmit={handleFileUpload} className={styles.uploadFileContainer} aria-label="Bulk certificate upload form">
+        <div
+          {...getRootProps()}
+          className={`${styles.dropZone} ${
+            isDragActive ? styles.active : styles.inactive
+          }`}
+          role="button"
+          aria-label="File upload dropzone"
+        >
+          <input {...getInputProps()} aria-label="File input" />
+          <Image
+            className={styles.uploadFileImg}
+            src={"/Images/fileUploadImg.png"}
+            height={150}
+            width={150}
+            alt="File Upload Icon"
+            priority
+          />
+          {isDragActive ? (
+            <p>Drop your file here...</p>
+          ) : (
+            <p>Drag and drop your file here, or click to select a file</p>
+          )}
+          {fileName && <p className={styles.fileName}>Selected: {fileName}</p>}
+        </div>
+        <button className={styles.formButton} type="submit" disabled={!file} aria-label="Upload Excel file">
+          Upload Excel
+        </button>
+      </form>
+    </>
   );
 };
 

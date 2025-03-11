@@ -5,6 +5,7 @@ import { TablePagination, Tooltip } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { useAdmin } from "@/context/AdminContext";
+import Head from "next/head";
 
 const AdminsTable: React.FC<AdminsTableProps> = ({
   admins,
@@ -22,19 +23,42 @@ const AdminsTable: React.FC<AdminsTableProps> = ({
     page * rowsPerPage + rowsPerPage
   );
 
+  // Create structured data for SEO
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Table",
+    about: "Administrators in the E-Verify Portal system",
+    name: "Administrators Table",
+  };
+
   return (
     <>
+      <Head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+      </Head>
       <div className={styles.tableContainer}>
-        <table className={styles.table}>
+        <table
+          className={styles.table}
+          aria-describedby="admin-table-description"
+        >
+          <caption
+            id="admin-table-description"
+            className={styles.visuallyHidden}
+          >
+            List of administrators with their username, email, and role
+          </caption>
           <thead>
             <tr>
-              <th>Username</th>
-              <th>Email</th>
-              <th>Role</th>
+              <th scope="col">Username</th>
+              <th scope="col">Email</th>
+              <th scope="col">Role</th>
               {adminUser?.role === "superadmin" && (
                 <>
-                  <th>Edit</th>
-                  <th>Delete</th>
+                  <th scope="col">Edit</th>
+                  <th scope="col">Delete</th>
                 </>
               )}
             </tr>
@@ -84,7 +108,7 @@ const AdminsTable: React.FC<AdminsTableProps> = ({
                   colSpan={adminUser?.role === "superadmin" ? 5 : 3}
                   className={styles.emptyMessage}
                 >
-                  No admins found
+                  No administrators found
                 </td>
               </tr>
             )}
@@ -99,6 +123,8 @@ const AdminsTable: React.FC<AdminsTableProps> = ({
         rowsPerPage={rowsPerPage}
         onRowsPerPageChange={onRowsPerPageChange}
         rowsPerPageOptions={[5, 7, 10]}
+        labelRowsPerPage="Administrators per page:"
+        getItemAriaLabel={(type) => `Go to ${type} page of administrators`}
         sx={{
           "& .MuiTablePagination-toolbar": {
             fontFamily: `"Quicksand", sans-serif`,

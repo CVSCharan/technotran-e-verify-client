@@ -25,6 +25,30 @@
   border-color: #4b0406; /* Soft blue for focus state */
 }
 
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.formHeading {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.inputGroup {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
 .formHeading {
   margin-bottom: 1rem;
   font-family: "Georgia", serif;

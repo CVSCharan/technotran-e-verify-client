@@ -50,8 +50,13 @@ const CreateAdmin: React.FC<CreateModelProps> = ({ handleCloseModal }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className={styles.formContainer}>
-      <h2 className={styles.formHeading}>{`Admin's Form`}</h2>
+    <form 
+      onSubmit={handleSubmit} 
+      className={styles.formContainer}
+      aria-labelledby="admin-form-heading"
+      role="form"
+    >
+      <h2 id="admin-form-heading" className={styles.formHeading}>{`Admin's Form`}</h2>
       <div className={styles.formSubContainer}>
         <input
           type="text"
@@ -60,6 +65,10 @@ const CreateAdmin: React.FC<CreateModelProps> = ({ handleCloseModal }) => {
           onChange={(e) => setUsername(e.target.value)}
           required
           className={styles.formInput}
+          id="username"
+          name="username"
+          aria-required="true"
+          aria-label="Username"
         />
 
         <input
@@ -69,6 +78,10 @@ const CreateAdmin: React.FC<CreateModelProps> = ({ handleCloseModal }) => {
           onChange={(e) => setEmail(e.target.value)}
           required
           className={styles.formInput}
+          id="email"
+          name="email"
+          aria-required="true"
+          aria-label="Email"
         />
 
         <input
@@ -78,6 +91,10 @@ const CreateAdmin: React.FC<CreateModelProps> = ({ handleCloseModal }) => {
           onChange={(e) => setPassword(e.target.value)}
           required
           className={styles.formInput}
+          id="password"
+          name="password"
+          aria-required="true"
+          aria-label="Password"
         />
 
         <input
@@ -86,12 +103,18 @@ const CreateAdmin: React.FC<CreateModelProps> = ({ handleCloseModal }) => {
           value={profilePic}
           onChange={(e) => setProfilePic(e.target.value)}
           className={styles.formInput}
+          id="profilePic"
+          name="profilePic"
+          aria-label="Profile Picture URL"
         />
 
         <select
           value={role}
           onChange={(e) => setRole(e.target.value)}
           className={styles.formInput}
+          id="role"
+          name="role"
+          aria-label="Admin Role"
         >
           <option value="admin">Admin</option>
           <option value="superadmin">Super Admin</option>
@@ -103,16 +126,21 @@ const CreateAdmin: React.FC<CreateModelProps> = ({ handleCloseModal }) => {
           type="button"
           onClick={handleCloseModal}
           className={styles.formButton}
+          aria-label="Close form"
         >
           Close
         </button>
 
-        <button type="submit" className={styles.formButton}>
+        <button 
+          type="submit" 
+          className={styles.formButton}
+          aria-label="Add admin"
+        >
           Add
         </button>
       </div>
 
-      {message && <p className={styles.message}>{message}</p>}
+      {message && <p className={styles.message} role="status">{message}</p>}
     </form>
   );
 };

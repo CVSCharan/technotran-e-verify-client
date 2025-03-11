@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Modal } from "@mui/material";
 import styles from "../styles/ForgotPasswordModal.module.css";
 import { ForgotPasswordModalProps } from "@/utils/types";
+import Head from "next/head";
 
 const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
   target,
@@ -17,6 +18,14 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState<"email" | "otp" | "password">("email");
+
+  // Create structured data for SEO
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Password Recovery",
+    "description": "Reset your password for the E-Verify Portal system"
+  };
 
   const handleSendOtp = async () => {
     if (!email) {
@@ -124,93 +133,121 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
   };
 
   return (
-    <Modal
-      open={open}
-      aria-labelledby="forgot-password-modal"
-      className={styles.modalMainContainer}
-    >
-      <form className={styles.modalContainer}>
-        <h2 className={styles.formHeading}>Forgot Password?</h2>
-        <h3 className={styles.formSubHeading}>
-          {step === "email" && "Enter your registered email to receive OTP."}
-          {step === "otp" && "Enter the OTP sent to your email."}
-          {step === "password" && "Enter your new password."}
-        </h3>
+    <>
+      <Head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+      </Head>
+      <Modal
+        open={open}
+        aria-labelledby="forgot-password-modal-title"
+        aria-describedby="forgot-password-modal-description"
+        className={styles.modalMainContainer}
+        role="dialog"
+        onClose={onClose}
+      >
+        <form className={styles.modalContainer} role="form" aria-modal="true">
+          <h2 id="forgot-password-modal-title" className={styles.formHeading}>Forgot Password?</h2>
+          <h3 id="forgot-password-modal-description" className={styles.formSubHeading}>
+            {step === "email" && "Enter your registered email to receive OTP."}
+            {step === "otp" && "Enter the OTP sent to your email."}
+            {step === "password" && "Enter your new password."}
+          </h3>
 
-        {step === "email" && (
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className={styles.formInput}
-            placeholder="Enter Email"
-          />
-        )}
-
-        {step === "otp" && (
-          <input
-            type="text"
-            value={otp}
-            onChange={(e) => setOtp(e.target.value)}
-            className={styles.formInput}
-            placeholder="Enter OTP"
-          />
-        )}
-
-        {step === "password" && (
-          <input
-            type="password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            className={styles.formInput}
-            placeholder="Enter New Password"
-          />
-        )}
-
-        <div className={styles.btnContainer}>
-          <button
-            className={styles.formButton}
-            onClick={onClose}
-            disabled={loading}
-          >
-            Close
-          </button>
           {step === "email" && (
-            <button
-              type="button"
-              className={styles.formButton}
-              onClick={handleSendOtp}
-              disabled={loading}
-            >
-              {loading ? "Sending..." : "Send OTP"}
-            </button>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={styles.formInput}
+              placeholder="Enter Email"
+              id="reset-email"
+              name="email"
+              aria-label="Email address"
+              aria-required="true"
+            />
           )}
-          {step === "otp" && (
-            <button
-              type="button"
-              className={styles.formButton}
-              onClick={handleVerifyOtp}
-              disabled={loading}
-            >
-              {loading ? "Verifying..." : "Verify OTP"}
-            </button>
-          )}
-          {step === "password" && (
-            <button
-              type="button"
-              className={styles.formButton}
-              onClick={handleResetPassword}
-              disabled={loading}
-            >
-              {loading ? "Resetting..." : "Reset Password"}
-            </button>
-          )}
-        </div>
 
-        {error && <p className={styles.error}>{error}</p>}
-        {message && <p className={styles.success}>{message}</p>}
-      </form>
-    </Modal>
+          {step === "otp" && (
+            <input
+              type="text"
+              value={otp}
+              onChange={(e) => setOtp(e.target.value)}
+              className={styles.formInput}
+              placeholder="Enter OTP"
+              id="reset-otp"
+              name="otp"
+              aria-label="One-time password"
+              aria-required="true"
+            />
+          )}
+
+          {step === "password" && (
+            <input
+              type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              className={styles.formInput}
+              placeholder="Enter New Password"
+              id="reset-password"
+              name="newPassword"
+              aria-label="New password"
+              aria-required="true"
+            />
+          )}
+
+          <div className={styles.btnContainer}>
+            <button
+              className={styles.formButton}
+              onClick={onClose}
+              disabled={loading}
+              type="button"
+              aria-label="Close password reset form"
+            >
+              Close
+            </button>
+            {step === "email" && (
+              <button
+                type="button"
+                className={styles.formButton}
+                onClick={handleSendOtp}
+                disabled={loading}
+                aria-label="Send one-time password to email"
+              >
+                {loading ? "Sending..." : "Send OTP"}
+              </button>
+            )}
+            {step === "otp" && (
+              <button
+                type="button"
+                className={styles.formButton}
+                onClick={handleVerifyOtp}
+                disabled={loading}
+                aria-label="Verify one-time password"
+              >
+                {loading ? "Verifying..." : "Verify OTP"}
+              </button>
+            )}
+            {step === "password" && (
+              <button
+                type="button"
+                className={styles.formButton}
+                onClick={handleResetPassword}
+                disabled={loading}
+                aria-label="Reset password with new password"
+              >
+                {loading ? "Resetting..." : "Reset Password"}
+              </button>
+            )}
+          </div>
+
+          {error && <p className={styles.error} role="alert">{error}</p>}
+          {message && <p className={styles.success} role="status">{message}</p>}
+        </form>
+      </Modal>
+    </>
   );
 };
 
