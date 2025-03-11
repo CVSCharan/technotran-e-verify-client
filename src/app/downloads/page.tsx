@@ -79,9 +79,7 @@ const DownloadsPage = () => {
                 {viewMode === "single" && (
                   <SingleDownloadForm setMessage={setMessage} />
                 )}
-                {viewMode === "multiple" && (
-                  <MultipleDownloadForm setMessage={setMessage} />
-                )}
+                {viewMode === "multiple" && <MultipleDownloadForm />}
               </div>
             </div>
           </div>
