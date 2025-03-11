@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "../styles/VendorsTable.module.css";
 import { VendorsTableProps } from "@/utils/types";
-import { TablePagination } from "@mui/material";
+import { TablePagination, Tooltip } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { useAdmin } from "@/context/AdminContext";
@@ -24,46 +24,64 @@ const VendorsTable: React.FC<VendorsTableProps> = ({
 
   return (
     <>
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Organization</th>
-            {adminUser?.role === "superadmin" && (
-              <>
-                <th>Edit</th>
-                <th>Delete</th>
-              </>
-            )}
-          </tr>
-        </thead>
-        <tbody>
-          {displayedVendors.map((vendor) => (
-            <tr key={vendor._id}>
-              <td>{vendor.name}</td>
-              <td>{vendor.email}</td>
-              <td>{vendor.org}</td>
+      <div className={styles.tableContainer}>
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Organization</th>
               {adminUser?.role === "superadmin" && (
                 <>
-                  <td>
-                    <EditOutlinedIcon
-                      onClick={() => onEditClick(vendor)}
-                      style={{ cursor: "pointer", fontSize: "1.2rem" }}
-                    />
-                  </td>
-                  <td>
-                    <DeleteOutlineIcon
-                      onClick={() => onDeleteClick(vendor)} // Trigger delete modal
-                      style={{ cursor: "pointer", fontSize: "1.2rem" }}
-                    />
-                  </td>
+                  <th>Edit</th>
+                  <th>Delete</th>
                 </>
               )}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {displayedVendors.length > 0 ? (
+              displayedVendors.map((vendor) => (
+                <tr key={vendor._id}>
+                  <td>{vendor.name}</td>
+                  <td>{vendor.email}</td>
+                  <td>{vendor.org}</td>
+                  {adminUser?.role === "superadmin" && (
+                    <>
+                      <td>
+                        <Tooltip title="Edit Vendor">
+                          <div className={`${styles.actionIcon} ${styles.editIcon}`}>
+                            <EditOutlinedIcon
+                              onClick={() => onEditClick(vendor)}
+                              fontSize="small"
+                            />
+                          </div>
+                        </Tooltip>
+                      </td>
+                      <td>
+                        <Tooltip title="Delete Vendor">
+                          <div className={`${styles.actionIcon} ${styles.deleteIcon}`}>
+                            <DeleteOutlineIcon
+                              onClick={() => onDeleteClick(vendor)}
+                              fontSize="small"
+                            />
+                          </div>
+                        </Tooltip>
+                      </td>
+                    </>
+                  )}
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={adminUser?.role === "superadmin" ? 5 : 3} className={styles.emptyMessage}>
+                  No vendors found
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
       <TablePagination
         component="div"
         count={vendors.length}
@@ -71,7 +89,7 @@ const VendorsTable: React.FC<VendorsTableProps> = ({
         onPageChange={onPageChange}
         rowsPerPage={rowsPerPage}
         onRowsPerPageChange={onRowsPerPageChange}
-        rowsPerPageOptions={[5, 7]}
+        rowsPerPageOptions={[5, 7, 10]}
         sx={{
           "& .MuiTablePagination-toolbar": {
             fontFamily: `"Quicksand", sans-serif`,
@@ -80,6 +98,9 @@ const VendorsTable: React.FC<VendorsTableProps> = ({
             {
               fontFamily: `"Quicksand", sans-serif`,
             },
+          "& .MuiTablePagination-actions": {
+            color: "#4b0406",
+          },
         }}
       />
     </>

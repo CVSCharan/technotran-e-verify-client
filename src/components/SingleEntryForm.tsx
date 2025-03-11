@@ -13,6 +13,7 @@ const SingleEntryForm: React.FC<SingleEntryFormProps> = ({ onMessage }) => {
     startDate: "",
     issueDate: "",
     certificateId: "",
+    certificateImgSrc: "",
     rollNo: "",
     email: "",
     org: "",
@@ -47,6 +48,7 @@ const SingleEntryForm: React.FC<SingleEntryFormProps> = ({ onMessage }) => {
           startDate: formData.startDate,
           issueDate: formData.issueDate,
           certificateId: formData.certificateId,
+          certificateImgSrc: formData.certificateImgSrc,
           rollNo: formData.rollNo,
           email: formData.email,
           org: formData.org,
@@ -69,6 +71,7 @@ const SingleEntryForm: React.FC<SingleEntryFormProps> = ({ onMessage }) => {
         startDate: "",
         issueDate: "",
         certificateId: "",
+        certificateImgSrc: "",
         rollNo: "",
         email: "",
         org: "",
@@ -152,6 +155,15 @@ const SingleEntryForm: React.FC<SingleEntryFormProps> = ({ onMessage }) => {
           name={"certificateId"}
           onChange={handleFormItem}
           required
+          className={styles.formInput}
+        />
+
+        <input
+          placeholder="Certificate Img URL"
+          type="text"
+          value={formData.certificateImgSrc}
+          name={"certificateImgSrc"}
+          onChange={handleFormItem}
           className={styles.formInput}
         />
 

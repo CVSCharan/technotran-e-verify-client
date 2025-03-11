@@ -8,6 +8,7 @@ import { Certificate } from "@/utils/types";
 import { vendorsData } from "@/utils/helper";
 import Footer from "@/sections/Footer";
 import Image from "next/image";
+import jsPDF from "jspdf";
 
 const CertificateDetails = () => {
   const params = useParams();
@@ -65,12 +66,18 @@ const CertificateDetails = () => {
       if (ctx) {
         let imgSrc =
           "https://github.com/CVSCharan/Technotran_Assets/blob/main/Internship_Cert.png?raw=true"; // Default to Internship
+
         if (certificate.type === "Workshop") {
           imgSrc =
-            "https://github.com/CVSCharan/Technotran_Assets/blob/main/Blank_Workshop_Certificate.jpeg?raw=true"; // Use Workshop Template
+            "https://res.cloudinary.com/dcooiidus/image/upload/v1740660460/default_blank_workshop_cert_sgu2ad.jpg"; // Use Workshop Template
+        }
+
+        if (certificate.certificateImgSrc !== "") {
+          imgSrc = certificate.certificateImgSrc ?? imgSrc;
         }
 
         const img = new window.Image();
+        img.crossOrigin = "anonymous"; // Ensure CORS support
         img.src = imgSrc;
 
         img.onload = async () => {
@@ -82,9 +89,10 @@ const CertificateDetails = () => {
           const vendor = vendorsData.find((v) => v.name === certificate.org);
           if (vendor) {
             const vendorLogo = new window.Image();
+            vendorLogo.crossOrigin = "anonymous"; // Ensures image loading works with CORS
             vendorLogo.src = vendor.imgSrc;
             vendorLogo.onload = () => {
-              ctx.drawImage(vendorLogo, 90, 40, 50, 50); // Adjust position & size
+              ctx.drawImage(vendorLogo, 110, 60, 70, 70); // Adjust position & size
             };
           }
 
@@ -93,7 +101,7 @@ const CertificateDetails = () => {
           ctx.fillStyle = "black";
 
           // **Display Student Details**
-          ctx.fillText(certificate.name, 400, 190);
+          ctx.fillText(certificate.name, 400, 200);
 
           ctx.font = `22px "ArialCustom", Arial, sans-serif`;
           ctx.fillStyle = "#4b0406";
@@ -103,7 +111,7 @@ const CertificateDetails = () => {
           const centerXPrgm = (canvas.width - programTextWidth) / 2;
 
           // Draw centered text
-          ctx.fillText(certificate.program, centerXPrgm, 245);
+          ctx.fillText(certificate.program, centerXPrgm, 265);
 
           ctx.font = `16px "ArialCustom", Arial, sans-serif`;
           ctx.fillStyle = "#4b0406";
@@ -117,8 +125,8 @@ const CertificateDetails = () => {
           const orgTextWidth = ctx.measureText(certificate.org).width;
           const centerXOrg = (canvas.width - orgTextWidth) / 2;
 
-          ctx.fillText(certificate.department, centerXDept, 263);
-          ctx.fillText(certificate.org, centerXOrg, 335);
+          ctx.fillText(certificate.department, centerXDept, 320);
+          ctx.fillText(certificate.org, centerXOrg, 370);
 
           ctx.font = `16px "ArialCustom", Arial, sans-serif`;
           ctx.fillStyle = "black";
@@ -127,13 +135,13 @@ const CertificateDetails = () => {
           const formattedStartDate = formatDate(certificate.startDate);
           const formattedIssueDate = formatDate(certificate.issueDate);
 
-          ctx.fillText(formattedStartDate, 325, 360);
-          ctx.fillText(formattedIssueDate, 495, 360);
+          ctx.fillText(formattedStartDate, 325, 395);
+          ctx.fillText(formattedIssueDate, 495, 395);
 
           ctx.font = `11px "ArialCustom", Arial, sans-serif`;
           ctx.fillStyle = "#4b0406";
 
-          ctx.fillText(certificate.certificateId, 160, 435);
+          ctx.fillText(certificate.certificateId, 723, 315);
 
           // **Generate QR Code**
           QRCode.toCanvas(
@@ -149,9 +157,9 @@ const CertificateDetails = () => {
                 ctx.drawImage(
                   qrImg,
                   canvas.width - 133,
-                  canvas.height - 125,
-                  90,
-                  90
+                  canvas.height - 140,
+                  80,
+                  80
                 ); // Adjust QR position
               }
             }
@@ -161,12 +169,49 @@ const CertificateDetails = () => {
     }
   }, [certificate, id]);
 
-  const downloadImage = () => {
+  // const downloadImage = () => {
+  //   if (canvasRef.current) {
+  //     const link = document.createElement("a");
+  //     link.download = `certificate-${id}.png`;
+  //     link.href = canvasRef.current.toDataURL("image/png");
+  //     link.click();
+  //   }
+  // };
+
+  const downloadCertificatePDF = () => {
     if (canvasRef.current) {
-      const link = document.createElement("a");
-      link.download = `certificate-${id}.png`;
-      link.href = canvasRef.current.toDataURL("image/png");
-      link.click();
+      const canvas = canvasRef.current;
+
+      // Increase resolution for better quality
+      const scale = 2; // Adjust scale for better resolution
+      const tempCanvas = document.createElement("canvas");
+      tempCanvas.width = canvas.width * scale;
+      tempCanvas.height = canvas.height * scale;
+      const ctx = tempCanvas.getContext("2d");
+
+      if (!ctx) {
+        console.error("Failed to get 2D context");
+        return;
+      }
+
+      ctx.scale(scale, scale);
+      ctx.drawImage(canvas, 0, 0);
+
+      // Create a high-resolution PDF
+      const pdf = new jsPDF({
+        orientation: "landscape",
+        unit: "px",
+        format: [canvas.width, canvas.height],
+      });
+
+      // Convert scaled canvas to image
+      const imgData = tempCanvas.toDataURL("image/png");
+
+      // Add high-res image to PDF
+      pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
+
+      // Save the PDF
+      pdf.save(`${certificate?.name}.pdf`);
     }
   };
 
@@ -214,8 +259,11 @@ const CertificateDetails = () => {
               fontFamily: `"ArialCustom", Arial, sans-serif`,
             }}
           ></canvas>
-          <button className={styles.downloadButton} onClick={downloadImage}>
-            Download Certificate with Details
+          <button
+            className={styles.downloadButton}
+            onClick={downloadCertificatePDF}
+          >
+            Download Certificate
           </button>
         </div>
       </section>

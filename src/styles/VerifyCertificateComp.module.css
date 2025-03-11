@@ -2,11 +2,14 @@
 .formContainer {
   height: 100%;
   width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 0.7rem;
+  padding: 1.5rem;
 }
 
 .formInput {
@@ -30,6 +33,7 @@
   font-family: "Georgia", serif;
   font-size: 1.5rem;
   font-weight: 600;
+  text-align: center;
 }
 
 .formButton {
@@ -42,63 +46,144 @@
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  width: 100%;
+  max-width: 300px;
 }
 
 .formButton:hover {
   background: linear-gradient(90deg, #4b0406, #6b0f12, #a82b30);
+  opacity: 0.9;
 }
 
-/* Extra Small Mobile Devices (Portrait) */
-/* iPhone SE, older Android phones */
-@media only screen and (max-width: 320px) {
-  .formButton {
-    font-size: 0.9rem;
-  }
+.formButton:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+}
 
-  .formInput {
-    font-size: 1rem;
-    margin-bottom: 0.7rem;
+/* Large Screens */
+@media only screen and (min-width: 1025px) {
+  .formContainer {
+    padding: 2rem;
   }
 
   .formHeading {
-    font-size: 0.9rem;
+    font-size: 1.8rem;
   }
 }
 
-/* Small Mobile Devices (Portrait) */
-/* iPhone 6/7/8, Galaxy S8 */
-@media only screen and (min-width: 321px) and (max-width: 375px) {
-  .formButton {
-    font-size: 1rem;
-  }
-
-  .formInput {
-    font-size: 1rem;
-    margin-bottom: 1rem;
+/* Tablets (portrait and landscape) */
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+  .formContainer {
+    max-width: 80%;
+    padding: 1.5rem;
   }
 
   .formHeading {
+    font-size: 1.4rem;
+  }
+
+  .formInput {
+    padding: 0.9rem;
+    font-size: 1.05rem;
+  }
+
+  .formButton {
+    font-size: 1.05rem;
+  }
+}
+
+/* Large Mobile Devices (Landscape) */
+@media only screen and (min-width: 426px) and (max-width: 768px) {
+  .formContainer {
+    max-width: 90%;
+    padding: 1.2rem;
+  }
+
+  .formHeading {
+    font-size: 1.3rem;
+  }
+
+  .formInput {
+    padding: 0.8rem;
     font-size: 1rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .formButton {
+    font-size: 1rem;
+    padding: 0.5rem 1.5rem;
   }
 }
 
 /* Medium Mobile Devices (Portrait) */
 /* iPhone 11 Pro, Google Pixel 2 */
 @media only screen and (min-width: 376px) and (max-width: 425px) {
+  .formContainer {
+    max-width: 95%;
+    padding: 1rem;
+  }
+
   .formButton {
     font-size: 1rem;
+    padding: 0.5rem 1.5rem;
   }
 
   .formInput {
     font-size: 1rem;
     margin-bottom: 1rem;
+    padding: 0.8rem;
   }
 
   .formHeading {
-    font-size: 1rem;
+    font-size: 1.2rem;
   }
 }
 
-/* Tablets (portrait and landscape) */
-@media only screen and (min-width: 769px) and (max-width: 1024px) {
+/* Small Mobile Devices (Portrait) */
+/* iPhone 6/7/8, Galaxy S8 */
+@media only screen and (min-width: 321px) and (max-width: 375px) {
+  .formContainer {
+    padding: 0.8rem;
+    gap: 0.5rem;
+  }
+
+  .formButton {
+    font-size: 1rem;
+    padding: 0.5rem 1.2rem;
+  }
+
+  .formInput {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    padding: 0.7rem;
+  }
+
+  .formHeading {
+    font-size: 1.1rem;
+  }
+}
+
+/* Extra Small Mobile Devices (Portrait) */
+/* iPhone SE, older Android phones */
+@media only screen and (max-width: 320px) {
+  .formContainer {
+    padding: 0.7rem;
+    gap: 0.4rem;
+  }
+
+  .formButton {
+    font-size: 0.9rem;
+    padding: 0.4rem 1rem;
+  }
+
+  .formInput {
+    font-size: 0.9rem;
+    margin-bottom: 0.7rem;
+    padding: 0.6rem;
+  }
+
+  .formHeading {
+    font-size: 0.9rem;
+    margin-bottom: 0.7rem;
+  }
 }

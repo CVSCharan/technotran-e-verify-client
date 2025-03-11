@@ -7,11 +7,13 @@
   justify-content: flex-start;
   align-items: center;
   background-color: #fafafa; /* Soft background color */
+  overflow-x: hidden;
 }
 
 .mainBody {
   margin-left: auto;
   margin-right: auto;
+  width: 100%;
   overflow-x: hidden;
   position: relative;
   color: #333; /* Dark text for contrast */
@@ -19,7 +21,7 @@
 
 /* Landing section with grid pattern */
 .landingSection {
-  height: 85vh;
+  min-height: 85vh;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -40,10 +42,11 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  height: 30%;
+  min-height: 30%;
   max-width: 80rem;
   width: 100%;
   padding: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .heading {
@@ -67,6 +70,7 @@
   font-family: "Georgia", serif;
   color: #555;
   max-width: 770px;
+  width: 100%;
   line-height: 1.6;
 }
 
@@ -79,68 +83,22 @@
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow */
   max-width: 550px;
   width: 100%;
-  height: 70%;
-  max-height: 370px;
+  min-height: 370px;
   text-align: center;
 }
 
-/* Extra Small Mobile Devices (Portrait) */
-/* iPhone SE, older Android phones */
-@media only screen and (max-width: 320px) {
-  .landingSection {
-    padding: 1rem;
+/* Large Screens */
+@media only screen and (min-width: 1025px) {
+  .formContainer {
+    padding: 2.5rem;
   }
 
   .heading {
-    font-size: 1rem;
+    font-size: 2.5rem;
   }
 
   .subHeading {
-    font-size: 0.8rem;
-  }
-
-  .welcomeText {
-    font-size: 1rem;
-  }
-}
-
-/* Small Mobile Devices (Portrait) */
-/* iPhone 6/7/8, Galaxy S8 */
-@media only screen and (min-width: 321px) and (max-width: 375px) {
-  .landingSection {
-    padding: 1rem;
-  }
-
-  .heading {
     font-size: 1.2rem;
-  }
-
-  .subHeading {
-    font-size: 0.8rem;
-  }
-
-  .welcomeText {
-    font-size: 1rem;
-  }
-}
-
-/* Medium Mobile Devices (Portrait) */
-/* iPhone 11 Pro, Google Pixel 2 */
-@media only screen and (min-width: 376px) and (max-width: 425px) {
-  .landingSection {
-    padding: 1rem;
-  }
-
-  .heading {
-    font-size: 1.3rem;
-  }
-
-  .subHeading {
-    font-size: 0.9rem;
-  }
-
-  .welcomeText {
-    font-size: 1.05rem;
   }
 }
 
@@ -162,5 +120,118 @@
 
   .welcomeText {
     font-size: 1.4rem;
+  }
+
+  .formContainer {
+    max-width: 80%;
+    padding: 1.8rem;
+  }
+}
+
+/* Large Mobile Devices (Landscape) */
+@media only screen and (min-width: 426px) and (max-width: 768px) {
+  .landingSection {
+    padding: 1.5rem;
+  }
+
+  .heading {
+    font-size: 2rem;
+  }
+
+  .subHeading {
+    font-size: 1.1rem;
+  }
+
+  .welcomeText {
+    font-size: 1.1rem;
+    max-width: 90%;
+  }
+
+  .formContainer {
+    max-width: 90%;
+    padding: 1.5rem;
+  }
+}
+
+/* Medium Mobile Devices (Portrait) */
+/* iPhone 11 Pro, Google Pixel 2 */
+@media only screen and (min-width: 376px) and (max-width: 425px) {
+  .landingSection {
+    padding: 1rem;
+    min-height: 90vh;
+  }
+
+  .heading {
+    font-size: 1.3rem;
+  }
+
+  .subHeading {
+    font-size: 0.9rem;
+  }
+
+  .welcomeText {
+    font-size: 1.05rem;
+    max-width: 95%;
+  }
+
+  .formContainer {
+    padding: 1.2rem;
+    max-width: 95%;
+    min-height: 320px;
+  }
+}
+
+/* Small Mobile Devices (Portrait) */
+/* iPhone 6/7/8, Galaxy S8 */
+@media only screen and (min-width: 321px) and (max-width: 375px) {
+  .landingSection {
+    padding: 1rem;
+    min-height: 90vh;
+  }
+
+  .heading {
+    font-size: 1.2rem;
+  }
+
+  .subHeading {
+    font-size: 0.8rem;
+  }
+
+  .welcomeText {
+    font-size: 1rem;
+    max-width: 100%;
+  }
+
+  .formContainer {
+    padding: 1rem;
+    max-width: 95%;
+    min-height: 300px;
+  }
+}
+
+/* Extra Small Mobile Devices (Portrait) */
+/* iPhone SE, older Android phones */
+@media only screen and (max-width: 320px) {
+  .landingSection {
+    padding: 0.8rem;
+    min-height: 90vh;
+  }
+
+  .heading {
+    font-size: 1rem;
+  }
+
+  .subHeading {
+    font-size: 0.8rem;
+  }
+
+  .welcomeText {
+    font-size: 0.9rem;
+  }
+
+  .formContainer {
+    padding: 0.8rem;
+    max-width: 95%;
+    min-height: 280px;
   }
 }

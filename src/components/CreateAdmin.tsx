@@ -108,7 +108,7 @@ const CreateAdmin: React.FC<CreateModelProps> = ({ handleCloseModal }) => {
         </button>
 
         <button type="submit" className={styles.formButton}>
-          Add User
+          Add
         </button>
       </div>
 

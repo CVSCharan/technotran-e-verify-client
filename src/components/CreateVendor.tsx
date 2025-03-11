@@ -114,7 +114,7 @@ const CreateVendor: React.FC<CreateModelProps> = ({ handleCloseModal }) => {
           Close
         </button>
         <button type="submit" className={styles.formButton}>
-          Add Vendor
+          Add
         </button>
       </div>
     </form>

@@ -4,16 +4,17 @@
   overflow-x: hidden;
   position: relative;
   color: #333; /* Dark text for contrast */
+  width: 100%;
 }
 
 .landingSection {
-  height: 85vh;
+  min-height: 85vh;
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  padding: 2rem; /* Added padding for a spacious feel */
+  padding: 2rem 1rem; /* Adjusted padding for mobile */
   background-color: #f8fafc; /* Light background color */
   background-image: radial-gradient(circle, #d1d5db 1px, transparent 1px),
     radial-gradient(circle, #d1d5db 1px, transparent 1px); /* Grid pattern */
@@ -28,6 +29,7 @@
   color: #2c3e50; /* Dark gray for a refined look */
   margin-bottom: 0.5rem;
   line-height: 1.6;
+  text-align: center;
 }
 
 .loading {
@@ -38,6 +40,8 @@
 .error {
   font-size: 1.2rem;
   color: red;
+  text-align: center;
+  max-width: 90%;
 }
 
 .noCertificates {
@@ -46,12 +50,14 @@
   font-family: "Georgia", serif;
   color: #34495e; /* Softer gray */
   margin-bottom: 1rem;
+  text-align: center;
 }
 
 .searchBarContainer {
   margin: 0.5rem 0;
   text-align: center;
-  width: 70%;
+  width: 90%;
+  max-width: 600px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -78,7 +84,8 @@
 .dropdownContainer {
   margin: 0.5rem 0;
   margin-bottom: 1rem;
-  width: 100%;
+  width: 90%;
+  max-width: 600px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -177,5 +184,95 @@
   100% {
     box-shadow: 30px 0 0 #2c3e50;
     margin-top: 0;
+  }
+}
+
+/* Media Queries for Responsiveness */
+@media only screen and (max-width: 768px) {
+  .landingSection {
+    padding: 1.5rem 1rem;
+  }
+
+  .heading {
+    font-size: 1.8rem;
+  }
+
+  .searchBarContainer {
+    width: 95%;
+  }
+
+  .dropdownContainer {
+    width: 95%;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .landingSection {
+    padding: 1rem 0.8rem;
+  }
+
+  .heading {
+    font-size: 1.5rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .searchBar {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .dropdown {
+    padding: 0.4rem;
+    font-size: 0.85rem;
+    max-width: 150px;
+  }
+
+  .clearButton {
+    font-size: 1.5rem !important;
+  }
+
+  .loading,
+  .error {
+    font-size: 1.1rem;
+  }
+
+  .noCertificates {
+    font-size: 1rem;
+  }
+
+  .loader {
+    height: 40px;
+    width: 40px;
+  }
+
+  .loader:before,
+  .loader:after {
+    height: 16px;
+    width: 16px;
+  }
+}
+
+@media only screen and (max-width: 360px) {
+  .landingSection {
+    padding: 0.8rem 0.6rem;
+  }
+
+  .heading {
+    font-size: 1.3rem;
+  }
+
+  .searchBar {
+    padding: 0.35rem 0.7rem;
+    font-size: 0.8rem;
+  }
+
+  .dropdown {
+    padding: 0.35rem;
+    font-size: 0.8rem;
+    max-width: 130px;
+  }
+
+  .clearButton {
+    font-size: 1.3rem !important;
   }
 }

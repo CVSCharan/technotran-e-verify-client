@@ -4,11 +4,12 @@
   overflow-x: hidden;
   position: relative;
   color: #333; /* Dark text for contrast */
+  width: 100%;
 }
 
 /* Landing section with grid pattern */
 .landingSection {
-  height: 85vh;
+  min-height: 85vh;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -29,6 +30,7 @@
   color: #2c3e50; /* Dark gray for a refined look */
   margin-bottom: 0.5rem;
   line-height: 1.6;
+  text-align: center;
 }
 
 .subHeading {
@@ -37,6 +39,7 @@
   font-family: "Georgia", serif;
   color: #34495e; /* Softer gray */
   margin-bottom: 1rem;
+  text-align: center;
 }
 
 .button {
@@ -49,11 +52,14 @@
   border: 1.5px solid #d1d5db;
   font-weight: 600;
   width: 200px;
+  transition: all 0.3s ease;
 }
 
 .button:hover {
   background: linear-gradient(90deg, #4b0406, #6b0f12, #a82b30);
   color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .modalMainContainer {
@@ -66,35 +72,42 @@
 
 .modalBox {
   position: absolute;
-  width: 100%;
+  width: 90%;
   max-width: 600px;
   background-color: white;
-  box-shadow: 24px;
-  padding: 20px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  padding: 1.5rem;
   border-radius: 8px;
   background-color: #f8fafc; /* Light background color */
   background-image: radial-gradient(circle, #d1d5db 1px, transparent 1px),
     radial-gradient(circle, #d1d5db 1px, transparent 1px); /* Grid pattern */
   background-position: 0 0, 25px 25px; /* Offset the grid */
   background-size: 50px 50px; /* Set the grid size */
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .modalTitle {
   font-size: 1.5rem;
   margin-bottom: 20px;
+  text-align: center;
 }
 
 .modalContent {
   margin-bottom: 20px;
+  width: 100%;
 }
 
 .btnContainer {
   display: flex;
-  height: 10%;
+  flex-wrap: wrap;
+  height: auto;
   width: 100%;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
   margin: 0.7rem 0;
+  gap: 1rem;
+  max-width: 800px;
 }
 
 .userProfileContainer {
@@ -103,6 +116,13 @@
   justify-content: center;
   align-items: center;
   gap: 0.4rem;
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+  width: 100%;
+  max-width: 350px;
 }
 
 .userPic {
@@ -110,7 +130,7 @@
   width: 90px;
   border: 2px solid #4b0406;
   border-radius: 50%;
-  object-fit: fill;
+  object-fit: cover;
 }
 
 .userName {
@@ -126,5 +146,215 @@
   font-weight: 500;
   font-family: "Georgia", serif;
   color: #34495e; /* Softer gray */
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Large Screens */
+@media only screen and (min-width: 1025px) {
+  .button {
+    width: 220px;
+    padding: 0.8rem;
+    font-size: 1.1rem;
+  }
+
+  .userProfileContainer {
+    max-width: 380px;
+  }
+
+  .userPic {
+    height: 100px;
+    width: 100px;
+  }
+}
+
+/* Tablets (portrait and landscape) */
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+  .landingSection {
+    padding: 1.8rem;
+  }
+
+  .landingHeading {
+    font-size: 2rem;
+  }
+
+  .subHeading {
+    font-size: 1rem;
+  }
+
+  .button {
+    width: 190px;
+  }
+}
+
+/* Large Mobile Devices (Landscape) */
+@media only screen and (min-width: 426px) and (max-width: 768px) {
+  .landingSection {
+    padding: 1.5rem;
+  }
+
+  .landingHeading {
+    font-size: 1.8rem;
+  }
+
+  .subHeading {
+    font-size: 0.95rem;
+  }
+
+  .button {
+    width: 180px;
+    font-size: 0.95rem;
+  }
+
+  .btnContainer {
+    gap: 0.8rem;
+  }
+
+  .userProfileContainer {
+    max-width: 320px;
+  }
+
+  .modalBox {
+    padding: 1.2rem;
+  }
+}
+
+/* Medium Mobile Devices (Portrait) */
+@media only screen and (min-width: 376px) and (max-width: 425px) {
+  .landingSection {
+    padding: 1.2rem;
+  }
+
+  .landingHeading {
+    font-size: 1.6rem;
+  }
+
+  .subHeading {
+    font-size: 0.9rem;
+  }
+
+  .button {
+    width: 160px;
+    font-size: 0.9rem;
+    padding: 0.6rem;
+  }
+
+  .btnContainer {
+    gap: 0.7rem;
+  }
+
+  .userProfileContainer {
+    max-width: 280px;
+    padding: 1.2rem;
+  }
+
+  .userPic {
+    height: 80px;
+    width: 80px;
+  }
+
+  .userName {
+    font-size: 1.1rem;
+  }
+
+  .modalBox {
+    padding: 1rem;
+    width: 95%;
+  }
+}
+
+/* Small Mobile Devices (Portrait) */
+@media only screen and (min-width: 321px) and (max-width: 375px) {
+  .landingSection {
+    padding: 1rem;
+  }
+
+  .landingHeading {
+    font-size: 1.4rem;
+  }
+
+  .subHeading {
+    font-size: 0.85rem;
+  }
+
+  .button {
+    width: 140px;
+    font-size: 0.85rem;
+    padding: 0.5rem;
+  }
+
+  .btnContainer {
+    gap: 0.6rem;
+  }
+
+  .userProfileContainer {
+    max-width: 250px;
+    padding: 1rem;
+  }
+
+  .userPic {
+    height: 70px;
+    width: 70px;
+  }
+
+  .userName {
+    font-size: 1rem;
+  }
+
+  .userRole {
+    font-size: 0.8rem;
+  }
+
+  .modalBox {
+    padding: 0.9rem;
+    width: 95%;
+  }
+}
+
+/* Extra Small Mobile Devices (Portrait) */
+@media only screen and (max-width: 320px) {
+  .landingSection {
+    padding: 0.8rem;
+  }
+
+  .landingHeading {
+    font-size: 1.2rem;
+  }
+
+  .subHeading {
+    font-size: 0.8rem;
+  }
+
+  .button {
+    width: 130px;
+    font-size: 0.8rem;
+    padding: 0.5rem;
+    margin: 3px;
+  }
+
+  .btnContainer {
+    gap: 0.5rem;
+  }
+
+  .userProfileContainer {
+    max-width: 220px;
+    padding: 0.8rem;
+  }
+
+  .userPic {
+    height: 60px;
+    width: 60px;
+  }
+
+  .userName {
+    font-size: 0.9rem;
+  }
+
+  .userRole {
+    font-size: 0.75rem;
+  }
+
+  .modalBox {
+    padding: 0.8rem;
+    width: 95%;
+  }
 }

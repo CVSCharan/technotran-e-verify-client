@@ -1,6 +1,6 @@
 import Link from "next/link";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import { TablePagination } from "@mui/material";
+import { TablePagination, Tooltip } from "@mui/material";
 import styles from "../styles/CertificatesTable.module.css";
 import { CertificatesTableProps } from "@/utils/types";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
@@ -13,7 +13,7 @@ const CertificatesTable: React.FC<CertificatesTableProps> = ({
   onPageChange,
   onRowsPerPageChange,
   onEditClick,
-  onDeleteClick, // New prop to handle delete action
+  onDeleteClick,
 }) => {
   const { adminUser } = useAdmin();
 
@@ -22,55 +22,90 @@ const CertificatesTable: React.FC<CertificatesTableProps> = ({
     page * rowsPerPage + rowsPerPage
   );
 
+  // Format date in a more readable way
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
   return (
     <>
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Issue Date</th>
-            {adminUser?.role === "superadmin" && (
-              <>
-                <th>Edit</th>
-                <th>Delete</th>
-              </>
-            )}
-          </tr>
-        </thead>
-        <tbody>
-          {displayedCertificates.map((certificate) => (
-            <tr key={certificate._id}>
-              <td>
-                <Link
-                  href={`/certificate/${certificate.certificateId}`}
-                  className={styles.link}
-                >
-                  {certificate.name}
-                </Link>
-              </td>
-              <td>{certificate.type}</td>
-              <td>{new Date(certificate.issueDate).toLocaleDateString()}</td>
+      <div className={styles.tableContainer}>
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Issue Date</th>
               {adminUser?.role === "superadmin" && (
                 <>
-                  <td>
-                    <EditOutlinedIcon
-                      onClick={() => onEditClick(certificate)}
-                      style={{ cursor: "pointer", fontSize: "1.2rem" }}
-                    />
-                  </td>
-                  <td>
-                    <DeleteOutlineIcon
-                      onClick={() => onDeleteClick(certificate)} // Trigger delete modal
-                      style={{ cursor: "pointer", fontSize: "1.2rem" }}
-                    />
-                  </td>
+                  <th>Edit</th>
+                  <th>Delete</th>
                 </>
               )}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {displayedCertificates.length > 0 ? (
+              displayedCertificates.map((certificate) => (
+                <tr key={certificate._id}>
+                  <td>
+                    <Link
+                      href={`/certificate/${certificate.certificateId}`}
+                      className={styles.link}
+                    >
+                      {certificate.name}
+                    </Link>
+                  </td>
+                  <td>{certificate.type}</td>
+                  <td>{formatDate(certificate.issueDate)}</td>
+                  {adminUser?.role === "superadmin" && (
+                    <>
+                      <td>
+                        <Tooltip title="Edit Certificate">
+                          <div
+                            className={`${styles.actionIcon} ${styles.editIcon}`}
+                          >
+                            <EditOutlinedIcon
+                              onClick={() => onEditClick(certificate)}
+                              fontSize="small"
+                            />
+                          </div>
+                        </Tooltip>
+                      </td>
+                      <td>
+                        <Tooltip title="Delete Certificate">
+                          <div
+                            className={`${styles.actionIcon} ${styles.deleteIcon}`}
+                          >
+                            <DeleteOutlineIcon
+                              onClick={() => onDeleteClick(certificate)}
+                              fontSize="small"
+                            />
+                          </div>
+                        </Tooltip>
+                      </td>
+                    </>
+                  )}
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan={adminUser?.role === "superadmin" ? 5 : 3}
+                  className={styles.emptyMessage}
+                >
+                  No certificates found
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
       <TablePagination
         component="div"
         count={certificates.length}
@@ -78,7 +113,7 @@ const CertificatesTable: React.FC<CertificatesTableProps> = ({
         onPageChange={onPageChange}
         rowsPerPage={rowsPerPage}
         onRowsPerPageChange={onRowsPerPageChange}
-        rowsPerPageOptions={[5, 7]}
+        rowsPerPageOptions={[5, 7, 10]}
         sx={{
           "& .MuiTablePagination-toolbar": {
             fontFamily: `"Quicksand", sans-serif`,
@@ -87,6 +122,9 @@ const CertificatesTable: React.FC<CertificatesTableProps> = ({
             {
               fontFamily: `"Quicksand", sans-serif`,
             },
+          "& .MuiTablePagination-actions": {
+            color: "#4b0406",
+          },
         }}
       />
     </>

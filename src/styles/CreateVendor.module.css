@@ -6,6 +6,7 @@
   justify-content: center;
   align-items: center;
   gap: 0.7rem;
+  padding: 1rem;
 }
 
 .formSubContainer {
@@ -15,24 +16,27 @@
   justify-content: center;
   align-items: center;
   gap: 0.7rem;
+  width: 100%;
+  max-width: 900px;
 }
 
 .formInput {
-  min-width: 270px; /* Ensure a minimum width for smaller screens */
+  width: calc(50% - 0.7rem); /* Always two inputs per row with gap considered */
   padding: 0.7rem;
   margin-bottom: 1rem;
   border: 1px solid #ccc;
   border-radius: 8px;
-  font-size: 1rem;
   outline: none;
-  transition: border-color 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
   font-family: "Quicksand", sans-serif;
   font-weight: 500;
   font-size: 0.9rem;
+  box-sizing: border-box;
 }
 
 .formInput:focus {
   border-color: #4b0406;
+  box-shadow: 0 0 0 2px rgba(75, 4, 6, 0.1);
 }
 
 .formHeading {
@@ -42,22 +46,7 @@
   font-weight: 600;
   text-align: center;
   line-height: 1.6;
-}
-
-.formButton {
-  padding: 0.5rem 2rem;
-  background: linear-gradient(90deg, #4b0406, #6b0f12, #a82b30);
-  color: white;
-  font-size: 1.1rem;
-  font-weight: 500;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.formButton:hover {
-  background: linear-gradient(90deg, #4b0406, #6b0f12, #a82b30);
+  width: 100%;
 }
 
 .btnContainer {
@@ -66,74 +55,136 @@
   justify-content: center;
   align-items: center;
   gap: 0.7rem;
+  margin-top: 0.5rem;
+  max-width: 500px;
 }
 
-/* Extra Small Mobile Devices (Portrait) */
-/* iPhone SE, older Android phones */
-@media only screen and (max-width: 320px) {
-  .modalContainer {
-    height: 60%;
-    width: 90%;
-  }
-
-  .formButton {
-    font-size: 0.9rem;
-  }
-
-  .formInput {
-    font-size: 1rem;
-    margin-bottom: 0.7rem;
-  }
-
-  .formHeading {
-    font-size: 0.9rem;
-  }
+.formButton {
+  padding: 0.5rem 1.5rem;
+  background: linear-gradient(90deg, #4b0406, #6b0f12, #a82b30);
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 100px;
+  max-width: 150px;
+  flex: 1;
 }
 
-/* Small Mobile Devices (Portrait) */
-/* iPhone 6/7/8, Galaxy S8 */
-@media only screen and (min-width: 321px) and (max-width: 375px) {
-  .modalContainer {
-    height: 60%;
-    width: 90%;
-  }
-
-  .formButton {
-    font-size: 1rem;
-  }
-
-  .formInput {
-    font-size: 1rem;
-    margin-bottom: 1rem;
-  }
-
-  .formHeading {
-    font-size: 1rem;
-  }
+.formButton:hover {
+  background: linear-gradient(90deg, #4b0406, #6b0f12, #a82b30);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Medium Mobile Devices (Portrait) */
-/* iPhone 11 Pro, Google Pixel 2 */
-@media only screen and (min-width: 376px) and (max-width: 425px) {
-  .modalContainer {
-    height: 60%;
-    width: 90%;
-  }
-
-  .formButton {
-    font-size: 1rem;
-  }
-
-  .formInput {
-    font-size: 1rem;
-    margin-bottom: 1rem;
-  }
-
+/* Large Screens */
+@media only screen and (min-width: 1025px) {
   .formHeading {
-    font-size: 1rem;
+    font-size: 1.8rem;
   }
 }
 
 /* Tablets (portrait and landscape) */
 @media only screen and (min-width: 769px) and (max-width: 1024px) {
+  .formHeading {
+    font-size: 1.6rem;
+  }
+}
+
+/* Large Mobile Devices (Landscape) */
+@media only screen and (min-width: 426px) and (max-width: 768px) {
+  .formHeading {
+    font-size: 1.4rem;
+  }
+
+  .formButton {
+    font-size: 1rem;
+    padding: 0.5rem 1.5rem;
+  }
+}
+
+/* Medium Mobile Devices (Portrait) */
+@media only screen and (min-width: 376px) and (max-width: 425px) {
+  .formContainer {
+    padding: 0.8rem;
+  }
+
+  .formInput {
+    width: calc(50% - 0.7rem); /* Keep two inputs per row */
+    margin-bottom: 0.8rem;
+  }
+
+  .formHeading {
+    font-size: 1.2rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .formButton {
+    font-size: 1rem;
+    padding: 0.5rem 1.5rem;
+  }
+
+  .btnContainer {
+    gap: 0.5rem;
+  }
+}
+
+/* Small Mobile Devices (Portrait) */
+@media only screen and (min-width: 321px) and (max-width: 375px) {
+  .formContainer {
+    padding: 0.7rem;
+  }
+
+  .formInput {
+    width: calc(50% - 0.7rem); /* Keep two inputs per row */
+    margin-bottom: 0.8rem;
+    font-size: 0.9rem;
+    padding: 0.6rem;
+  }
+
+  .formHeading {
+    font-size: 1.1rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .formButton {
+    font-size: 0.95rem;
+    padding: 0.5rem 1.2rem;
+  }
+}
+
+/* Extra Small Mobile Devices (Portrait) */
+@media only screen and (max-width: 320px) {
+  .formContainer {
+    padding: 0.6rem;
+  }
+
+  .formInput {
+    width: calc(50% - 0.5rem); /* Keep two inputs per row with smaller gap */
+    margin-bottom: 0.7rem;
+    padding: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .formSubContainer {
+    gap: 0.5rem;
+  }
+
+  .formHeading {
+    font-size: 1rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .formButton {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    min-width: 100px;
+  }
+
+  .btnContainer {
+    gap: 0.5rem;
+  }
 }

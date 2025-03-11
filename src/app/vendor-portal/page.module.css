@@ -4,11 +4,12 @@
   overflow-x: hidden;
   position: relative;
   color: #333; /* Dark text for contrast */
+  width: 100%;
 }
 
 /* Landing section with grid pattern */
 .landingSection {
-  height: 85vh;
+  min-height: 85vh;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -29,10 +30,11 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  height: 30%;
+  min-height: 30%;
   max-width: 80rem;
   width: 100%;
   padding: 1rem;
+  margin-bottom: 1rem;
 }
 
 .heading {
@@ -56,19 +58,20 @@
   font-family: "Georgia", serif;
   color: #555;
   max-width: 770px;
+  width: 100%;
   line-height: 1.6;
 }
 
 .selectContainer {
   margin-top: 0.7rem;
   padding: 1rem;
-  max-width: 80rem;
+  max-width: 550px;
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 20%;
+  min-height: 20%;
 }
 
 .selectLabel {
@@ -78,6 +81,7 @@
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 1rem;
+  text-align: center;
 }
 
 .selectDropdown {
@@ -99,98 +103,31 @@
 
 /* Form container styles */
 .formContainer {
-  margin-top: 0.5rem;
+  margin-top: 1rem;
   padding: 2rem;
   background-color: #ffffff; /* White background */
   border-radius: 12px;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-  max-width: 550px;
+  max-width: 500px; /* Reduced from 550px */
   width: 100%;
-  height: 50%;
+  min-height: 300px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-/* Extra Small Mobile Devices (Portrait) */
-/* iPhone SE, older Android phones */
-@media only screen and (max-width: 320px) {
-  .landingSection {
-    padding: 1rem;
+/* Large Screens */
+@media only screen and (min-width: 1025px) {
+  .formContainer {
+    padding: 2.5rem;
+    max-width: 480px; /* Slightly smaller for large screens */
   }
 
-  .heading {
-    font-size: 1rem;
-  }
-
-  .subHeading {
-    font-size: 0.8rem;
-  }
-
-  .selectLabel {
-    font-size: 1rem;
-  }
-
-  .welcomeText {
-    font-size: 1rem;
-  }
-
-  .selectDropdown {
-    font-size: 1rem;
-  }
-}
-
-/* Small Mobile Devices (Portrait) */
-/* iPhone 6/7/8, Galaxy S8 */
-@media only screen and (min-width: 321px) and (max-width: 375px) {
-  .landingSection {
-    padding: 1rem;
-  }
-
-  .heading {
-    font-size: 1.2rem;
-  }
-
-  .subHeading {
-    font-size: 0.8rem;
-  }
-
-  .selectLabel {
-    font-size: 1.2rem;
-  }
-
-  .welcomeText {
-    font-size: 1rem;
-  }
-
-  .selectDropdown {
-    font-size: 1rem;
-  }
-}
-
-/* Medium Mobile Devices (Portrait) */
-/* iPhone 11 Pro, Google Pixel 2 */
-@media only screen and (min-width: 376px) and (max-width: 425px) {
-  .landingSection {
-    padding: 1rem;
-  }
-
-  .heading {
-    font-size: 1.3rem;
-  }
-
-  .subHeading {
-    font-size: 0.9rem;
-  }
-
-  .selectLabel {
-    font-size: 1.3rem;
-  }
-
-  .welcomeText {
-    font-size: 1.05rem;
-  }
-
-  .selectDropdown {
-    font-size: 1.05rem;
+  .selectContainer {
+    margin-top: 1.5rem;
+    max-width: 480px; /* Match form container width */
   }
 }
 
@@ -212,5 +149,169 @@
 
   .welcomeText {
     font-size: 1.4rem;
+  }
+
+  .formContainer {
+    max-width: 75%; /* Reduced from 80% */
+    padding: 1.8rem;
+  }
+
+  .selectContainer {
+    max-width: 75%; /* Match form container width */
+  }
+}
+
+/* Large Mobile Devices (Landscape) */
+@media only screen and (min-width: 426px) and (max-width: 768px) {
+  .landingSection {
+    padding: 1.5rem;
+  }
+
+  .heading {
+    font-size: 2rem;
+  }
+
+  .subHeading {
+    font-size: 1rem;
+  }
+
+  .welcomeText {
+    font-size: 1.1rem;
+  }
+
+  .selectLabel {
+    font-size: 1.3rem;
+  }
+
+  .formContainer,
+  .selectContainer {
+    max-width: 90%;
+    padding: 1.5rem;
+  }
+}
+
+/* Medium Mobile Devices (Portrait) */
+/* iPhone 11 Pro, Google Pixel 2 */
+@media only screen and (min-width: 376px) and (max-width: 425px) {
+  .landingSection {
+    padding: 1rem;
+    min-height: 90vh;
+  }
+
+  .heading {
+    font-size: 1.3rem;
+  }
+
+  .subHeading {
+    font-size: 0.9rem;
+  }
+
+  .selectLabel {
+    font-size: 1.3rem;
+  }
+
+  .welcomeText {
+    font-size: 1.05rem;
+  }
+
+  .selectDropdown {
+    font-size: 1.05rem;
+    max-width: 100%;
+  }
+
+  .formContainer {
+    padding: 1.2rem;
+    max-width: 95%;
+    min-height: 280px;
+  }
+
+  .selectContainer {
+    max-width: 95%;
+    padding: 0.8rem;
+  }
+}
+
+/* Small Mobile Devices (Portrait) */
+/* iPhone 6/7/8, Galaxy S8 */
+@media only screen and (min-width: 321px) and (max-width: 375px) {
+  .landingSection {
+    padding: 1rem;
+    min-height: 90vh;
+  }
+
+  .heading {
+    font-size: 1.2rem;
+  }
+
+  .subHeading {
+    font-size: 0.8rem;
+  }
+
+  .selectLabel {
+    font-size: 1.2rem;
+  }
+
+  .welcomeText {
+    font-size: 1rem;
+  }
+
+  .selectDropdown {
+    font-size: 1rem;
+    max-width: 100%;
+    padding: 8px;
+  }
+
+  .formContainer {
+    padding: 1rem;
+    max-width: 95%;
+    min-height: 250px;
+  }
+
+  .selectContainer {
+    max-width: 95%;
+    padding: 0.7rem;
+  }
+}
+
+/* Extra Small Mobile Devices (Portrait) */
+/* iPhone SE, older Android phones */
+@media only screen and (max-width: 320px) {
+  .landingSection {
+    padding: 0.8rem;
+    min-height: 90vh;
+  }
+
+  .heading {
+    font-size: 1rem;
+  }
+
+  .subHeading {
+    font-size: 0.8rem;
+  }
+
+  .selectLabel {
+    font-size: 1rem;
+  }
+
+  .welcomeText {
+    font-size: 0.9rem;
+  }
+
+  .selectDropdown {
+    font-size: 0.9rem;
+    max-width: 100%;
+    padding: 7px;
+  }
+
+  .formContainer {
+    padding: 0.8rem;
+    max-width: 95%;
+    min-height: 220px;
+  }
+
+  .selectContainer {
+    max-width: 95%;
+    padding: 0.6rem;
+    margin-top: 0.5rem;
   }
 }

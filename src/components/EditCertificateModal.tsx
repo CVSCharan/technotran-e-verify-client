@@ -133,6 +133,17 @@ const EditCertificateModal: React.FC<EditCertificateModalProps> = ({
             }
           />
           <input
+            value={localCertificate.certificateImgSrc}
+            placeholder="Certificate Img URL"
+            className={styles.formInput}
+            onChange={(e) =>
+              setLocalCertificate({
+                ...localCertificate,
+                certificateImgSrc: e.target.value,
+              })
+            }
+          />
+          <input
             value={localCertificate.rollNo}
             placeholder="Roll No."
             className={styles.formInput}

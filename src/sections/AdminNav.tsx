@@ -46,7 +46,9 @@ const AdminNav = () => {
             </Link>
           </li>
           <li>
-            <h2 onClick={() => handleLogoutBtnClick()}>Logout</h2>
+            <a href="#" onClick={handleLogoutBtnClick} className={styles.navLink}>
+              Logout
+            </a>
           </li>
         </ul>
       </div>

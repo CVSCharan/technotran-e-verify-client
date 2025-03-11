@@ -62,6 +62,7 @@ export interface Certificate {
   startDate: string;
   issueDate: string;
   certificateId: string;
+  certificateImgSrc?: string;
   rollNo: string;
   email: string;
   org: string;
