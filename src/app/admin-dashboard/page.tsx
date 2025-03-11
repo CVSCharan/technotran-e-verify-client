@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import AdminNav from "@/sections/AdminNav";
 import styles from "./page.module.css";
 import Footer from "@/sections/Footer";
@@ -49,29 +49,46 @@ const AdminDashboardPage = () => {
     <>
       <Head>
         <title>Admin Dashboard | E-Verify Portal | Technotran Solutions</title>
-        <meta name="description" content="Manage certificates, vendors, and administrators through the E-Verify Portal admin dashboard. A secure certificate verification system by Technotran Solutions." />
-        <meta name="keywords" content="admin dashboard, certificate management, vendor management, e-verify portal, technotran solutions" />
+        <meta
+          name="description"
+          content="Manage certificates, vendors, and administrators through the E-Verify Portal admin dashboard. A secure certificate verification system by Technotran Solutions."
+        />
+        <meta
+          name="keywords"
+          content="admin dashboard, certificate management, vendor management, e-verify portal, technotran solutions"
+        />
         <meta name="robots" content="noindex, nofollow" />
-        <link rel="canonical" href="https://e-verify-portal.com/admin-dashboard" />
+        <link
+          rel="canonical"
+          href="https://e-verify-portal.com/admin-dashboard"
+        />
       </Head>
 
-      <main className={styles.dashboardMain} aria-labelledby="dashboard-heading">
+      <main
+        className={styles.dashboardMain}
+        aria-labelledby="dashboard-heading"
+      >
         {/* Show the LoginModal if user is not authenticated */}
         {!adminUser && showModal && <LoginModal authParams="Admin" />}
 
         <AdminNav />
         <section className={styles.mainBody}>
           <div className={styles.landingSection}>
-            <h1 id="dashboard-heading" className={styles.landingHeading}>E-Verify Portal Dashboard</h1>
+            <h1 id="dashboard-heading" className={styles.landingHeading}>
+              E-Verify Portal Dashboard
+            </h1>
             <p className={styles.subHeading}>A Technotran Solutions Venture</p>
-            
-            <div className={styles.userProfileContainer} aria-label="Admin Profile">
+
+            <div
+              className={styles.userProfileContainer}
+              aria-label="Admin Profile"
+            >
               <Image
                 src={
                   adminUser?.profilePic ||
                   "https://github.com/CVSCharan/Technotran_Assets/blob/main/Picture11.png?raw=true"
                 }
-                alt={`Profile picture of ${adminUser?.username || 'admin'}`}
+                alt={`Profile picture of ${adminUser?.username || "admin"}`}
                 height={100}
                 width={100}
                 className={styles.userPic}
@@ -82,7 +99,7 @@ const AdminDashboardPage = () => {
                 {adminUser?.role === "superadmin" ? "Super Admin" : "Admin"}
               </p>
             </div>
-            
+
             {adminUser?.role === "superadmin" && (
               <div className={styles.btnContainer} aria-label="Admin Actions">
                 <button
@@ -108,7 +125,7 @@ const AdminDashboardPage = () => {
                 </button>
               </div>
             )}
-            
+
             <div className={styles.btnContainer} aria-label="View Options">
               <button
                 className={`${styles.button} quicksand-text`}
@@ -132,8 +149,11 @@ const AdminDashboardPage = () => {
                 View Admins
               </button>
             </div>
-            
-            <div className={styles.btnContainer} aria-label="Additional Options">
+
+            <div
+              className={styles.btnContainer}
+              aria-label="Additional Options"
+            >
               <button
                 className={`${styles.button} quicksand-text`}
                 onClick={() => router.push("/analytics")}

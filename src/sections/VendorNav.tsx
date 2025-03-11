@@ -36,12 +36,19 @@ const VendorNav = () => {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setIsOpen(false)}
+              className={styles.navLink}
             >
               Technotran.in
             </Link>
           </li>
           <li>
-            <h2 onClick={() => handleLogoutBtnClick()}>Logout</h2>
+            <a
+              href="#"
+              onClick={() => handleLogoutBtnClick()}
+              className={styles.navLink}
+            >
+              Logout
+            </a>
           </li>
         </ul>
       </div>

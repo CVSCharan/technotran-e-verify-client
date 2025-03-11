@@ -88,7 +88,7 @@ export const vendorsData: VendorsDataItem[] = [
   {
     id: 15,
     imgSrc:
-      "https://github.com/CVSCharan/Technotran_Assets/blob/main/Annamacharya-university-new-Logo.png?raw=true",
+      "https://res.cloudinary.com/doxrqtfxo/image/upload/v1741726836/E%20Verify%20Portal%20Assets/qufi9j7bhse9ouqxc5gx.png",
     name: "Annamacharya Institute of Technology & sciences, Rajampet",
   },
   {
