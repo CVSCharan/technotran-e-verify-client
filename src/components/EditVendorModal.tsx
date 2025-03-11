@@ -33,8 +33,8 @@ const EditVendorModal: React.FC<EditVendorModalProps> = ({
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "name": "Edit Vendor",
-    "description": "Form to edit vendor details in the E-Verify Portal system"
+    name: "Edit Vendor",
+    description: "Form to edit vendor details in the E-Verify Portal system",
   };
 
   return (
@@ -53,11 +53,16 @@ const EditVendorModal: React.FC<EditVendorModalProps> = ({
         aria-describedby="edit-vendor-modal-description"
         role="dialog"
       >
-        <div className={styles.modalContainer} role="form" aria-modal="true">
+        <div className={styles.modalContainer}>
           <h2 id="edit-vendor-modal-title" className={styles.formHeading}>
             Edit Vendor
           </h2>
-          <form className={styles.formContainer} id="edit-vendor-modal-description">
+          <form
+            className={styles.formContainer}
+            role="dialog"
+            aria-modal="true"
+            id="edit-vendor-modal-description"
+          >
             <input
               value={localVendor.name}
               className={styles.formInput}
@@ -118,16 +123,16 @@ const EditVendorModal: React.FC<EditVendorModalProps> = ({
                 gap: "10px",
               }}
             >
-              <button 
-                className={styles.formButton} 
+              <button
+                className={styles.formButton}
                 onClick={onClose}
                 type="button"
                 aria-label="Close edit form"
               >
                 Close
               </button>
-              <button 
-                className={styles.formButton} 
+              <button
+                className={styles.formButton}
                 onClick={handleSave}
                 type="button"
                 aria-label="Save vendor changes"

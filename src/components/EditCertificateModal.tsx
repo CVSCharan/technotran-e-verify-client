@@ -54,11 +54,11 @@ const EditCertificateModal: React.FC<EditCertificateModalProps> = ({
         aria-describedby="edit-certificate-modal-description"
         role="dialog"
       >
-        <div className={styles.modalContainer} role="form" aria-modal="true">
+        <div className={styles.modalContainer}>
           <h2 id="edit-certificate-modal-title" className={styles.formHeading}>
             Edit Certificate
           </h2>
-          <form className={styles.formContainer} id="edit-certificate-modal-description">
+          <form className={styles.formContainer} role="dialog" aria-modal="true" id="edit-certificate-modal-description">
             <input
               value={localCertificate.name}
               placeholder="Name"

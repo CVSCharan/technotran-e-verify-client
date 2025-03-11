@@ -68,7 +68,7 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({
   // Memoize context value to avoid unnecessary re-renders
   const contextValue = useMemo(
     () => ({ adminUser, setAdminUser, login, logout, showModal, setShowModal }),
-    [adminUser, showModal]
+    [adminUser, showModal, login, logout, setShowModal]  // Added missing dependencies
   );
 
   return (

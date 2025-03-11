@@ -35,8 +35,9 @@ const EditAdminsModal: React.FC<EditAdminModalProps> = ({
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "name": "Edit Administrator",
-    "description": "Form to edit administrator details in the E-Verify Portal system"
+    name: "Edit Administrator",
+    description:
+      "Form to edit administrator details in the E-Verify Portal system",
   };
 
   return (
@@ -55,11 +56,16 @@ const EditAdminsModal: React.FC<EditAdminModalProps> = ({
         aria-describedby="edit-admin-modal-description"
         role="dialog"
       >
-        <div className={styles.modalContainer} role="form" aria-modal="true">
+        <div className={styles.modalContainer}>
           <h2 id="edit-admin-modal-title" className={styles.formHeading}>
             Edit User
           </h2>
-          <form className={styles.formContainer} id="edit-admin-modal-description">
+          <form
+            className={styles.formContainer}
+            role="dialog"
+            aria-modal="true"
+            id="edit-admin-modal-description"
+          >
             <input
               type="text"
               value={localAdmin.username}

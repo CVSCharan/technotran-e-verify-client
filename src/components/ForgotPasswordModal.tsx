@@ -23,8 +23,8 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "name": "Password Recovery",
-    "description": "Reset your password for the E-Verify Portal system"
+    name: "Password Recovery",
+    description: "Reset your password for the E-Verify Portal system",
   };
 
   const handleSendOtp = async () => {
@@ -148,9 +148,14 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
         role="dialog"
         onClose={onClose}
       >
-        <form className={styles.modalContainer} role="form" aria-modal="true">
-          <h2 id="forgot-password-modal-title" className={styles.formHeading}>Forgot Password?</h2>
-          <h3 id="forgot-password-modal-description" className={styles.formSubHeading}>
+        <form className={styles.modalContainer} role="dialog" aria-modal="true">
+          <h2 id="forgot-password-modal-title" className={styles.formHeading}>
+            Forgot Password?
+          </h2>
+          <h3
+            id="forgot-password-modal-description"
+            className={styles.formSubHeading}
+          >
             {step === "email" && "Enter your registered email to receive OTP."}
             {step === "otp" && "Enter the OTP sent to your email."}
             {step === "password" && "Enter your new password."}
@@ -243,8 +248,16 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
             )}
           </div>
 
-          {error && <p className={styles.error} role="alert">{error}</p>}
-          {message && <p className={styles.success} role="status">{message}</p>}
+          {error && (
+            <p className={styles.error} role="alert">
+              {error}
+            </p>
+          )}
+          {message && (
+            <p className={styles.success} role="status">
+              {message}
+            </p>
+          )}
         </form>
       </Modal>
     </>
