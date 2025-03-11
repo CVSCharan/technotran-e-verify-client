@@ -53,10 +53,19 @@ const MultipleDownloadForm: React.FC<MultipleDownloadFormProps> = ({ setMessage 
           const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
           
           // Extract certificate IDs (assuming they're in the first column)
+          // Replace these lines:
           const certificateIds = jsonData
             .map((row: any) => row[0])
             .filter((id: any) => id && typeof id === 'string' || typeof id === 'number')
-            .slice(0, 50); // Take only the first 50 IDs
+            .slice(0, 50);
+          
+          // With these properly typed lines:
+          const processedIds = jsonData
+            .map((value: unknown) => Array.isArray(value) ? value[0] : null)
+            .filter((id: unknown): id is string | number => 
+              id !== null && id !== undefined && 
+              (typeof id === 'string' || typeof id === 'number'))
+            .slice(0, 50);
           
           if (certificateIds.length === 0) {
             throw new Error('No valid certificate IDs found in the Excel file');
