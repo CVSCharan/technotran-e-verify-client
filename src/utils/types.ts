@@ -1,10 +1,15 @@
 export interface Certificate {
   certificateId: string;
-  vendorName: string;
-  vendorAddress: string;
-  vendorGSTIN: string;
-  vendorEmail: string;
-  vendorPhone: string;
+  name: string;
+  type: "AICTE Internship" | "Internship" | "Workshop";
+  program: string;
+  department: string;
+  startDate: string;
+  issueDate: string;
+  certificateImgSrc: string;
+  rollNo: string;
+  email: string;
+  org: string;
 }
 
 export interface EditCertificateModalProps {
