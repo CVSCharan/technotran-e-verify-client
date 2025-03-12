@@ -146,7 +146,7 @@ const CertificateDetails = () => {
           // **Generate QR Code**
           QRCode.toCanvas(
             qrCanvasRef.current,
-            `https://technotran-e-verify-client.vercel.app/certificate/${id}`,
+            `https://e-verify.technotran.in//certificate/${id}`,
             {
               width: 100,
               margin: 0,

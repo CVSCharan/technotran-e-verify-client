@@ -121,7 +121,7 @@ const MultipleDownloadForm: React.FC<MultipleDownloadFormProps> = ({
     // Generate QR Code
     QRCode.toCanvas(
       qrCanvasRef.current,
-      `https://technotran-e-verify-client.vercel.app/certificate/${certificate.certificateId}`,
+      `https://e-verify.technotran.in//certificate/${certificate.certificateId}`,
       {
         width: 100,
         margin: 0,
