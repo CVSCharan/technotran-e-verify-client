@@ -153,7 +153,7 @@ const MultipleDownloadForm: React.FC<MultipleDownloadFormProps> = ({
       }
 
       let imgSrc =
-        "https://github.com/CVSCharan/Technotran_Assets/blob/main/Internship_Cert.png?raw=true"; // Default to Internship
+        "https://res.cloudinary.com/doxrqtfxo/image/upload/v1741560885/E%20Verify%20Portal%20Assets/pbruozkwvgw6f8s9ltpc.png"; // Default to Internship
 
       if (certificate.type === "Workshop") {
         imgSrc =
