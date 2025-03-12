@@ -229,7 +229,7 @@ const EditCertificateModal: React.FC<EditCertificateModalProps> = ({
                 marginTop: 2,
                 display: "flex",
                 justifyContent: "center",
-                width: "70%",
+                width: "100%",
                 gap: "10px",
               }}
             >

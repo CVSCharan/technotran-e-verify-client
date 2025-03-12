@@ -1,0 +1,225 @@
+/* Base Modal Container */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  z-index: 1000;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.modalContent {
+  background-color: #f8fafc;
+  background-image: radial-gradient(circle, #d1d5db 1px, transparent 1px),
+    radial-gradient(circle, #d1d5db 1px, transparent 1px);
+  background-position: 0 0, 25px 25px;
+  background-size: 50px 50px;
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  width: 90%;
+  max-width: 900px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  animation: modalEnter 0.3s ease-out;
+}
+
+/* Modal Animation */
+@keyframes modalEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Modal Header */
+.modalHeader {
+  position: sticky;
+  top: 0;
+  background: inherit;
+  padding: 1.5rem 1.5rem 1rem;
+  border-bottom: 1px solid rgba(209, 213, 219, 0.5);
+  z-index: 10;
+}
+
+/* Modal Body */
+.modalBody {
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+/* Modal Footer */
+.modalFooter {
+  position: sticky;
+  bottom: 0;
+  background: inherit;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid rgba(209, 213, 219, 0.5);
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  z-index: 10;
+}
+
+/* Form Elements */
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.formLabel {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.formInput {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+  font-size: 0.95rem;
+}
+
+.formInput:focus {
+  border-color: #4b0406;
+  box-shadow: 0 0 0 2px rgba(75, 4, 6, 0.1);
+  outline: none;
+}
+
+/* Buttons */
+.button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  min-width: 100px;
+}
+
+.primaryButton {
+  composes: button;
+  background: linear-gradient(90deg, #4b0406, #6b0f12, #a82b30);
+  color: white;
+  border: none;
+}
+
+.primaryButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.secondaryButton {
+  composes: button;
+  background: transparent;
+  border: 1px solid #d1d5db;
+  color: #4b5563;
+}
+
+.secondaryButton:hover {
+  background: #f3f4f6;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 1024px) {
+  .modalContent {
+    max-width: 800px;
+  }
+}
+
+@media (max-width: 768px) {
+  .modalContent {
+    width: 95%;
+    max-width: 600px;
+  }
+
+  .modalHeader,
+  .modalBody,
+  .modalFooter {
+    padding: 1.2rem;
+  }
+
+  .button {
+    padding: 0.7rem 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .modalOverlay {
+    padding: 0.5rem;
+  }
+
+  .modalContent {
+    width: 100%;
+    max-height: 95vh;
+  }
+
+  .modalHeader,
+  .modalBody,
+  .modalFooter {
+    padding: 1rem;
+  }
+
+  .formInput {
+    padding: 0.7rem;
+    font-size: 0.9rem;
+  }
+
+  .button {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .modalOverlay {
+    padding: 0.3rem;
+  }
+
+  .modalHeader,
+  .modalBody,
+  .modalFooter {
+    padding: 0.8rem;
+  }
+
+  .formInput {
+    padding: 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  .button {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.85rem;
+    min-width: 80px;
+  }
+}
+
+/* Utility Classes */
+.scrollLock {
+  overflow: hidden;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
