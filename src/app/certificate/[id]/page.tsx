@@ -27,7 +27,7 @@ const CertificateDetails = () => {
     const fetchCertificate = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/certificates//id/${id}`
+          `${process.env.NEXT_PUBLIC_API_URL}/certificates/id/${id}`
         );
         if (response.status === 404) {
           throw new Error("No Certificate details found");
@@ -97,13 +97,17 @@ const CertificateDetails = () => {
           }
 
           // **Text Styles**
-          ctx.font = `16px "ArialCustom", Arial, sans-serif`;
+          ctx.font = `500 16px "ArialCustom", Arial, sans-serif`;
+          ctx.lineWidth = 0.5;
+          ctx.strokeStyle = "black";
           ctx.fillStyle = "black";
 
           // **Display Student Details**
+          ctx.strokeText(certificate.name, 400, 200);
           ctx.fillText(certificate.name, 400, 200);
 
-          ctx.font = `22px "ArialCustom", Arial, sans-serif`;
+          ctx.font = `500 22px "ArialCustom", Arial, sans-serif`;
+          ctx.strokeStyle = "#4b0406";
           ctx.fillStyle = "#4b0406";
 
           // Calculate dynamic X position
@@ -111,9 +115,11 @@ const CertificateDetails = () => {
           const centerXPrgm = (canvas.width - programTextWidth) / 2;
 
           // Draw centered text
+          ctx.strokeText(certificate.program, centerXPrgm, 265);
           ctx.fillText(certificate.program, centerXPrgm, 265);
 
-          ctx.font = `16px "ArialCustom", Arial, sans-serif`;
+          ctx.font = `500 16px "ArialCustom", Arial, sans-serif`;
+          ctx.strokeStyle = "#4b0406";
           ctx.fillStyle = "#4b0406";
 
           // Calculate dynamic X position
@@ -125,29 +131,36 @@ const CertificateDetails = () => {
           const orgTextWidth = ctx.measureText(certificate.org).width;
           const centerXOrg = (canvas.width - orgTextWidth) / 2;
 
+          ctx.strokeText(certificate.department, centerXDept, 320);
           ctx.fillText(certificate.department, centerXDept, 320);
+          ctx.strokeText(certificate.org, centerXOrg, 370);
           ctx.fillText(certificate.org, centerXOrg, 370);
 
-          ctx.font = `16px "ArialCustom", Arial, sans-serif`;
+          ctx.font = `500 16px "ArialCustom", Arial, sans-serif`;
+          ctx.strokeStyle = "black";
           ctx.fillStyle = "black";
 
           // **Format Dates (dd/mm/yy)**
           const formattedStartDate = formatDate(certificate.startDate);
           const formattedIssueDate = formatDate(certificate.issueDate);
 
+          ctx.strokeText(formattedStartDate, 325, 395);
           ctx.fillText(formattedStartDate, 325, 395);
+          ctx.strokeText(formattedIssueDate, 495, 395);
           ctx.fillText(formattedIssueDate, 495, 395);
 
-          ctx.font = `11px "ArialCustom", Arial, sans-serif`;
+          ctx.font = `500 11px "ArialCustom", Arial, sans-serif`;
+          ctx.strokeStyle = "#4b0406";
           ctx.fillStyle = "#4b0406";
 
+          ctx.strokeText(certificate.certificateId, 723, 315);
           ctx.fillText(certificate.certificateId, 723, 315);
 
           // **Generate QR Code**
           if (qrCanvasRef.current) {
             QRCode.toCanvas(
               qrCanvasRef.current,
-              `https://e-verify.technotran.in//certificate/${id}`,
+              `https://e-verify.technotran.in/certificate/${id}`,
               {
                 width: 100,
                 margin: 2,
@@ -193,41 +206,196 @@ const CertificateDetails = () => {
   //   }
   // };
 
-  const downloadCertificatePDF = (): void => {
-    if (canvasRef.current) {
-      const canvas = canvasRef.current;
+  const downloadCertificatePDF = async (): Promise<void> => {
+    if (!canvasRef.current || !certificate) return;
 
-      // Increase resolution for better quality
-      const scale = 2; // Adjust scale for better resolution
-      const tempCanvas = document.createElement("canvas");
-      tempCanvas.width = canvas.width * scale;
-      tempCanvas.height = canvas.height * scale;
-      const ctx = tempCanvas.getContext("2d");
+    const canvas = canvasRef.current;
+    const scale = 4; // Higher scale for better resolution
+    const tempCanvas = document.createElement("canvas");
+    tempCanvas.width = canvas.width * scale;
+    tempCanvas.height = canvas.height * scale;
 
-      if (!ctx) {
-        console.error("Failed to get 2D context");
-        return;
-      }
+    const ctx = tempCanvas.getContext("2d", {
+      alpha: true,
+      willReadFrequently: true,
+    });
 
-      ctx.scale(scale, scale);
-      ctx.drawImage(canvas, 0, 0);
-
-      // Create a high-resolution PDF
-      const pdf = new jsPDF({
-        orientation: "landscape",
-        unit: "px",
-        format: [canvas.width, canvas.height],
-      });
-
-      // Convert scaled canvas to image
-      const imgData = tempCanvas.toDataURL("image/png");
-
-      // Add high-res image to PDF
-      pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
-
-      // Save the PDF
-      pdf.save(`${certificate?.name}.pdf`);
+    if (!ctx) {
+      console.error("Failed to get 2D context");
+      return;
     }
+
+    // Enable better image quality
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+
+    // Clear canvas with white background
+    ctx.fillStyle = "#FFFFFF";
+    ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+
+    // Apply high-resolution scaling
+    ctx.scale(scale, scale);
+
+    // Create and load base image
+    const baseImage = new window.Image();
+    baseImage.crossOrigin = "anonymous";
+    baseImage.src = canvas.toDataURL("image/png", 1.0);
+
+    await new Promise((resolve) => {
+      baseImage.onload = () => {
+        // Draw base image
+        ctx.drawImage(baseImage, 0, 0);
+
+        // Set text rendering for better quality
+        ctx.textRendering = "optimizeLegibility";
+        ctx.textBaseline = "middle";
+        ctx.textAlign = "center";
+
+        // Re-apply all text with enhanced styling
+        ctx.font = `500 ${16 * scale}px "ArialCustom", Arial, sans-serif`;
+        ctx.lineWidth = 0.5 * scale;
+        ctx.strokeStyle = "black";
+        ctx.fillStyle = "black";
+
+        // Re-draw all text elements with enhanced positioning
+        ctx.strokeText(certificate.name, 400 * scale, 200 * scale);
+        ctx.fillText(certificate.name, 400 * scale, 200 * scale);
+
+        ctx.font = `500 ${22 * scale}px "ArialCustom", Arial, sans-serif`;
+        ctx.strokeStyle = "#4b0406";
+        ctx.fillStyle = "#4b0406";
+
+        // Program name (centered)
+        ctx.strokeText(
+          certificate.program,
+          (canvas.width * scale) / 2,
+          265 * scale
+        );
+        ctx.fillText(
+          certificate.program,
+          (canvas.width * scale) / 2,
+          265 * scale
+        );
+
+        ctx.font = `500 ${16 * scale}px "ArialCustom", Arial, sans-serif`;
+
+        // Department and org (centered)
+        ctx.strokeText(
+          certificate.department,
+          (canvas.width * scale) / 2,
+          320 * scale
+        );
+        ctx.fillText(
+          certificate.department,
+          (canvas.width * scale) / 2,
+          320 * scale
+        );
+        ctx.strokeText(
+          certificate.org,
+          (canvas.width * scale) / 2,
+          370 * scale
+        );
+        ctx.fillText(certificate.org, (canvas.width * scale) / 2, 370 * scale);
+
+        // Reset text alignment for non-centered text
+        ctx.textAlign = "left";
+
+        // Dates with enhanced positioning
+        const formattedStartDate = formatDate(certificate.startDate);
+        const formattedIssueDate = formatDate(certificate.issueDate);
+        ctx.strokeText(formattedStartDate, 325 * scale, 395 * scale);
+        ctx.fillText(formattedStartDate, 325 * scale, 395 * scale);
+        ctx.strokeText(formattedIssueDate, 495 * scale, 395 * scale);
+        ctx.fillText(formattedIssueDate, 495 * scale, 395 * scale);
+
+        // Certificate ID with enhanced clarity
+        ctx.font = `500 ${11 * scale}px "ArialCustom", Arial, sans-serif`;
+        ctx.strokeText(certificate.certificateId, 723 * scale, 315 * scale);
+        ctx.fillText(certificate.certificateId, 723 * scale, 315 * scale);
+
+        resolve(true);
+      };
+    });
+
+    // Generate high-quality QR code
+    if (qrCanvasRef.current) {
+      const highResQRCanvas = document.createElement("canvas");
+      highResQRCanvas.width = 200 * scale;
+      highResQRCanvas.height = 200 * scale;
+
+      await new Promise((resolve) => {
+        QRCode.toCanvas(
+          highResQRCanvas,
+          `https://e-verify.technotran.in/certificate/${id}`,
+          {
+            width: 200 * scale,
+            margin: 2,
+            color: {
+              dark: "#000000",
+              light: "#FFFFFF",
+            },
+            errorCorrectionLevel: "H",
+          },
+          (error) => {
+            if (!error) {
+              const qrX = (canvas.width - 133) * scale;
+              const qrY = (canvas.height - 140) * scale;
+              const qrSize = 80 * scale;
+
+              // Add white background with padding
+              ctx.fillStyle = "#FFFFFF";
+              ctx.fillRect(
+                qrX - 5 * scale,
+                qrY - 5 * scale,
+                qrSize + 10 * scale,
+                qrSize + 10 * scale
+              );
+
+              // Add subtle border
+              ctx.strokeStyle = "#4b0406";
+              ctx.lineWidth = 1 * scale;
+              ctx.strokeRect(
+                qrX - 5 * scale,
+                qrY - 5 * scale,
+                qrSize + 10 * scale,
+                qrSize + 10 * scale
+              );
+
+              // Draw high-resolution QR code
+              ctx.drawImage(highResQRCanvas, qrX, qrY, qrSize, qrSize);
+              resolve(true);
+            }
+          }
+        );
+      });
+    }
+
+    // Create PDF after everything is drawn
+    const pdf = new jsPDF({
+      orientation: "landscape",
+      unit: "px",
+      format: [canvas.width, canvas.height],
+      putOnlyUsedFonts: true,
+      compress: true,
+    });
+
+    // Remove metadata
+    pdf.setProperties({
+      title: "",
+      subject: "",
+      author: "",
+      keywords: "",
+      creator: "",
+    });
+
+    // Convert to high-quality image
+    const imgData = tempCanvas.toDataURL("image/png", 1.0);
+
+    // Add image to PDF with maximum quality
+    pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height, "", "FAST");
+
+    // Save with optimized settings
+    pdf.save(`${certificate.name}.pdf`);
   };
 
   if (loading)

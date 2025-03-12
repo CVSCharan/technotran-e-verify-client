@@ -38,13 +38,17 @@ export const SingleDownloadForm: React.FC<SingleDownloadFormProps> = ({
     certificate: Certificate
   ) => {
     // Text Styles
-    ctx.font = `16px "ArialCustom", Arial, sans-serif`;
+    ctx.font = `500 16px "ArialCustom", Arial, sans-serif`;
+    ctx.lineWidth = 0.5;
+    ctx.strokeStyle = "black";
     ctx.fillStyle = "black";
 
     // Display Student Details
+    ctx.strokeText(certificate.name, 400, 200);
     ctx.fillText(certificate.name, 400, 200);
 
-    ctx.font = `22px "ArialCustom", Arial, sans-serif`;
+    ctx.font = `500 22px "ArialCustom", Arial, sans-serif`;
+    ctx.strokeStyle = "#4b0406";
     ctx.fillStyle = "#4b0406";
 
     // Calculate dynamic X position
@@ -52,9 +56,11 @@ export const SingleDownloadForm: React.FC<SingleDownloadFormProps> = ({
     const centerXPrgm = (canvas.width - programTextWidth) / 2;
 
     // Draw centered text
+    ctx.strokeText(certificate.program, centerXPrgm, 265);
     ctx.fillText(certificate.program, centerXPrgm, 265);
 
-    ctx.font = `16px "ArialCustom", Arial, sans-serif`;
+    ctx.font = `500 16px "ArialCustom", Arial, sans-serif`;
+    ctx.strokeStyle = "#4b0406";
     ctx.fillStyle = "#4b0406";
 
     // Calculate dynamic X position
@@ -64,22 +70,29 @@ export const SingleDownloadForm: React.FC<SingleDownloadFormProps> = ({
     const orgTextWidth = ctx.measureText(certificate.org).width;
     const centerXOrg = (canvas.width - orgTextWidth) / 2;
 
+    ctx.strokeText(certificate.department, centerXDept, 320);
     ctx.fillText(certificate.department, centerXDept, 320);
+    ctx.strokeText(certificate.org, centerXOrg, 370);
     ctx.fillText(certificate.org, centerXOrg, 370);
 
-    ctx.font = `16px "ArialCustom", Arial, sans-serif`;
+    ctx.font = `500 16px "ArialCustom", Arial, sans-serif`;
+    ctx.strokeStyle = "black";
     ctx.fillStyle = "black";
 
     // Format Dates (dd/mm/yy)
     const formattedStartDate = formatDate(certificate.startDate);
     const formattedIssueDate = formatDate(certificate.issueDate);
 
+    ctx.strokeText(formattedStartDate, 325, 395);
     ctx.fillText(formattedStartDate, 325, 395);
+    ctx.strokeText(formattedIssueDate, 495, 395);
     ctx.fillText(formattedIssueDate, 495, 395);
 
-    ctx.font = `11px "ArialCustom", Arial, sans-serif`;
+    ctx.font = `500 11px "ArialCustom", Arial, sans-serif`;
+    ctx.strokeStyle = "#4b0406";
     ctx.fillStyle = "#4b0406";
 
+    ctx.strokeText(certificate.certificateId, 723, 315);
     ctx.fillText(certificate.certificateId, 723, 315);
 
     // Generate QR Code
@@ -88,12 +101,31 @@ export const SingleDownloadForm: React.FC<SingleDownloadFormProps> = ({
       `https://e-verify.technotran.in/certificate/${certificate.certificateId}`,
       {
         width: 100,
-        margin: 0,
+        margin: 2,
+        color: {
+          dark: "#000000",
+          light: "#FFFFFF",
+        },
+        errorCorrectionLevel: "H",
       },
       (error) => {
         if (!error && qrCanvasRef.current) {
           const qrImg = qrCanvasRef.current;
-          ctx.drawImage(qrImg, canvas.width - 133, canvas.height - 140, 80, 80); // Adjust QR position
+          const qrX = canvas.width - 133;
+          const qrY = canvas.height - 140;
+          const qrSize = 80;
+
+          // Add white background with padding
+          ctx.fillStyle = "#FFFFFF";
+          ctx.fillRect(qrX - 5, qrY - 5, qrSize + 10, qrSize + 10);
+
+          // Add subtle border
+          ctx.strokeStyle = "#4b0406";
+          ctx.lineWidth = 1;
+          ctx.strokeRect(qrX - 5, qrY - 5, qrSize + 10, qrSize + 10);
+
+          // Draw QR code
+          ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
         }
       }
     );
@@ -188,7 +220,7 @@ export const SingleDownloadForm: React.FC<SingleDownloadFormProps> = ({
       pdf.save(`${certificate.name}_certificate.pdf`);
     }
   };
-  
+
   // Effect to trigger download when canvas is ready
   useEffect(() => {
     if (canvasReady && certificate) {
@@ -204,7 +236,6 @@ export const SingleDownloadForm: React.FC<SingleDownloadFormProps> = ({
       return () => clearTimeout(timer);
     }
   }, [canvasReady, certificate, downloadCertificatePDF, setMessage]); // Add missing dependencies
-
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
