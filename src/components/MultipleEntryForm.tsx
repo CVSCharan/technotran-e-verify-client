@@ -53,8 +53,13 @@ const MultipleEntryForm: React.FC<MultipleEntryFormProps> = ({ onMessage }) => {
     disabled: loading,
   });
 
+  interface FailedItem {
+    certificateId?: string;
+    [key: string]: unknown;
+  }
+
   const createFailedItemsReport = (
-    failedItems: any[],
+    failedItems: (string | FailedItem)[],
     reason: string = "Failed to upload"
   ) => {
     // Create a new workbook
@@ -119,12 +124,18 @@ const MultipleEntryForm: React.FC<MultipleEntryFormProps> = ({ onMessage }) => {
             const data = new Uint8Array(e.target?.result as ArrayBuffer);
             const workbook = XLSX.read(data, { type: "array" });
             const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-            const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+            interface ExcelRow {
+              "Certificate ID"?: string | number;
+              [key: string]: string | number | undefined;
+            }
+
+            const jsonData = XLSX.utils.sheet_to_json(worksheet) as ExcelRow[];
 
             // Get all certificate IDs
             const certificateIds = jsonData
-              .map((row: any) => row["Certificate ID"]?.toString().trim())
-              .filter(Boolean);
+              .map((row) => row["Certificate ID"]?.toString().trim())
+              .filter((id): id is string => id !== undefined && id !== "");
 
             // Create report for all IDs as they're duplicates
             createFailedItemsReport(certificateIds, "Duplicate Certificate ID");
