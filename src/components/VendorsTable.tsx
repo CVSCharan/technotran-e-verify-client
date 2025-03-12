@@ -50,7 +50,9 @@ const VendorsTable: React.FC<VendorsTableProps> = ({
                     <>
                       <td>
                         <Tooltip title="Edit Vendor">
-                          <div className={`${styles.actionIcon} ${styles.editIcon}`}>
+                          <div
+                            className={`${styles.actionIcon} ${styles.editIcon}`}
+                          >
                             <EditOutlinedIcon
                               onClick={() => onEditClick(vendor)}
                               fontSize="small"
@@ -60,7 +62,9 @@ const VendorsTable: React.FC<VendorsTableProps> = ({
                       </td>
                       <td>
                         <Tooltip title="Delete Vendor">
-                          <div className={`${styles.actionIcon} ${styles.deleteIcon}`}>
+                          <div
+                            className={`${styles.actionIcon} ${styles.deleteIcon}`}
+                          >
                             <DeleteOutlineIcon
                               onClick={() => onDeleteClick(vendor)}
                               fontSize="small"
@@ -74,7 +78,10 @@ const VendorsTable: React.FC<VendorsTableProps> = ({
               ))
             ) : (
               <tr>
-                <td colSpan={adminUser?.role === "superadmin" ? 5 : 3} className={styles.emptyMessage}>
+                <td
+                  colSpan={adminUser?.role === "superadmin" ? 5 : 3}
+                  className={styles.emptyMessage}
+                >
                   No vendors found
                 </td>
               </tr>
@@ -88,6 +95,7 @@ const VendorsTable: React.FC<VendorsTableProps> = ({
         page={page}
         onPageChange={onPageChange}
         rowsPerPage={rowsPerPage}
+        labelRowsPerPage="Vendors per page:"
         onRowsPerPageChange={onRowsPerPageChange}
         rowsPerPageOptions={[5, 7, 10]}
         sx={{
