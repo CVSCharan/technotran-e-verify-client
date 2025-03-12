@@ -98,7 +98,6 @@ const MultipleEntryForm: React.FC<MultipleEntryFormProps> = ({ onMessage }) => {
     setLoading(true);
     setProgress(0);
     setProcessedCertificates(0);
-    setFailedIds([]);
     onMessage("Processing certificates...");
 
     try {
@@ -109,12 +108,17 @@ const MultipleEntryForm: React.FC<MultipleEntryFormProps> = ({ onMessage }) => {
           const data = new Uint8Array(e.target?.result as ArrayBuffer);
           const workbook = XLSX.read(data, { type: "array" });
           const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-          const jsonData = XLSX.utils.sheet_to_json(worksheet);
+          const jsonData = XLSX.utils.sheet_to_json(worksheet) as ExcelRow[];
 
           // Extract and validate certificate IDs
+          interface ExcelRow {
+            "Certificate ID"?: string | number;
+            [key: string]: any;
+          }
+
           const certificateIds = jsonData
             .slice(0, 50) // Limit to first 50 rows
-            .map((row: any) => {
+            .map((row: ExcelRow) => {
               const id = row["Certificate ID"]?.toString().trim();
               // Skip if it's a header-like value
               if (
@@ -182,7 +186,7 @@ const MultipleEntryForm: React.FC<MultipleEntryFormProps> = ({ onMessage }) => {
             }
           }
 
-          // Save failed IDs
+          // Save failed IDs for potential use in UI or future functionality
           setFailedIds(failedDownloads);
 
           // Show final status and export failed IDs if any
