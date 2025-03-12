@@ -13,10 +13,10 @@ export interface Certificate {
 }
 
 export interface AdminUser {
-  id: string;
-  name: string;
+  _id: string;
+  username: string;
   email: string;
-  role: "admin" | "super_admin";
+  role: string;
   createdAt: string;
   updatedAt: string;
 }
