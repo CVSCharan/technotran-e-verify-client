@@ -53,12 +53,22 @@ const MultipleEntryForm: React.FC<MultipleEntryFormProps> = ({ onMessage }) => {
     disabled: loading,
   });
 
-  const createFailedItemsReport = (failedItems: any[]) => {
+  const createFailedItemsReport = (
+    failedItems: any[],
+    reason: string = "Failed to upload"
+  ) => {
     // Create a new workbook
     const wb = XLSX.utils.book_new();
 
+    // Add headers and format the failed items
+    const formattedItems = failedItems.map((item) => ({
+      "Certificate ID":
+        typeof item === "string" ? item : item.certificateId || item,
+      Reason: reason,
+    }));
+
     // Convert failed items to worksheet
-    const ws = XLSX.utils.json_to_sheet(failedItems);
+    const ws = XLSX.utils.json_to_sheet(formattedItems);
 
     // Add the worksheet to the workbook
     XLSX.utils.book_append_sheet(wb, ws, "Failed Items");
@@ -91,25 +101,39 @@ const MultipleEntryForm: React.FC<MultipleEntryFormProps> = ({ onMessage }) => {
 
       // Upload the file
       const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-      console.log("Uploading to:", `${apiUrl}/certificates/upload`); // Debug log
+      console.log("Uploading to:", `${apiUrl}/certificates/upload`);
 
       const response = await fetch(`${apiUrl}/certificates/upload`, {
-        // Remove /api prefix
         method: "POST",
         body: formData,
       });
 
-      // Check if response is JSON
-      const contentType = response.headers.get("content-type");
-      if (!contentType || !contentType.includes("application/json")) {
-        throw new Error(
-          `Server returned ${response.status} ${response.statusText}`
-        );
-      }
-
       const result = await response.json();
 
       if (!response.ok) {
+        // Handle duplicate certificate IDs error
+        if (result.error?.includes("Duplicate certificate IDs")) {
+          // Extract certificate IDs from the Excel file
+          const reader = new FileReader();
+          reader.onload = async (e) => {
+            const data = new Uint8Array(e.target?.result as ArrayBuffer);
+            const workbook = XLSX.read(data, { type: "array" });
+            const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+            const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+            // Get all certificate IDs
+            const certificateIds = jsonData
+              .map((row: any) => row["Certificate ID"]?.toString().trim())
+              .filter(Boolean);
+
+            // Create report for all IDs as they're duplicates
+            createFailedItemsReport(certificateIds, "Duplicate Certificate ID");
+          };
+          reader.readAsArrayBuffer(file);
+          throw new Error(
+            "Duplicate certificate IDs found. Check the downloaded report for details."
+          );
+        }
         throw new Error(result.error || "Failed to upload certificates");
       }
 
