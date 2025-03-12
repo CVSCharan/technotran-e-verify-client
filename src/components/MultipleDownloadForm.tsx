@@ -430,6 +430,7 @@ const MultipleDownloadForm: React.FC<MultipleDownloadFormProps> = ({
 
           // Extract certificate IDs (assuming they're in the first column)
           const certificateIds = jsonData
+            .slice(1) // Skip the header row
             .map((value: unknown) => {
               if (Array.isArray(value)) {
                 return value[0];
@@ -440,7 +441,8 @@ const MultipleDownloadForm: React.FC<MultipleDownloadFormProps> = ({
               (id: unknown): id is string | number =>
                 id !== null &&
                 id !== undefined &&
-                (typeof id === "string" || typeof id === "number")
+                (typeof id === "string" || typeof id === "number") &&
+                String(id).trim() !== "" // Also filter out empty strings
             )
             .slice(0, 50); // Take only the first 50 IDs
 
