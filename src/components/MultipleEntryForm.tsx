@@ -20,9 +20,6 @@ const MultipleEntryForm: React.FC<MultipleEntryFormProps> = ({ onMessage }) => {
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
     "success"
   );
-  const [progress, setProgress] = useState(0);
-  const [totalCertificates, setTotalCertificates] = useState(0);
-  const [processedCertificates, setProcessedCertificates] = useState(0);
 
   // SEO structured data
   const structuredData = {
@@ -56,35 +53,25 @@ const MultipleEntryForm: React.FC<MultipleEntryFormProps> = ({ onMessage }) => {
     disabled: loading,
   });
 
-  // Function to export failed certificate IDs to CSV
-  const exportFailedIdsToCSV = (failedIds: string[]) => {
-    console.log("Attempting to export failed IDs:", failedIds);
-    if (!failedIds || failedIds.length === 0) {
-      console.log("No failed IDs to export");
-      return;
-    }
+  const createFailedItemsReport = (failedItems: any[]) => {
+    // Create a new workbook
+    const wb = XLSX.utils.book_new();
 
-    try {
-      // Create CSV content
-      const csvContent = [
-        ["Failed Certificate IDs", "Reason"],
-        ...failedIds.map((id) => [id, "Failed to download"]),
-      ]
-        .map((row) => row.join(","))
-        .join("\n");
+    // Convert failed items to worksheet
+    const ws = XLSX.utils.json_to_sheet(failedItems);
 
-      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-      saveAs(
-        blob,
-        `failed_downloads_${new Date().toISOString().split("T")[0]}.csv`
-      );
-      console.log("CSV file created and download initiated");
-    } catch (error) {
-      console.error("Error creating CSV file:", error);
-      setSnackbarMessage("Error creating CSV file for failed IDs");
-      setSnackbarSeverity("error");
-      setShowSnackbar(true);
-    }
+    // Add the worksheet to the workbook
+    XLSX.utils.book_append_sheet(wb, ws, "Failed Items");
+
+    // Generate Excel file and trigger download
+    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    const blob = new Blob([excelBuffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+    saveAs(
+      blob,
+      `failed_uploads_${new Date().toISOString().split("T")[0]}.xlsx`
+    );
   };
 
   const handleFileUpload = async (e: React.FormEvent) => {
@@ -95,145 +82,82 @@ const MultipleEntryForm: React.FC<MultipleEntryFormProps> = ({ onMessage }) => {
     }
 
     setLoading(true);
-    setProgress(0);
-    setProcessedCertificates(0);
-    onMessage("Processing certificates...");
+    onMessage("Uploading certificates...");
 
     try {
-      const reader = new FileReader();
+      // Create FormData and append the file
+      const formData = new FormData();
+      formData.append("file", file);
 
-      reader.onload = async (e) => {
-        try {
-          const data = new Uint8Array(e.target?.result as ArrayBuffer);
-          const workbook = XLSX.read(data, { type: "array" });
-          const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+      // Upload the file
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      console.log("Uploading to:", `${apiUrl}/certificates/upload`); // Debug log
 
-          // Define types for Excel data
-          interface ExcelRow {
-            "Certificate ID"?: string | number;
-            [key: string]: string | number | undefined;
-          }
+      const response = await fetch(`${apiUrl}/certificates/upload`, {
+        // Remove /api prefix
+        method: "POST",
+        body: formData,
+      });
 
-          const jsonData = XLSX.utils.sheet_to_json(worksheet) as ExcelRow[];
+      // Check if response is JSON
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error(
+          `Server returned ${response.status} ${response.statusText}`
+        );
+      }
 
-          // Extract and validate certificate IDs
-          const certificateIds = jsonData
-            .slice(0, 50) // Limit to first 50 rows
-            .map((row: ExcelRow) => {
-              const id = row["Certificate ID"]?.toString().trim();
-              // Skip if it's a header-like value
-              if (
-                !id ||
-                id.toLowerCase() === "certificate id" ||
-                id.toLowerCase() === "certificateid" ||
-                id.toLowerCase() === "certificate_id" ||
-                id.toLowerCase().includes("certificate") ||
-                id.toLowerCase().includes("id")
-              ) {
-                return null;
-              }
-              return id;
-            })
-            .filter((id): id is string => Boolean(id)); // Remove null/undefined values
+      const result = await response.json();
 
-          if (certificateIds.length === 0) {
-            throw new Error("No valid certificate IDs found in the Excel file");
-          }
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to upload certificates");
+      }
 
-          setTotalCertificates(certificateIds.length);
-          const failedDownloads: string[] = [];
-          let successCount = 0;
-
-          // Process each certificate
-          for (let i = 0; i < certificateIds.length; i++) {
-            const certId = certificateIds[i];
-            setProcessedCertificates(i + 1);
-            setProgress(Math.round(((i + 1) / certificateIds.length) * 100));
-
-            try {
-              const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-              // First check if certificate exists
-              const response = await fetch(
-                `${apiUrl}/certificates/id/${certId}`
-              );
-
-              if (!response.ok) {
-                console.log(`Certificate not found: ${certId}`);
-                failedDownloads.push(certId);
-                continue;
-              }
-
-              // Get certificate data
-              const certificate = await response.json();
-
-              // Try to download the certificate
-              const downloadResponse = await fetch(
-                `${apiUrl}/certificates/download/${certId}`
-              );
-
-              if (!downloadResponse.ok) {
-                console.log(`Failed to download certificate: ${certId}`);
-                failedDownloads.push(certId);
-                continue;
-              }
-
-              // Download the certificate
-              const pdfBlob = await downloadResponse.blob();
-              saveAs(pdfBlob, `${certificate.name}_${certId}.pdf`);
-              successCount++;
-            } catch (error) {
-              console.error(`Error processing certificate ${certId}:`, error);
-              failedDownloads.push(certId);
-            }
-          }
-
-          // Show final status and export failed IDs if any
-          if (failedDownloads.length > 0) {
-            setSnackbarMessage(
-              `Downloaded ${successCount} certificates. ${failedDownloads.length} failed. Check the downloaded CSV file for failed IDs.`
-            );
-            setSnackbarSeverity("error");
-            exportFailedIdsToCSV(failedDownloads);
-          } else {
-            setSnackbarMessage(
-              `Successfully downloaded all ${successCount} certificates!`
-            );
-            setSnackbarSeverity("success");
-          }
-          setShowSnackbar(true);
-
-          // Reset form
-          setFile(null);
-          setFileName(null);
-          onMessage("");
-        } catch (error) {
-          console.error("Excel processing error:", error);
-          onMessage(
-            error instanceof Error
-              ? error.message
-              : "Failed to process Excel file"
-          );
-          setSnackbarMessage("Failed to process Excel file");
-          setSnackbarSeverity("error");
-          setShowSnackbar(true);
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      reader.onerror = () => {
-        onMessage("Error reading the file");
-        setLoading(false);
-      };
-
-      reader.readAsArrayBuffer(file);
-    } catch (error) {
+      // Handle successful upload
+      setSnackbarMessage(
+        `Successfully uploaded ${result.uploadedCertificates.length} certificates!`
+      );
+      setSnackbarSeverity("success");
+    } catch (error: unknown) {
       console.error("Upload error:", error);
-      onMessage("Failed to process file!");
-      setSnackbarMessage("Failed to process file!");
+
+      // Type guard for error with response property
+      interface UploadError {
+        response?: {
+          data?: {
+            failedItems?: any[];
+          };
+        };
+      }
+
+      // If the error contains failed items data, create a report
+      const uploadError = error as UploadError;
+      if (
+        typeof error === "object" &&
+        error !== null &&
+        "response" in error &&
+        uploadError.response?.data?.failedItems &&
+        uploadError.response.data.failedItems.length > 0
+      ) {
+        createFailedItemsReport(uploadError.response.data.failedItems);
+        setSnackbarMessage(
+          "Some certificates failed to upload. Check the downloaded report for details."
+        );
+      } else {
+        setSnackbarMessage(
+          error instanceof Error
+            ? error.message
+            : "Failed to upload certificates. Please check the server connection."
+        );
+      }
+
       setSnackbarSeverity("error");
-      setShowSnackbar(true);
+    } finally {
       setLoading(false);
+      setShowSnackbar(true);
+      setFile(null);
+      setFileName(null);
+      onMessage("");
     }
   };
 
@@ -275,28 +199,13 @@ const MultipleEntryForm: React.FC<MultipleEntryFormProps> = ({ onMessage }) => {
           {fileName && <p className={styles.fileName}>Selected: {fileName}</p>}
         </div>
 
-        {loading && (
-          <div className={styles.progressContainer}>
-            <div className={styles.progressBar}>
-              <div
-                className={styles.progressFill}
-                style={{ width: `${progress}%` }}
-              ></div>
-            </div>
-            <p className={styles.progressText}>
-              Processing {processedCertificates} of {totalCertificates}{" "}
-              certificates ({progress}%)
-            </p>
-          </div>
-        )}
-
         <button
           className={styles.formButton}
           type="submit"
           disabled={!file || loading}
-          aria-label="Download Certificates"
+          aria-label="Upload Certificates"
         >
-          {loading ? "Processing..." : "Download Certificates"}
+          {loading ? "Uploading..." : "Upload Certificates"}
         </button>
 
         {/* Snackbar for success/error messages */}
