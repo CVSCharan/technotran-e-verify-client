@@ -144,26 +144,41 @@ const CertificateDetails = () => {
           ctx.fillText(certificate.certificateId, 723, 315);
 
           // **Generate QR Code**
-          QRCode.toCanvas(
-            qrCanvasRef.current,
-            `https://e-verify.technotran.in//certificate/${id}`,
-            {
-              width: 100,
-              margin: 0,
-            },
-            (error) => {
-              if (!error && qrCanvasRef.current) {
-                const qrImg = qrCanvasRef.current;
-                ctx.drawImage(
-                  qrImg,
-                  canvas.width - 133,
-                  canvas.height - 140,
-                  80,
-                  80
-                ); // Adjust QR position
+          if (qrCanvasRef.current) {
+            QRCode.toCanvas(
+              qrCanvasRef.current,
+              `https://e-verify.technotran.in//certificate/${id}`,
+              {
+                width: 100,
+                margin: 2,
+                color: {
+                  dark: "#000000",
+                  light: "#FFFFFF",
+                },
+                errorCorrectionLevel: "H",
+              },
+              (error) => {
+                if (!error && qrCanvasRef.current) {
+                  const qrImg = qrCanvasRef.current;
+                  const qrX = canvas.width - 133;
+                  const qrY = canvas.height - 140;
+                  const qrSize = 80;
+
+                  // Add white background with padding
+                  ctx.fillStyle = "#FFFFFF";
+                  ctx.fillRect(qrX - 5, qrY - 5, qrSize + 10, qrSize + 10);
+
+                  // Add subtle border
+                  ctx.strokeStyle = "#4b0406";
+                  ctx.lineWidth = 1;
+                  ctx.strokeRect(qrX - 5, qrY - 5, qrSize + 10, qrSize + 10);
+
+                  // Draw QR code
+                  ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
+                }
               }
-            }
-          );
+            );
+          }
         };
       }
     }
@@ -178,7 +193,7 @@ const CertificateDetails = () => {
   //   }
   // };
 
-  const downloadCertificatePDF = () => {
+  const downloadCertificatePDF = (): void => {
     if (canvasRef.current) {
       const canvas = canvasRef.current;
 
