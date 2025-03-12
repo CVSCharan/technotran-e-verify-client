@@ -177,129 +177,202 @@ const MultipleDownloadForm: React.FC<MultipleDownloadFormProps> = ({
       }
 
       const canvas = canvasRef.current;
-      const ctx = canvas.getContext("2d");
+
+      // Create a high-resolution temporary canvas
+      const scale = 8; // Increased scale for even better resolution
+      const tempCanvas = document.createElement("canvas");
+      tempCanvas.width = canvas.width * scale;
+      tempCanvas.height = canvas.height * scale;
+      const ctx = tempCanvas.getContext("2d", {
+        alpha: true,
+        willReadFrequently: true,
+      });
 
       if (!ctx) {
         reject(new Error("Failed to get 2D context"));
         return;
       }
 
-      let imgSrc =
-        "https://res.cloudinary.com/doxrqtfxo/image/upload/v1741560885/E%20Verify%20Portal%20Assets/pbruozkwvgw6f8s9ltpc.png"; // Default to Internship
+      // Clear and prepare the high-res canvas
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
 
+      // First, draw the background image at high resolution
+      const img = new window.Image();
+      img.crossOrigin = "anonymous";
+
+      // Get the current background image source
+      let imgSrc =
+        "https://res.cloudinary.com/doxrqtfxo/image/upload/v1741560885/E%20Verify%20Portal%20Assets/pbruozkwvgw6f8s9ltpc.png";
       if (certificate.type === "Workshop") {
         imgSrc =
-          "https://res.cloudinary.com/dcooiidus/image/upload/v1740660460/default_blank_workshop_cert_sgu2ad.jpg"; // Use Workshop Template
+          "https://res.cloudinary.com/dcooiidus/image/upload/v1740660460/default_blank_workshop_cert_sgu2ad.jpg";
       }
-
       if (certificate.certificateImgSrc !== "") {
         imgSrc = certificate.certificateImgSrc ?? imgSrc;
       }
 
-      const img = new window.Image();
-      img.crossOrigin = "anonymous"; // Ensure CORS support
-      img.src = imgSrc;
-
       img.onload = async () => {
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, tempCanvas.width, tempCanvas.height);
 
-        await document.fonts.ready;
-
-        // Embed Vendor Logo
+        // Draw vendor logo if available
         const vendor = vendorsData.find((v) => v.name === certificate.org);
         if (vendor) {
           const vendorLogo = new window.Image();
           vendorLogo.crossOrigin = "anonymous";
-          vendorLogo.src = vendor.imgSrc;
-          vendorLogo.onload = () => {
-            ctx.drawImage(vendorLogo, 110, 60, 70, 70);
-
-            // Continue with the rest of the rendering
-            renderCertificateText(ctx, canvas, certificate);
-
-            // Create PDF after rendering is complete
-            setTimeout(() => {
-              // Increase resolution for better quality
-              const scale = 2; // Adjust scale for better resolution
-              const tempCanvas = document.createElement("canvas");
-              tempCanvas.width = canvas.width * scale;
-              tempCanvas.height = canvas.height * scale;
-              const tempCtx = tempCanvas.getContext("2d");
-
-              if (!tempCtx) {
-                reject(new Error("Failed to get temp 2D context"));
-                return;
-              }
-
-              tempCtx.scale(scale, scale);
-              tempCtx.drawImage(canvas, 0, 0);
-
-              // Create a high-resolution PDF
-              const pdf = new jsPDF({
-                orientation: "landscape",
-                unit: "px",
-                format: [canvas.width, canvas.height],
-              });
-
-              // Convert scaled canvas to image
-              const imgData = tempCanvas.toDataURL("image/png");
-
-              // Add high-res image to PDF
-              pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
-
-              // Get PDF as blob
-              const pdfBlob = pdf.output("blob");
-              resolve(pdfBlob);
-            }, 300);
-          };
-
-          vendorLogo.onerror = () => {
-            reject(new Error("Failed to load vendor logo"));
-          };
-        } else {
-          // If no vendor logo, continue with text rendering
-          renderCertificateText(ctx, canvas, certificate);
-
-          // Create PDF after rendering is complete
-          setTimeout(() => {
-            // Increase resolution for better quality
-            const scale = 2; // Adjust scale for better resolution
-            const tempCanvas = document.createElement("canvas");
-            tempCanvas.width = canvas.width * scale;
-            tempCanvas.height = canvas.height * scale;
-            const tempCtx = tempCanvas.getContext("2d");
-
-            if (!tempCtx) {
-              reject(new Error("Failed to get temp 2D context"));
-              return;
-            }
-
-            tempCtx.scale(scale, scale);
-            tempCtx.drawImage(canvas, 0, 0);
-
-            // Create a high-resolution PDF
-            const pdf = new jsPDF({
-              orientation: "landscape",
-              unit: "px",
-              format: [canvas.width, canvas.height],
-            });
-
-            // Convert scaled canvas to image
-            const imgData = tempCanvas.toDataURL("image/png");
-
-            // Add high-res image to PDF
-            pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
-
-            // Get PDF as blob
-            const pdfBlob = pdf.output("blob");
-            resolve(pdfBlob);
-          }, 300);
+          await new Promise((resolve) => {
+            vendorLogo.onload = () => {
+              ctx.drawImage(
+                vendorLogo,
+                110 * scale,
+                60 * scale,
+                70 * scale,
+                70 * scale
+              );
+              resolve(true);
+            };
+            vendorLogo.src = vendor.imgSrc;
+          });
         }
+
+        // Scale context for text rendering
+        ctx.scale(scale, scale);
+
+        // Optimize text rendering
+        ctx.textBaseline = "middle";
+        ctx.textAlign = "center";
+        ctx.textRendering = "geometricPrecision";
+        ctx.letterSpacing = "1px";
+
+        // Re-render all text with enhanced quality
+        // Student Name
+        ctx.font = `600 16px "ArialCustom", Arial, sans-serif`;
+        ctx.lineWidth = 0.5;
+        ctx.strokeStyle = "black";
+        ctx.fillStyle = "black";
+        ctx.strokeText(certificate.name, canvas.width / 2 + 7, 195);
+        ctx.fillText(certificate.name, canvas.width / 2 + 7, 195);
+
+        // Program
+        ctx.font = `600 22px "ArialCustom", Arial, sans-serif`;
+        ctx.strokeStyle = "#4b0406";
+        ctx.fillStyle = "#4b0406";
+        ctx.strokeText(certificate.program, canvas.width / 2, 260);
+        ctx.fillText(certificate.program, canvas.width / 2, 260);
+
+        // Department and Organization
+        ctx.font = `600 16px "ArialCustom", Arial, sans-serif`;
+        ctx.strokeText(certificate.department, canvas.width / 2, 315);
+        ctx.fillText(certificate.department, canvas.width / 2, 315);
+        ctx.strokeText(certificate.org, canvas.width / 2, 365);
+        ctx.fillText(certificate.org, canvas.width / 2, 365);
+
+        // Dates
+        ctx.font = `600 16px "ArialCustom", Arial, sans-serif`;
+        ctx.strokeStyle = "black";
+        ctx.fillStyle = "black";
+        const formattedStartDate = formatDate(certificate.startDate);
+        const formattedIssueDate = formatDate(certificate.issueDate);
+        ctx.strokeText(formattedStartDate, 355, 390);
+        ctx.fillText(formattedStartDate, 355, 390);
+        ctx.strokeText(formattedIssueDate, 525, 390);
+        ctx.fillText(formattedIssueDate, 525, 390);
+
+        // Certificate ID
+        ctx.font = `600 11px "ArialCustom", Arial, sans-serif`;
+        ctx.strokeStyle = "#4b0406";
+        ctx.fillStyle = "#4b0406";
+        ctx.strokeText(certificate.certificateId, 755, 315);
+        ctx.fillText(certificate.certificateId, 755, 315);
+
+        // Generate high-quality QR code
+        const highResQRCanvas = document.createElement("canvas");
+        highResQRCanvas.width = 200 * scale;
+        highResQRCanvas.height = 200 * scale;
+
+        await new Promise((resolve) => {
+          QRCode.toCanvas(
+            highResQRCanvas,
+            `https://e-verify.technotran.in/certificate/${certificate.certificateId}`,
+            {
+              width: 200 * scale,
+              margin: 2,
+              color: {
+                dark: "#000000",
+                light: "#FFFFFF",
+              },
+              errorCorrectionLevel: "H",
+            },
+            (error) => {
+              if (!error) {
+                const qrX = canvas.width - 133;
+                const qrY = canvas.height - 140;
+                const qrSize = 80;
+
+                // Add white background with padding
+                ctx.fillStyle = "#FFFFFF";
+                ctx.fillRect(qrX - 5, qrY - 5, qrSize + 10, qrSize + 10);
+
+                // Add subtle border
+                ctx.strokeStyle = "#4b0406";
+                ctx.lineWidth = 1;
+                ctx.strokeRect(qrX - 5, qrY - 5, qrSize + 10, qrSize + 10);
+
+                // Draw high-resolution QR code
+                ctx.drawImage(highResQRCanvas, qrX, qrY, qrSize, qrSize);
+                resolve(true);
+              }
+            }
+          );
+        });
+
+        // Convert to high-quality PNG
+        const imgData = tempCanvas.toDataURL("image/png", 1.0);
+
+        // Create PDF with maximum quality settings
+        const pdf = new jsPDF({
+          orientation: "landscape",
+          unit: "px",
+          format: [canvas.width, canvas.height],
+          compress: true,
+          putOnlyUsedFonts: true,
+          precision: 32,
+          hotfixes: ["px_scaling"],
+        });
+
+        // Remove metadata and optimize
+        pdf.setProperties({
+          title: "",
+          subject: "",
+          author: "",
+          keywords: "",
+          creator: "",
+        });
+
+        // Add image with maximum quality
+        pdf.addImage(
+          imgData,
+          "PNG",
+          0,
+          0,
+          canvas.width,
+          canvas.height,
+          "",
+          "FAST"
+        );
+
+        // Get PDF as blob with optimized settings
+        const pdfBlob = pdf.output("blob");
+        resolve(pdfBlob);
       };
 
       img.onerror = () => {
         reject(new Error("Failed to load certificate template"));
       };
+
+      img.src = imgSrc;
     });
   };
 

@@ -65,7 +65,7 @@ const CertificateDetails = () => {
 
       if (ctx) {
         let imgSrc =
-          "https://github.com/CVSCharan/Technotran_Assets/blob/main/Internship_Cert.png?raw=true"; // Default to Internship
+          "https://res.cloudinary.com/doxrqtfxo/image/upload/v1741560885/E%20Verify%20Portal%20Assets/pbruozkwvgw6f8s9ltpc.png"; // Default to Internship
 
         if (certificate.type === "Workshop") {
           imgSrc =
@@ -210,11 +210,12 @@ const CertificateDetails = () => {
     if (!canvasRef.current || !certificate) return;
 
     const canvas = canvasRef.current;
-    const scale = 4; // Higher scale for better resolution
+
+    // Create a high-resolution temporary canvas
+    const scale = 8; // Increased scale for even better resolution
     const tempCanvas = document.createElement("canvas");
     tempCanvas.width = canvas.width * scale;
     tempCanvas.height = canvas.height * scale;
-
     const ctx = tempCanvas.getContext("2d", {
       alpha: true,
       willReadFrequently: true,
@@ -225,97 +226,104 @@ const CertificateDetails = () => {
       return;
     }
 
-    // Enable better image quality
+    // Clear and prepare the high-res canvas
+    ctx.fillStyle = "#FFFFFF";
+    ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = "high";
 
-    // Clear canvas with white background
-    ctx.fillStyle = "#FFFFFF";
-    ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+    // First, draw the background image at high resolution
+    const img = new window.Image();
+    img.crossOrigin = "anonymous";
 
-    // Apply high-resolution scaling
-    ctx.scale(scale, scale);
-
-    // Create and load base image
-    const baseImage = new window.Image();
-    baseImage.crossOrigin = "anonymous";
-    baseImage.src = canvas.toDataURL("image/png", 1.0);
+    // Get the current background image source
+    let imgSrc =
+      "https://res.cloudinary.com/doxrqtfxo/image/upload/v1741560885/E%20Verify%20Portal%20Assets/pbruozkwvgw6f8s9ltpc.png";
+    if (certificate.type === "Workshop") {
+      imgSrc =
+        "https://res.cloudinary.com/dcooiidus/image/upload/v1740660460/default_blank_workshop_cert_sgu2ad.jpg";
+    }
+    if (certificate.certificateImgSrc !== "") {
+      imgSrc = certificate.certificateImgSrc ?? imgSrc;
+    }
 
     await new Promise((resolve) => {
-      baseImage.onload = () => {
-        // Draw base image
-        ctx.drawImage(baseImage, 0, 0);
-
-        // Set text rendering for better quality
-        ctx.textRendering = "optimizeLegibility";
-        ctx.textBaseline = "middle";
-        ctx.textAlign = "center";
-
-        // Re-apply all text with enhanced styling
-        ctx.font = `500 ${16 * scale}px "ArialCustom", Arial, sans-serif`;
-        ctx.lineWidth = 0.5 * scale;
-        ctx.strokeStyle = "black";
-        ctx.fillStyle = "black";
-
-        // Re-draw all text elements with enhanced positioning
-        ctx.strokeText(certificate.name, 400 * scale, 200 * scale);
-        ctx.fillText(certificate.name, 400 * scale, 200 * scale);
-
-        ctx.font = `500 ${22 * scale}px "ArialCustom", Arial, sans-serif`;
-        ctx.strokeStyle = "#4b0406";
-        ctx.fillStyle = "#4b0406";
-
-        // Program name (centered)
-        ctx.strokeText(
-          certificate.program,
-          (canvas.width * scale) / 2,
-          265 * scale
-        );
-        ctx.fillText(
-          certificate.program,
-          (canvas.width * scale) / 2,
-          265 * scale
-        );
-
-        ctx.font = `500 ${16 * scale}px "ArialCustom", Arial, sans-serif`;
-
-        // Department and org (centered)
-        ctx.strokeText(
-          certificate.department,
-          (canvas.width * scale) / 2,
-          320 * scale
-        );
-        ctx.fillText(
-          certificate.department,
-          (canvas.width * scale) / 2,
-          320 * scale
-        );
-        ctx.strokeText(
-          certificate.org,
-          (canvas.width * scale) / 2,
-          370 * scale
-        );
-        ctx.fillText(certificate.org, (canvas.width * scale) / 2, 370 * scale);
-
-        // Reset text alignment for non-centered text
-        ctx.textAlign = "left";
-
-        // Dates with enhanced positioning
-        const formattedStartDate = formatDate(certificate.startDate);
-        const formattedIssueDate = formatDate(certificate.issueDate);
-        ctx.strokeText(formattedStartDate, 325 * scale, 395 * scale);
-        ctx.fillText(formattedStartDate, 325 * scale, 395 * scale);
-        ctx.strokeText(formattedIssueDate, 495 * scale, 395 * scale);
-        ctx.fillText(formattedIssueDate, 495 * scale, 395 * scale);
-
-        // Certificate ID with enhanced clarity
-        ctx.font = `500 ${11 * scale}px "ArialCustom", Arial, sans-serif`;
-        ctx.strokeText(certificate.certificateId, 723 * scale, 315 * scale);
-        ctx.fillText(certificate.certificateId, 723 * scale, 315 * scale);
-
+      img.onload = () => {
+        ctx.drawImage(img, 0, 0, tempCanvas.width, tempCanvas.height);
         resolve(true);
       };
+      img.src = imgSrc;
     });
+
+    // Draw vendor logo if available
+    const vendor = vendorsData.find((v) => v.name === certificate.org);
+    if (vendor) {
+      const vendorLogo = new window.Image();
+      vendorLogo.crossOrigin = "anonymous";
+      await new Promise((resolve) => {
+        vendorLogo.onload = () => {
+          ctx.drawImage(
+            vendorLogo,
+            110 * scale,
+            60 * scale,
+            70 * scale,
+            70 * scale
+          );
+          resolve(true);
+        };
+        vendorLogo.src = vendor.imgSrc;
+      });
+    }
+
+    // Scale context for text rendering
+    ctx.scale(scale, scale);
+
+    // Optimize text rendering
+    ctx.textBaseline = "middle";
+    ctx.textAlign = "center";
+    ctx.textRendering = "geometricPrecision";
+    ctx.letterSpacing = "1px";
+
+    // Re-render all text with enhanced quality
+    // Student Name
+    ctx.font = `600 16px "ArialCustom", Arial, sans-serif`;
+    ctx.lineWidth = 0.5;
+    ctx.strokeStyle = "black";
+    ctx.fillStyle = "black";
+    ctx.strokeText(certificate.name, canvas.width / 2 + 7, 195);
+    ctx.fillText(certificate.name, canvas.width / 2 + 7, 195);
+
+    // Program
+    ctx.font = `600 22px "ArialCustom", Arial, sans-serif`;
+    ctx.strokeStyle = "#4b0406";
+    ctx.fillStyle = "#4b0406";
+    ctx.strokeText(certificate.program, canvas.width / 2, 260);
+    ctx.fillText(certificate.program, canvas.width / 2, 260);
+
+    // Department and Organization
+    ctx.font = `600 16px "ArialCustom", Arial, sans-serif`;
+    ctx.strokeText(certificate.department, canvas.width / 2, 315);
+    ctx.fillText(certificate.department, canvas.width / 2, 315);
+    ctx.strokeText(certificate.org, canvas.width / 2, 365);
+    ctx.fillText(certificate.org, canvas.width / 2, 365);
+
+    // Dates
+    ctx.font = `600 16px "ArialCustom", Arial, sans-serif`;
+    ctx.strokeStyle = "black";
+    ctx.fillStyle = "black";
+    const formattedStartDate = formatDate(certificate.startDate);
+    const formattedIssueDate = formatDate(certificate.issueDate);
+    ctx.strokeText(formattedStartDate, 355, 390);
+    ctx.fillText(formattedStartDate, 355, 390);
+    ctx.strokeText(formattedIssueDate, 525, 390);
+    ctx.fillText(formattedIssueDate, 525, 390);
+
+    // Certificate ID
+    ctx.font = `600 11px "ArialCustom", Arial, sans-serif`;
+    ctx.strokeStyle = "#4b0406";
+    ctx.fillStyle = "#4b0406";
+    ctx.strokeText(certificate.certificateId, 755, 315);
+    ctx.fillText(certificate.certificateId, 755, 315);
 
     // Generate high-quality QR code
     if (qrCanvasRef.current) {
@@ -338,28 +346,18 @@ const CertificateDetails = () => {
           },
           (error) => {
             if (!error) {
-              const qrX = (canvas.width - 133) * scale;
-              const qrY = (canvas.height - 140) * scale;
-              const qrSize = 80 * scale;
+              const qrX = canvas.width - 133;
+              const qrY = canvas.height - 140;
+              const qrSize = 80;
 
               // Add white background with padding
               ctx.fillStyle = "#FFFFFF";
-              ctx.fillRect(
-                qrX - 5 * scale,
-                qrY - 5 * scale,
-                qrSize + 10 * scale,
-                qrSize + 10 * scale
-              );
+              ctx.fillRect(qrX - 5, qrY - 5, qrSize + 10, qrSize + 10);
 
               // Add subtle border
               ctx.strokeStyle = "#4b0406";
-              ctx.lineWidth = 1 * scale;
-              ctx.strokeRect(
-                qrX - 5 * scale,
-                qrY - 5 * scale,
-                qrSize + 10 * scale,
-                qrSize + 10 * scale
-              );
+              ctx.lineWidth = 1;
+              ctx.strokeRect(qrX - 5, qrY - 5, qrSize + 10, qrSize + 10);
 
               // Draw high-resolution QR code
               ctx.drawImage(highResQRCanvas, qrX, qrY, qrSize, qrSize);
@@ -370,16 +368,21 @@ const CertificateDetails = () => {
       });
     }
 
-    // Create PDF after everything is drawn
+    // Convert to high-quality PNG
+    const imgData = tempCanvas.toDataURL("image/png", 1.0);
+
+    // Create PDF with maximum quality settings
     const pdf = new jsPDF({
       orientation: "landscape",
       unit: "px",
       format: [canvas.width, canvas.height],
-      putOnlyUsedFonts: true,
       compress: true,
+      putOnlyUsedFonts: true,
+      precision: 32,
+      hotfixes: ["px_scaling"],
     });
 
-    // Remove metadata
+    // Remove metadata and optimize
     pdf.setProperties({
       title: "",
       subject: "",
@@ -388,14 +391,11 @@ const CertificateDetails = () => {
       creator: "",
     });
 
-    // Convert to high-quality image
-    const imgData = tempCanvas.toDataURL("image/png", 1.0);
-
-    // Add image to PDF with maximum quality
+    // Add image with maximum quality
     pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height, "", "FAST");
 
-    // Save with optimized settings
-    pdf.save(`${certificate.name}.pdf`);
+    // Save the optimized PDF
+    pdf.save(`${certificate.name} ${certificate.type} Certificate.pdf`);
   };
 
   if (loading)
