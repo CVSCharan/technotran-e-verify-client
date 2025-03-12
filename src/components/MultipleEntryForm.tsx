@@ -160,7 +160,7 @@ const MultipleEntryForm: React.FC<MultipleEntryFormProps> = ({ onMessage }) => {
       interface UploadError {
         response?: {
           data?: {
-            failedItems?: any[];
+            failedItems?: (string | FailedItem)[];
           };
         };
       }
