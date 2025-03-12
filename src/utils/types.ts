@@ -12,6 +12,15 @@ export interface Certificate {
   org: string;
 }
 
+export interface AdminUser {
+  id: string;
+  name: string;
+  email: string;
+  role: "admin" | "super_admin";
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface EditCertificateModalProps {
   open: boolean;
   onClose: () => void;
