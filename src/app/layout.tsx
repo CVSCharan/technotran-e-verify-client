@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Technotran E-Verify",
+  title: "E-Verify Portal | Technotran Solutions",
   description: "Created by CVS CHARAN",
 };
 

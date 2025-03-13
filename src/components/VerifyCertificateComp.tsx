@@ -19,14 +19,15 @@ const VerifyCertificateComp = () => {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "Certificate Verification System",
-    "applicationCategory": "BusinessApplication",
-    "description": "Verify the authenticity of certificates through email OTP verification",
-    "offers": {
+    name: "Certificate Verification System",
+    applicationCategory: "BusinessApplication",
+    description:
+      "Verify the authenticity of certificates through email OTP verification",
+    offers: {
       "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    }
+      price: "0",
+      priceCurrency: "USD",
+    },
   };
 
   const resetForm = () => {
@@ -43,7 +44,7 @@ const VerifyCertificateComp = () => {
     try {
       setLoading(true);
       const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
-      const response = await fetch(`${API_BASE_URL}/certificates/${id}`);
+      const response = await fetch(`${API_BASE_URL}/certificates/id/${id}`);
       if (!response.ok) {
         throw new Error("Failed to fetch certificate details");
       }
@@ -185,12 +186,14 @@ const VerifyCertificateComp = () => {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
       </Head>
-      <form 
-        onSubmit={handleSubmit} 
+      <form
+        onSubmit={handleSubmit}
         className={styles.formContainer}
         aria-labelledby="verify-certificate-heading"
       >
-        <h1 id="verify-certificate-heading" className={styles.formHeading}>Verify Your Certificate</h1>
+        <h1 id="verify-certificate-heading" className={styles.formHeading}>
+          Verify Your Certificate
+        </h1>
         <input
           type="text"
           name="certificateId"
@@ -244,7 +247,11 @@ const VerifyCertificateComp = () => {
             : "Send OTP"}
         </button>
 
-        {errorMessage && <p className="quicksand-ext" role="alert">{errorMessage}</p>}
+        {errorMessage && (
+          <p className="quicksand-ext" role="alert">
+            {errorMessage}
+          </p>
+        )}
       </form>
     </>
   );
