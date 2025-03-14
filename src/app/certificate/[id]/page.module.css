@@ -1,9 +1,26 @@
+.mainBody {
+  margin-left: auto;
+  margin-right: auto;
+  overflow-x: hidden;
+  position: relative;
+  color: #333; /* Dark text for contrast */
+  width: 100%;
+}
+
 .container {
-  max-width: 900px;
+  min-height: 95vh;
+  width: 100%;
   margin: 0 auto;
   padding: 20px;
   text-align: center;
   font-family: "Arial", sans-serif;
+  background-color: #f9f9f9; /* Subtle off-white background */
+  background-image: linear-gradient(
+      rgba(220, 220, 220, 0.1) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(220, 220, 220, 0.1) 1px, transparent 1px); /* Subtle grid pattern */
+  background-size: 20px 20px; /* Smaller, more refined grid */
 }
 
 .noCertFoundContainer {
@@ -116,4 +133,39 @@
   font-size: 1rem;
   color: #555;
   margin-top: 10px;
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 2rem;
+}
+
+.loadingSpinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(75, 4, 6, 0.1);
+  border-radius: 50%;
+  border-top: 4px solid #4b0406;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1.5rem;
+}
+
+.loadingText {
+  font-size: 1.2rem;
+  color: #4b0406;
+  font-weight: 500;
+  text-align: center;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

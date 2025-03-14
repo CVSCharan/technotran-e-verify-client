@@ -415,8 +415,14 @@ const CertificateDetails = () => {
     }
   };
 
-  if (loading)
-    return <p className={styles.loading}>Loading certificate details...</p>;
+  if (loading) {
+    return (
+      <div className={styles.loadingContainer}>
+        <div className={styles.loadingSpinner}></div>
+        <p className={styles.loadingText}>Loading certificate details...</p>
+      </div>
+    );
+  }
 
   if (error?.includes("No Certificate details found")) {
     return (
