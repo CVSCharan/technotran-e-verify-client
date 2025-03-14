@@ -179,81 +179,84 @@ const VerifyCertificateComp = () => {
   };
 
   return (
-    <>
+    <div>
       <Head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
       </Head>
-      <form
-        onSubmit={handleSubmit}
-        className={styles.formContainer}
-        aria-labelledby="verify-certificate-heading"
-      >
-        <h1 id="verify-certificate-heading" className={styles.formHeading}>
-          Verify Your Certificate
-        </h1>
-        <input
-          type="text"
-          name="certificateId"
-          placeholder="Enter Your Certificate ID"
-          value={formData.certificateId}
-          onChange={handleInputChange}
-          required
-          className={styles.formInput}
-          aria-label="Certificate ID"
-          autoComplete="off"
-        />
+      <div className={styles.loginContainer}>
+        <div className={styles.loginCard}>
+          <form
+            onSubmit={handleSubmit}
+            className={styles.formContainer}
+            aria-labelledby="verify-certificate-heading"
+          >
+            <h1 id="verify-certificate-heading" className={styles.formHeading}>
+              Verify Your Certificate
+            </h1>
+            <input
+              type="text"
+              name="certificateId"
+              placeholder="Enter Your Certificate ID"
+              value={formData.certificateId}
+              onChange={handleInputChange}
+              required
+              className={styles.formInput}
+              aria-label="Certificate ID"
+              autoComplete="off"
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Enter Your Email"
+              value={formData.email}
+              onChange={handleInputChange}
+              required
+              className={styles.formInput}
+              aria-label="Email Address"
+              autoComplete="email"
+            />
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Enter Your Email"
-          value={formData.email}
-          onChange={handleInputChange}
-          required
-          className={styles.formInput}
-          aria-label="Email Address"
-          autoComplete="email"
-        />
+            {showOtpInput && (
+              <input
+                type="text"
+                name="otp"
+                placeholder="Enter OTP"
+                value={otp}
+                onChange={handleOtpInputChange}
+                required
+                className={styles.formInput}
+                aria-label="One-Time Password"
+                autoComplete="one-time-code"
+              />
+            )}
 
-        {showOtpInput && (
-          <input
-            type="text"
-            name="otp"
-            placeholder="Enter OTP"
-            value={otp}
-            onChange={handleOtpInputChange}
-            required
-            className={styles.formInput}
-            aria-label="One-Time Password"
-            autoComplete="one-time-code"
-          />
-        )}
+            <button
+              className={`${styles.formButton} quicksand-text`}
+              type="submit"
+              disabled={loading}
+              aria-busy={loading}
+            >
+              {loading
+                ? "Verifying..."
+                : otpVerified
+                ? "Check Certificate"
+                : otpSent
+                ? "Verify OTP"
+                : "Send OTP"}
+            </button>
 
-        <button
-          className={`${styles.formButton} quicksand-text`}
-          type="submit"
-          disabled={loading}
-          aria-busy={loading}
-        >
-          {loading
-            ? "Verifying..."
-            : otpVerified
-            ? "Check Certificate"
-            : otpSent
-            ? "Verify OTP"
-            : "Send OTP"}
-        </button>
-
-        {errorMessage && (
-          <p className="quicksand-ext" role="alert">
-            {errorMessage}
-          </p>
-        )}
-      </form>
-    </>
+            {errorMessage && (
+              <p className="quicksand-ext" role="alert">
+                {errorMessage}
+              </p>
+            )}
+          </form>
+        </div>
+      </div>
+    </div>
   );
 };
 

@@ -87,6 +87,12 @@ const CertificateDetails = () => {
 
           await document.fonts.ready;
 
+          // Optimize text rendering
+          ctx.textBaseline = "middle";
+          ctx.textAlign = "center";
+          ctx.textRendering = "geometricPrecision";
+          ctx.letterSpacing = "1px";
+
           // **Embed Vendor Logo**
           const vendor = vendorsData.find((v) => v.name === certificate.org);
           if (vendor) {
@@ -105,38 +111,26 @@ const CertificateDetails = () => {
           ctx.fillStyle = "black";
 
           // **Display Student Details**
-          ctx.strokeText(certificate.name, 400, 200);
-          ctx.fillText(certificate.name, 400, 200);
+          ctx.strokeText(certificate.name, canvas.width / 2, 195);
+          ctx.fillText(certificate.name, canvas.width / 2, 195);
 
           ctx.font = `500 22px "ArialCustom", Arial, sans-serif`;
           ctx.strokeStyle = "#4b0406";
           ctx.fillStyle = "#4b0406";
 
-          // Calculate dynamic X position
-          const programTextWidth = ctx.measureText(certificate.program).width;
-          const centerXPrgm = (canvas.width - programTextWidth) / 2;
-
-          // Draw centered text
-          ctx.strokeText(certificate.program, centerXPrgm, 265);
-          ctx.fillText(certificate.program, centerXPrgm, 265);
+          // Draw centered text (using the center alignment)
+          ctx.strokeText(certificate.program, canvas.width / 2, 260);
+          ctx.fillText(certificate.program, canvas.width / 2, 260);
 
           ctx.font = `500 16px "ArialCustom", Arial, sans-serif`;
           ctx.strokeStyle = "#4b0406";
           ctx.fillStyle = "#4b0406";
 
-          // Calculate dynamic X position
-          const departmentTextWidth = ctx.measureText(
-            certificate.department
-          ).width;
-          const centerXDept = (canvas.width - departmentTextWidth) / 2;
-
-          const orgTextWidth = ctx.measureText(certificate.org).width;
-          const centerXOrg = (canvas.width - orgTextWidth) / 2;
-
-          ctx.strokeText(certificate.department, centerXDept, 320);
-          ctx.fillText(certificate.department, centerXDept, 320);
-          ctx.strokeText(certificate.org, centerXOrg, 370);
-          ctx.fillText(certificate.org, centerXOrg, 370);
+          // Using center alignment for all text
+          ctx.strokeText(certificate.department, canvas.width / 2, 315);
+          ctx.fillText(certificate.department, canvas.width / 2, 315);
+          ctx.strokeText(certificate.org, canvas.width / 2, 365);
+          ctx.fillText(certificate.org, canvas.width / 2, 365);
 
           ctx.font = `500 16px "ArialCustom", Arial, sans-serif`;
           ctx.strokeStyle = "black";
@@ -146,17 +140,19 @@ const CertificateDetails = () => {
           const formattedStartDate = formatDate(certificate.startDate);
           const formattedIssueDate = formatDate(certificate.issueDate);
 
-          ctx.strokeText(formattedStartDate, 325, 395);
-          ctx.fillText(formattedStartDate, 325, 395);
-          ctx.strokeText(formattedIssueDate, 495, 395);
-          ctx.fillText(formattedIssueDate, 495, 395);
+          // Adjust text alignment for dates
+          ctx.textAlign = "left";
+          ctx.strokeText(formattedStartDate, 320, 390);
+          ctx.fillText(formattedStartDate, 320, 390);
+          ctx.strokeText(formattedIssueDate, 495, 390);
+          ctx.fillText(formattedIssueDate, 495, 390);
 
           ctx.font = `500 11px "ArialCustom", Arial, sans-serif`;
           ctx.strokeStyle = "#4b0406";
           ctx.fillStyle = "#4b0406";
 
-          ctx.strokeText(certificate.certificateId, 723, 315);
-          ctx.fillText(certificate.certificateId, 723, 315);
+          ctx.strokeText(certificate.certificateId, 720, 315);
+          ctx.fillText(certificate.certificateId, 720, 315);
 
           // **Generate QR Code**
           if (qrCanvasRef.current) {
