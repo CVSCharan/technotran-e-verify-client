@@ -334,7 +334,7 @@ const CertificateDetails = () => {
         await new Promise((resolve) => {
           QRCode.toCanvas(
             highResQRCanvas,
-            `https://e-verify.technotran.in/certificate/${id}`,
+            `https://e-verify.robomonk.ai/certificate/${id}`,
             {
               width: 200 * scale,
               margin: 2,
